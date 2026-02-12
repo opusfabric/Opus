@@ -1,0 +1,5 @@
+<cross-connects xmlns="http://www.polatis.com/yang/optical-switch">
+<pair operation="delete">
+<ingress>20</ingress>
+</pair>
+</cross-connects>

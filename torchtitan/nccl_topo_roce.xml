@@ -1,0 +1,12 @@
+<system version="1">
+  <cpu host_hash="0xd37b35bca425f838" numaid="0" affinity="55555555,55555555,55555555,55555555" arch="x86_64" vendor="GenuineIntel" familyid="6" modelid="143">
+    <pci busid="0000:02:00.0" class="0x020000" vendor="0x14e4" device="0x165f" subsystem_vendor="0x1028" subsystem_device="0x0a6b" link_speed="5.0 GT/s PCIe" link_width="1">
+      <nic>
+        <net name="eno8303" dev="0" latency="0" speed="1000" port="0" guid="0x0" maxconn="65536" gdr="0"/>
+      </nic>
+    </pci>
+    <pci busid="0000:61:00.0" class="0x030200" vendor="0x10de" device="0x26b5" subsystem_vendor="0x10de" subsystem_device="0x169d" link_speed="16.0 GT/s PCIe" link_width="16">
+      <gpu dev="0" sm="89" rank="0" gdr="1"/>
+    </pci>
+  </cpu>
+</system>

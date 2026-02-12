@@ -1,0 +1,3 @@
+<system-restart xmlns="http://www.polatis.com/yang/optical-switch">
+<seconds>5</seconds>
+</system-restart>

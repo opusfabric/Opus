@@ -1,0 +1,127 @@
+PP start_backend: 1 start_idx: 0 end_backend: 1 end_idx: 3 len: 4, start_time: 10314456.441, end_time: 10320281.186
+DP start_backend: 5 start_idx: 0 end_backend: 5 end_idx: 13 len: 14, start_time: 10320361.604, end_time: 10324836.517
+PP start_backend: 1 start_idx: 4 end_backend: 5 end_idx: 4 len: 1, start_time: 10324846.628, end_time: 10324846.875
+DP start_backend: 5 start_idx: 14 end_backend: 5 end_idx: 41 len: 28, start_time: 10324850.083, end_time: 10330026.207
+PP start_backend: 1 start_idx: 5 end_backend: 1 end_idx: 6 len: 2, start_time: 10330167.749, end_time: 10330170.131
+DP start_backend: 5 start_idx: 42 end_backend: 5 end_idx: 55 len: 14, start_time: 10330403.11, end_time: 10332846.421
+PP start_backend: 1 start_idx: 7 end_backend: 5 end_idx: 7 len: 1, start_time: 10332988.772, end_time: 10332989.072
+DP start_backend: 5 start_idx: 56 end_backend: 5 end_idx: 70 len: 15, start_time: 10332993.089, end_time: 10336537.984
+PP start_backend: 1 start_idx: 8 end_backend: 5 end_idx: 8 len: 1, start_time: 10336563.748, end_time: 10337553.234
+DP start_backend: 6 start_idx: 0 end_backend: 6 end_idx: 3 len: 4, start_time: 10337619.803, end_time: 10337891.875
+PP start_backend: 1 start_idx: 9 end_backend: 6 end_idx: 9 len: 1, start_time: 10337905.58, end_time: 10337905.805
+DP start_backend: 5 start_idx: 71 end_backend: 5 end_idx: 98 len: 28, start_time: 10339813.269, end_time: 10344211.9
+PP start_backend: 1 start_idx: 10 end_backend: 1 end_idx: 11 len: 2, start_time: 10344358.014, end_time: 10344359.892
+DP start_backend: 5 start_idx: 99 end_backend: 5 end_idx: 112 len: 14, start_time: 10344578.305, end_time: 10347105.389
+PP start_backend: 1 start_idx: 12 end_backend: 5 end_idx: 12 len: 1, start_time: 10347251.762, end_time: 10347253.121
+DP start_backend: 5 start_idx: 113 end_backend: 5 end_idx: 127 len: 15, start_time: 10347257.194, end_time: 10350787.32
+PP start_backend: 1 start_idx: 13 end_backend: 5 end_idx: 13 len: 1, start_time: 10350793.052, end_time: 10351618.247
+DP start_backend: 6 start_idx: 4 end_backend: 6 end_idx: 7 len: 4, start_time: 10351625.038, end_time: 10351656.616
+PP start_backend: 1 start_idx: 14 end_backend: 6 end_idx: 14 len: 1, start_time: 10351681.846, end_time: 10351682.265
+DP start_backend: 5 start_idx: 128 end_backend: 5 end_idx: 155 len: 28, start_time: 10353495.738, end_time: 10357867.019
+PP start_backend: 1 start_idx: 15 end_backend: 1 end_idx: 16 len: 2, start_time: 10358058.051, end_time: 10358061.257
+DP start_backend: 5 start_idx: 156 end_backend: 5 end_idx: 169 len: 14, start_time: 10358276.524, end_time: 10360770.006
+PP start_backend: 1 start_idx: 17 end_backend: 5 end_idx: 17 len: 1, start_time: 10360920.475, end_time: 10360921.314
+DP start_backend: 5 start_idx: 170 end_backend: 5 end_idx: 184 len: 15, start_time: 10360925.916, end_time: 10364364.83
+PP start_backend: 1 start_idx: 18 end_backend: 5 end_idx: 18 len: 1, start_time: 10364368.484, end_time: 10365281.387
+DP start_backend: 6 start_idx: 8 end_backend: 6 end_idx: 11 len: 4, start_time: 10365288.301, end_time: 10365318.299
+PP start_backend: 1 start_idx: 19 end_backend: 6 end_idx: 19 len: 1, start_time: 10365341.221, end_time: 10365341.616
+DP start_backend: 5 start_idx: 185 end_backend: 5 end_idx: 212 len: 28, start_time: 10367101.73, end_time: 10371413.774
+PP start_backend: 1 start_idx: 20 end_backend: 1 end_idx: 21 len: 2, start_time: 10371560.339, end_time: 10371563.871
+DP start_backend: 5 start_idx: 213 end_backend: 5 end_idx: 226 len: 14, start_time: 10371763.735, end_time: 10374265.972
+PP start_backend: 1 start_idx: 22 end_backend: 5 end_idx: 22 len: 1, start_time: 10374414.109, end_time: 10374414.892
+DP start_backend: 5 start_idx: 227 end_backend: 5 end_idx: 241 len: 15, start_time: 10374419.342, end_time: 10377795.025
+PP start_backend: 1 start_idx: 23 end_backend: 5 end_idx: 23 len: 1, start_time: 10377796.418, end_time: 10378773.288
+DP start_backend: 6 start_idx: 12 end_backend: 6 end_idx: 15 len: 4, start_time: 10378780.485, end_time: 10378810.642
+PP start_backend: 1 start_idx: 24 end_backend: 6 end_idx: 24 len: 1, start_time: 10378825.121, end_time: 10378825.364
+DP start_backend: 5 start_idx: 242 end_backend: 5 end_idx: 269 len: 28, start_time: 10380615.868, end_time: 10384823.159
+PP start_backend: 1 start_idx: 25 end_backend: 1 end_idx: 26 len: 2, start_time: 10384970.398, end_time: 10384974.271
+DP start_backend: 5 start_idx: 270 end_backend: 5 end_idx: 283 len: 14, start_time: 10385179.116, end_time: 10387625.451
+PP start_backend: 1 start_idx: 27 end_backend: 5 end_idx: 27 len: 1, start_time: 10387768.81, end_time: 10387769.594
+DP start_backend: 5 start_idx: 284 end_backend: 5 end_idx: 298 len: 15, start_time: 10387773.935, end_time: 10391036.737
+PP start_backend: 1 start_idx: 28 end_backend: 5 end_idx: 28 len: 1, start_time: 10391038.019, end_time: 10392086.761
+DP start_backend: 6 start_idx: 16 end_backend: 6 end_idx: 19 len: 4, start_time: 10392094.617, end_time: 10392123.138
+PP start_backend: 1 start_idx: 29 end_backend: 6 end_idx: 29 len: 1, start_time: 10392144.923, end_time: 10392145.366
+DP start_backend: 5 start_idx: 299 end_backend: 5 end_idx: 326 len: 28, start_time: 10393941.525, end_time: 10398157.181
+PP start_backend: 1 start_idx: 30 end_backend: 1 end_idx: 31 len: 2, start_time: 10398299.615, end_time: 10398302.529
+DP start_backend: 5 start_idx: 327 end_backend: 5 end_idx: 340 len: 14, start_time: 10398500.775, end_time: 10401001.352
+PP start_backend: 1 start_idx: 32 end_backend: 5 end_idx: 32 len: 1, start_time: 10401143.098, end_time: 10401143.335
+DP start_backend: 5 start_idx: 341 end_backend: 5 end_idx: 355 len: 15, start_time: 10401149.079, end_time: 10404406.384
+PP start_backend: 1 start_idx: 33 end_backend: 5 end_idx: 33 len: 1, start_time: 10404406.922, end_time: 10405702.004
+DP start_backend: 6 start_idx: 20 end_backend: 6 end_idx: 23 len: 4, start_time: 10405708.829, end_time: 10405740.333
+PP start_backend: 1 start_idx: 34 end_backend: 6 end_idx: 34 len: 1, start_time: 10405753.723, end_time: 10405754.117
+DP start_backend: 5 start_idx: 356 end_backend: 5 end_idx: 383 len: 28, start_time: 10407556.122, end_time: 10411855.836
+PP start_backend: 1 start_idx: 35 end_backend: 1 end_idx: 36 len: 2, start_time: 10412003.489, end_time: 10412006.53
+DP start_backend: 5 start_idx: 384 end_backend: 5 end_idx: 397 len: 14, start_time: 10412205.164, end_time: 10414739.039
+PP start_backend: 1 start_idx: 37 end_backend: 5 end_idx: 37 len: 1, start_time: 10414888.331, end_time: 10414889.416
+DP start_backend: 5 start_idx: 398 end_backend: 5 end_idx: 412 len: 15, start_time: 10414893.203, end_time: 10418350.729
+PP start_backend: 1 start_idx: 38 end_backend: 5 end_idx: 38 len: 1, start_time: 10418355.692, end_time: 10419214.641
+DP start_backend: 6 start_idx: 24 end_backend: 6 end_idx: 27 len: 4, start_time: 10419223.062, end_time: 10419252.641
+PP start_backend: 1 start_idx: 39 end_backend: 6 end_idx: 39 len: 1, start_time: 10419270.224, end_time: 10419270.491
+DP start_backend: 5 start_idx: 413 end_backend: 5 end_idx: 440 len: 28, start_time: 10421054.864, end_time: 10425266.862
+PP start_backend: 1 start_idx: 40 end_backend: 1 end_idx: 41 len: 2, start_time: 10425408.124, end_time: 10425413.927
+DP start_backend: 5 start_idx: 441 end_backend: 5 end_idx: 454 len: 14, start_time: 10425623.743, end_time: 10428122.318
+PP start_backend: 1 start_idx: 42 end_backend: 5 end_idx: 42 len: 1, start_time: 10428264.115, end_time: 10428264.719
+DP start_backend: 5 start_idx: 455 end_backend: 5 end_idx: 469 len: 15, start_time: 10428269.745, end_time: 10431499.228
+PP start_backend: 1 start_idx: 43 end_backend: 5 end_idx: 43 len: 1, start_time: 10431499.539, end_time: 10432594.877
+DP start_backend: 6 start_idx: 28 end_backend: 6 end_idx: 31 len: 4, start_time: 10432601.774, end_time: 10432646.792
+PP start_backend: 1 start_idx: 44 end_backend: 6 end_idx: 44 len: 1, start_time: 10432662.197, end_time: 10432662.483
+DP start_backend: 5 start_idx: 470 end_backend: 5 end_idx: 497 len: 28, start_time: 10434522.583, end_time: 10438750.067
+PP start_backend: 1 start_idx: 45 end_backend: 1 end_idx: 46 len: 2, start_time: 10438891.662, end_time: 10438894.865
+DP start_backend: 5 start_idx: 498 end_backend: 5 end_idx: 511 len: 14, start_time: 10439107.735, end_time: 10441557.645
+PP start_backend: 1 start_idx: 47 end_backend: 5 end_idx: 47 len: 1, start_time: 10441699.415, end_time: 10441699.689
+DP start_backend: 5 start_idx: 512 end_backend: 5 end_idx: 526 len: 15, start_time: 10441704.085, end_time: 10445037.608
+PP start_backend: 1 start_idx: 48 end_backend: 5 end_idx: 48 len: 1, start_time: 10445042.763, end_time: 10446038.157
+DP start_backend: 6 start_idx: 32 end_backend: 6 end_idx: 35 len: 4, start_time: 10446045.162, end_time: 10446074.06
+PP start_backend: 1 start_idx: 49 end_backend: 6 end_idx: 49 len: 1, start_time: 10446084.055, end_time: 10446084.281
+DP start_backend: 5 start_idx: 527 end_backend: 5 end_idx: 554 len: 28, start_time: 10447866.957, end_time: 10452101.643
+PP start_backend: 1 start_idx: 50 end_backend: 1 end_idx: 51 len: 2, start_time: 10452245.593, end_time: 10452248.626
+DP start_backend: 5 start_idx: 555 end_backend: 5 end_idx: 568 len: 14, start_time: 10452451.511, end_time: 10455004.826
+PP start_backend: 1 start_idx: 52 end_backend: 5 end_idx: 52 len: 1, start_time: 10455146.991, end_time: 10455148.44
+DP start_backend: 5 start_idx: 569 end_backend: 5 end_idx: 583 len: 15, start_time: 10455152.564, end_time: 10458484.344
+PP start_backend: 1 start_idx: 53 end_backend: 5 end_idx: 53 len: 1, start_time: 10458487.245, end_time: 10459531.37
+DP start_backend: 6 start_idx: 36 end_backend: 6 end_idx: 39 len: 4, start_time: 10459538.26, end_time: 10459570.958
+Backend: 1, Idx: 0, Min Gap: 80.418 ms
+Backend: 1, Idx: 4, Min Gap: 3.208 ms
+Backend: 1, Idx: 5, Min Gap: 4.796 ms
+Backend: 1, Idx: 7, Min Gap: 4.017 ms
+Backend: 1, Idx: 8, Min Gap: 63.736 ms
+Backend: 1, Idx: 9, Min Gap: 1.673 ms
+Backend: 1, Idx: 10, Min Gap: 8.326 ms
+Backend: 1, Idx: 12, Min Gap: 4.073 ms
+Backend: 1, Idx: 13, Min Gap: 6.791 ms
+Backend: 1, Idx: 14, Min Gap: 2.116 ms
+Backend: 1, Idx: 15, Min Gap: 4.175 ms
+Backend: 1, Idx: 17, Min Gap: 4.602 ms
+Backend: 1, Idx: 18, Min Gap: 6.914 ms
+Backend: 1, Idx: 19, Min Gap: 1.882 ms
+Backend: 1, Idx: 20, Min Gap: 2.438 ms
+Backend: 1, Idx: 22, Min Gap: 4.450 ms
+Backend: 1, Idx: 23, Min Gap: 7.194 ms
+Backend: 1, Idx: 24, Min Gap: 1.584 ms
+Backend: 1, Idx: 25, Min Gap: 4.865 ms
+Backend: 1, Idx: 27, Min Gap: 4.341 ms
+Backend: 1, Idx: 28, Min Gap: 7.856 ms
+Backend: 1, Idx: 29, Min Gap: 1.502 ms
+Backend: 1, Idx: 30, Min Gap: 1.118 ms
+Backend: 1, Idx: 32, Min Gap: 5.744 ms
+Backend: 1, Idx: 33, Min Gap: 6.825 ms
+Backend: 1, Idx: 34, Min Gap: 1.803 ms
+Backend: 1, Idx: 35, Min Gap: 0.792 ms
+Backend: 1, Idx: 37, Min Gap: 3.787 ms
+Backend: 1, Idx: 38, Min Gap: 7.188 ms
+Backend: 1, Idx: 39, Min Gap: 1.995 ms
+Backend: 1, Idx: 40, Min Gap: 2.347 ms
+Backend: 1, Idx: 42, Min Gap: 5.026 ms
+Backend: 1, Idx: 43, Min Gap: 6.897 ms
+Backend: 1, Idx: 44, Min Gap: 2.350 ms
+Backend: 1, Idx: 45, Min Gap: 6.008 ms
+Backend: 1, Idx: 47, Min Gap: 4.396 ms
+Backend: 1, Idx: 48, Min Gap: 7.005 ms
+Backend: 1, Idx: 49, Min Gap: 2.364 ms
+Backend: 1, Idx: 50, Min Gap: 31.913 ms
+Backend: 1, Idx: 52, Min Gap: 4.124 ms
+Backend: 1, Idx: 53, Min Gap: 6.890 ms
+Average time gap: 8.281 ms
+Standard deviation: 15.313 ms
+Minimum time gap: 0.792 ms
+Maximum time gap: 80.418 ms

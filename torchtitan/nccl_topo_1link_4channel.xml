@@ -1,0 +1,21 @@
+<system version="1">
+  <cpu host_hash="0x364f35b62822b658" numaid="1" affinity="aaaaaaaa,aaaaaaaa,aaaaaaaa,aaaaaaaa" arch="x86_64" vendor="GenuineIntel" familyid="6" modelid="143">
+    <pci busid="0000:9f:00.0" class="0x020000" vendor="0x15b3" device="0x101d" subsystem_vendor="0x15b3" subsystem_device="0x0058" link_speed="16.0 GT/s PCIe" link_width="16">
+      <nic>
+        <net name="rocep159s0f0" dev="2" latency="0" speed="100000" port="1" guid="0x4c1140003e60050" maxconn="131072" gdr="0"/>
+        <net name="rocep159s0f1" dev="3" latency="0" speed="100000" port="2" guid="0x4c1140003e60050" maxconn="131072" gdr="0"/>
+      </nic>
+    </pci>
+    <pci busid="0000:e1:00.0" class="0x030200" vendor="0x10de" device="0x26b5" subsystem_vendor="0x10de" subsystem_device="0x169d" link_speed="16.0 GT/s PCIe" link_width="16">
+      <gpu dev="1" sm="89" rank="0" gdr="1"/>
+    </pci>
+  </cpu>
+  <cpu host_hash="0x364f35b62822b658" numaid="0" affinity="55555555,55555555,55555555,55555555" arch="x86_64" vendor="GenuineIntel" familyid="6" modelid="143">
+    <pci busid="0000:0d:00.0" class="0x020000" vendor="0x15b3" device="0x101d" subsystem_vendor="0x15b3" subsystem_device="0x0058" link_speed="16.0 GT/s PCIe" link_width="16">
+      <nic>
+        <net name="rocep13s0f0" dev="0" latency="0" speed="100000" port="1" guid="0x67ac30003098c7c" maxconn="131072" gdr="0"/>
+        <net name="rocep13s0f1" dev="1" latency="0" speed="100000" port="2" guid="0x67ac30003098c7c" maxconn="131072" gdr="0"/>
+      </nic>
+    </pci>
+  </cpu>
+</system>
