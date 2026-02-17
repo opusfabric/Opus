@@ -1,0 +1,11 @@
+Scale Out BW: 50.0
+Scale Up BW: 450.0
+DP Links: 1024, TP Links: 3584, PP Links: 1024
+Total Configured BW: 1664000.0
+Total DP Traffic: 2251837931520
+Total TP Traffic: 57841800970240
+Total PP Traffic: 51539607552
+Total BW to allocate: 1664000.0
+Allocated BW: 1664000.0, Target BW: 1664000.0
+Allocated BW - DP: 261.27625218395053, TP: 378.34171802735375, PP: 39.52773472031149
+378 | 261 | 40 GB/s

@@ -1,0 +1,21 @@
+[submodule "extern/graph_frontend/param"]
+	path = extern/graph_frontend/param
+	url = https://github.com/facebookresearch/param.git
+[submodule "extern/network_backend/analytical"]
+	path = extern/network_backend/analytical
+	url = https://github.com/shuoshuc/astra-network-analytical.git
+[submodule "extern/remote_memory_backend/analytical"]
+	path = extern/remote_memory_backend/analytical
+	url = https://github.com/astra-sim/astra-memory-analytical.git
+[submodule "extern/helper/fmt"]
+	path = extern/helper/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "extern/helper/spdlog"]
+	path = extern/helper/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "extern/network_backend/ns-3"]
+	path = extern/network_backend/ns-3
+	url = https://github.com/astra-sim/astra-network-ns3.git
+[submodule "extern/network_backend/csg-htsim"]
+	path = extern/network_backend/csg-htsim
+	url = https://github.com/Broadcom/csg-htsim.git

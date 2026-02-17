@@ -1,0 +1,9 @@
+DP Links: 128, TP Links: 448, PP Links: 64
+Total Configured BW: 214400
+Total DP Traffic: 450367586304
+Total TP Traffic: 57753720586240
+Total PP Traffic: 17179869184
+Total BW to allocate: 214400
+Allocated BW: 214399.99999999997, Target BW: 214400
+Allocated BW - DP: 133.79147906595617, TP: 432.8793125275815, PP: 52.26185417501707
+433 | 134 | 52 GB/s

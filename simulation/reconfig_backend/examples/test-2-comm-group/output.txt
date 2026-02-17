@@ -1,0 +1,1511 @@
+[ASTRA-sim] Compiling ASTRA-sim with the Analytical Network Backend...
+
+-- {fmt} version: 11.0.2
+-- Build type: Release
+-- Build spdlog: 1.14.1
+-- Build type: Release
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /app/astra-sim/build/astra_analytical/build
+Consolidate compiler generated dependencies of target fmt
+Consolidate compiler generated dependencies of target spdlog
+[  5%] Built target spdlog
+[  6%] Built target fmt
+Consolidate compiler generated dependencies of target yaml-cpp
+[ 25%] Built target yaml-cpp
+Consolidate compiler generated dependencies of target yaml-cpp-sandbox
+Consolidate compiler generated dependencies of target yaml-cpp-parse
+Consolidate compiler generated dependencies of target Analytical_Congestion_Unaware
+Consolidate compiler generated dependencies of target yaml-cpp-read
+[ 27%] Built target yaml-cpp-sandbox
+Consolidate compiler generated dependencies of target Analytical_Congestion_Aware
+Consolidate compiler generated dependencies of target Analytical_Reconfigurable
+[ 28%] Built target yaml-cpp-parse
+[ 29%] Built target yaml-cpp-read
+[ 37%] Built target Analytical_Congestion_Unaware
+[ 46%] Built target Analytical_Congestion_Aware
+[ 52%] Built target Analytical_Reconfigurable
+Consolidate compiler generated dependencies of target AstraSim
+[ 52%] Building CXX object AstraSim/CMakeFiles/AstraSim.dir/astra-sim/system/CommunicatorGroup.cc.o
+[ 53%] Linking CXX static library ../lib/libAstraSim.a
+[ 84%] Built target AstraSim
+Consolidate compiler generated dependencies of target AstraSim_Analytical_Congestion_Unaware
+Consolidate compiler generated dependencies of target AstraSim_Analytical_Congestion_Aware
+Consolidate compiler generated dependencies of target AstraSim_Analytical_Reconfigurable
+[ 85%] Linking CXX executable ../bin/AstraSim_Analytical_Congestion_Aware
+[ 85%] Linking CXX executable ../bin/AstraSim_Analytical_Congestion_Unaware
+[ 86%] Linking CXX executable ../bin/AstraSim_Analytical_Reconfigurable
+[ 90%] Built target AstraSim_Analytical_Congestion_Aware
+[ 97%] Built target AstraSim_Analytical_Congestion_Unaware
+[100%] Built target AstraSim_Analytical_Reconfigurable
+
+[ASTRA-sim] Compilation finished.
+[ASTRA-sim] Running ASTRA-sim Example with Analytical Network Backend...
+
+[2025-07-29 01:19:14.115] [system::topology::RingTopology] [info] ring of node 0, id: 0 dimension: local total nodes in ring: 2 index in ring: 0 offset: 1 total nodes in ring: 2
+[2025-07-29 01:19:14.115] [system::topology::RingTopology] [info] ring of node 0, id: 0 dimension: local total nodes in ring: 2 index in ring: 0 offset: 1 total nodes in ring: 2
+[2025-07-29 01:19:14.115] [system::topology::RingTopology] [info] ring of node 0, id: 0 dimension: local total nodes in ring: 2 index in ring: 0 offset: 1 total nodes in ring: 2
+[2025-07-29 01:19:14.115] [system::topology::RingTopology] [info] ring of node 0, id: 0 dimension: local total nodes in ring: 2 index in ring: 0 offset: 1 total nodes in ring: 2
+Issue node, sys->id=0, tick=0, node->id=1, node->name=[pytorch|profiler|execution_trace|thread], node->type=4
+Issue node, sys->id=0, tick=0, node->id=2, node->name=ProfilerStep#0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=3, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=4, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=5, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=6, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=7, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=8, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=9, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=10, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=11, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=12, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=13, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=14, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=15, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=16, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=17, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=18, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=19, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=20, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=21, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=22, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=23, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=24, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=25, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=26, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=27, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=28, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=29, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=30, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=31, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=32, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=33, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=34, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=35, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=36, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=37, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=38, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=39, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=40, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=41, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=42, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=43, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=44, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=45, node->name=aten::flatten, node->type=4
+Issue node, sys->id=0, tick=0, node->id=46, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=47, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=48, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=49, node->name=aten::flatten, node->type=4
+Issue node, sys->id=0, tick=0, node->id=50, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=51, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=52, node->name=aten::flatten, node->type=4
+Issue node, sys->id=0, tick=0, node->id=53, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=54, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=55, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=56, node->name=aten::flatten, node->type=4
+Issue node, sys->id=0, tick=0, node->id=57, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=0, node->id=58, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=59, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=60, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=0, tick=0, node->id=61, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=62, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=63, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=64, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=65, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=66, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=67, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=68, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=69, node->name=aten::flatten, node->type=4
+Issue node, sys->id=0, tick=0, node->id=70, node->name=aten::chunk, node->type=4
+Issue node, sys->id=0, tick=0, node->id=71, node->name=aten::split, node->type=4
+Issue node, sys->id=0, tick=0, node->id=72, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=73, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=74, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=75, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=76, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=77, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=78, node->name=aten::clone, node->type=4
+Issue node, sys->id=0, tick=0, node->id=79, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=80, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=81, node->name=aten::set_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=82, node->name=aten::set_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=83, node->name=aten::randn, node->type=4
+Issue node, sys->id=0, tick=0, node->id=84, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=85, node->name=aten::normal_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=86, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=87, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=88, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=89, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=90, node->name=aten::randn, node->type=4
+Issue node, sys->id=0, tick=0, node->id=91, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=92, node->name=aten::normal_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=93, node->name=aten::to, node->type=4
+Issue node, sys->id=0, tick=0, node->id=94, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=0, tick=0, node->id=95, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=96, node->name=aten::copy_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=97, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=98, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=99, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=100, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=101, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=0, tick=0, node->id=102, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=103, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=104, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=105, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=106, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=0, tick=0, node->id=107, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=108, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=109, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=110, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=111, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=0, tick=0, node->id=112, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=113, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=114, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=115, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=116, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=117, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=118, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=119, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=120, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=121, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=0, tick=0, node->id=122, node->name=aten::expand, node->type=4
+Issue node, sys->id=0, tick=0, node->id=123, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=124, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=125, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=126, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=127, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=128, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=129, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=130, node->name=aten::relu, node->type=4
+Issue node, sys->id=0, tick=0, node->id=131, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=0, tick=0, node->id=132, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=133, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=134, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=135, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=136, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=137, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=138, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=139, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=140, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=0, tick=0, node->id=141, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=0, tick=0, node->id=142, node->name=aten::resize_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=143, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=144, node->name=aten::mean, node->type=4
+Issue node, sys->id=0, tick=0, node->id=145, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=146, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=147, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=148, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=149, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=150, node->name=[pytorch|profiler|execution_trace|thread], node->type=4
+Issue node, sys->id=0, tick=0, node->id=151, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=152, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=153, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=154, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=155, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=156, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=157, node->name=aten::zero_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=158, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=159, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=160, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=161, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=162, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=163, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=164, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=165, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=166, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=167, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=168, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=169, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=170, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=171, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=172, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=173, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=174, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=175, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=176, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=177, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=178, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=179, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=180, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=181, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=182, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=183, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=184, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=185, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=186, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=187, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=188, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=189, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=190, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=191, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=192, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=193, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=194, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=195, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=196, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=197, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=198, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=199, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=200, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=201, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=202, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=203, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=204, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=205, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=206, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=207, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=208, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=209, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=210, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=211, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=212, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=213, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=214, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=215, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=216, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=217, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=218, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=219, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=220, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=221, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=222, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=0, node->id=223, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=224, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=225, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=226, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=227, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=228, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=229, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=0, node->id=230, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=231, node->name=aten::chunk, node->type=4
+Issue node, sys->id=0, tick=0, node->id=232, node->name=aten::split, node->type=4
+Issue node, sys->id=0, tick=0, node->id=233, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=234, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=235, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=236, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=237, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=238, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=239, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=240, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=241, node->name=aten::div_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=242, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=243, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=244, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=0, tick=0, node->id=245, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=246, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=0, node->id=247, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=0, tick=0, node->id=248, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=249, node->name=aten::result_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=250, node->name=aten::item, node->type=4
+Issue node, sys->id=0, tick=0, node->id=251, node->name=aten::_local_scalar_dense, node->type=4
+Issue node, sys->id=0, tick=0, node->id=252, node->name=ProfilerStep#1, node->type=4
+Issue node, sys->id=0, tick=0, node->id=253, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=254, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=255, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=256, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=0, tick=0, node->id=257, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=258, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=259, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=260, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=0, tick=0, node->id=261, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=262, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=263, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=264, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=265, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=0, tick=0, node->id=266, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=267, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=268, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=269, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=270, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=271, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=272, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=273, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=274, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=275, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=0, tick=0, node->id=276, node->name=aten::expand, node->type=4
+Issue node, sys->id=0, tick=0, node->id=277, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=278, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=279, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=280, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=281, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=282, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=283, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=284, node->name=aten::relu, node->type=4
+Issue node, sys->id=0, tick=0, node->id=285, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=0, tick=0, node->id=286, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=287, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=288, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=289, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=290, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=291, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=292, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=293, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=294, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=0, tick=0, node->id=295, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=0, tick=0, node->id=296, node->name=aten::resize_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=297, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=298, node->name=aten::mean, node->type=4
+Issue node, sys->id=0, tick=0, node->id=299, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=300, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=301, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=302, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=303, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=304, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=305, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=306, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=307, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=308, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=309, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=310, node->name=aten::zero_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=311, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=312, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=313, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=314, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=315, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=316, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=317, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=318, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=319, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=320, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=321, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=322, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=323, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=324, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=325, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=326, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=327, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=328, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=329, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=330, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=331, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=332, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=333, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=334, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=335, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=336, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=337, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=338, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=339, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=340, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=341, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=342, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=343, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=344, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=345, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=346, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=347, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=348, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=349, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=350, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=351, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=352, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=353, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=354, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=355, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=356, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=357, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=358, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=359, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=360, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=361, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=362, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=363, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=364, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=365, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=366, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=367, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=368, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=369, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=370, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=371, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=372, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=373, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=374, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=375, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=0, node->id=376, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=377, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=378, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=379, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=380, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=381, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=382, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=0, node->id=383, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=384, node->name=aten::chunk, node->type=4
+Issue node, sys->id=0, tick=0, node->id=385, node->name=aten::split, node->type=4
+Issue node, sys->id=0, tick=0, node->id=386, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=387, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=388, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=389, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=390, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=391, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=392, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=393, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=394, node->name=aten::div_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=395, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=396, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=397, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=0, tick=0, node->id=398, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=399, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=0, node->id=400, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=0, tick=0, node->id=401, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=402, node->name=aten::result_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=403, node->name=aten::item, node->type=4
+Issue node, sys->id=0, tick=0, node->id=404, node->name=aten::_local_scalar_dense, node->type=4
+Issue node, sys->id=0, tick=0, node->id=405, node->name=ProfilerStep#2, node->type=4
+Issue node, sys->id=0, tick=0, node->id=406, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=407, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=408, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=409, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=0, tick=0, node->id=410, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=411, node->name=FullyShardedDataParallel.rate_limiter, node->type=4
+Issue node, sys->id=0, tick=0, node->id=412, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=413, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=414, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=0, tick=0, node->id=415, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=0, node->id=416, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=417, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=418, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=419, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=0, tick=0, node->id=420, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=421, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=422, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=423, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=424, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=425, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=426, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=427, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=428, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=429, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=0, tick=0, node->id=430, node->name=aten::expand, node->type=4
+Issue node, sys->id=0, tick=0, node->id=431, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=432, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=433, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=434, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=435, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=436, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=437, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=438, node->name=aten::relu, node->type=4
+Issue node, sys->id=0, tick=0, node->id=439, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=0, tick=0, node->id=440, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=0, node->id=441, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=442, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=443, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=444, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=445, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=446, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=447, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=448, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=0, tick=0, node->id=449, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=0, tick=0, node->id=450, node->name=aten::resize_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=451, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=452, node->name=aten::mean, node->type=4
+Issue node, sys->id=0, tick=0, node->id=453, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=454, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=455, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=456, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=457, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=458, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=459, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=460, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=461, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=462, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=0, node->id=463, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=0, node->id=464, node->name=aten::zero_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=465, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=0, node->id=466, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=467, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=468, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=469, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=470, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=471, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=472, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=473, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=474, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=475, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=476, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=477, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=478, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=479, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=480, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=481, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=482, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=483, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=484, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=485, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=486, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=487, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=488, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=489, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=490, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=491, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=492, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=493, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=494, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=0, tick=0, node->id=495, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=496, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=497, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=498, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=499, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=500, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=0, node->id=501, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=502, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=503, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=504, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=0, node->id=505, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=506, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=507, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=508, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=0, node->id=509, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=0, node->id=510, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=511, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=512, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=513, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=514, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=515, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=516, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=517, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=518, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=519, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=520, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=521, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=522, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=523, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=524, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=525, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=0, node->id=526, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=0, node->id=527, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=528, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=0, node->id=529, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=0, node->id=530, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=531, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=0, node->id=532, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=533, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=0, node->id=534, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=0, tick=0, node->id=535, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=0, node->id=536, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=0, node->id=537, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=0, tick=0, node->id=538, node->name=aten::chunk, node->type=4
+Issue node, sys->id=0, tick=0, node->id=539, node->name=aten::split, node->type=4
+Issue node, sys->id=0, tick=0, node->id=540, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=0, node->id=541, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=0, node->id=542, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=0, node->id=543, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=1, node->name=[pytorch|profiler|execution_trace|thread], node->type=4
+Issue node, sys->id=1, tick=0, node->id=2, node->name=ProfilerStep#0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=3, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=4, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=5, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=6, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=7, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=8, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=9, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=10, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=11, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=12, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=13, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=14, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=15, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=16, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=17, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=18, node->name=aten::uniform_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=19, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=20, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=21, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=22, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=23, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=24, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=25, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=26, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=27, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=28, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=29, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=30, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=31, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=32, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=33, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=34, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=35, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=36, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=37, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=38, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=39, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=40, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=41, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=42, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=43, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=44, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=45, node->name=aten::flatten, node->type=4
+Issue node, sys->id=1, tick=0, node->id=46, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=47, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=48, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=49, node->name=aten::flatten, node->type=4
+Issue node, sys->id=1, tick=0, node->id=50, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=51, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=52, node->name=aten::flatten, node->type=4
+Issue node, sys->id=1, tick=0, node->id=53, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=54, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=55, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=56, node->name=aten::flatten, node->type=4
+Issue node, sys->id=1, tick=0, node->id=57, node->name=aten::cat, node->type=4
+Issue node, sys->id=1, tick=0, node->id=58, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=59, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=60, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=1, tick=0, node->id=61, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=62, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=63, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=64, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=65, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=66, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=67, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=68, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=69, node->name=aten::flatten, node->type=4
+Issue node, sys->id=1, tick=0, node->id=70, node->name=aten::chunk, node->type=4
+Issue node, sys->id=1, tick=0, node->id=71, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=0, node->id=72, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=73, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=74, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=75, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=76, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=77, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=78, node->name=aten::clone, node->type=4
+Issue node, sys->id=1, tick=0, node->id=79, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=80, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=81, node->name=aten::set_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=82, node->name=aten::set_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=83, node->name=aten::randn, node->type=4
+Issue node, sys->id=1, tick=0, node->id=84, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=85, node->name=aten::normal_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=86, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=87, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=88, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=89, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=90, node->name=aten::randn, node->type=4
+Issue node, sys->id=1, tick=0, node->id=91, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=92, node->name=aten::normal_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=93, node->name=aten::to, node->type=4
+Issue node, sys->id=1, tick=0, node->id=94, node->name=aten::_to_copy, node->type=4
+Issue node, sys->id=1, tick=0, node->id=95, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=96, node->name=aten::copy_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=97, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=98, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=99, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=100, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=101, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=1, tick=0, node->id=102, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=103, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=104, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=105, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=106, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=1, tick=0, node->id=107, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=108, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=109, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=110, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=111, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=1, tick=0, node->id=112, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=113, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=114, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=115, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=116, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=117, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=118, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=119, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=120, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=121, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=1, tick=0, node->id=122, node->name=aten::expand, node->type=4
+Issue node, sys->id=1, tick=0, node->id=123, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=124, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=125, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=126, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=127, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=128, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=129, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=130, node->name=aten::relu, node->type=4
+Issue node, sys->id=1, tick=0, node->id=131, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=1, tick=0, node->id=132, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=133, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=134, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=135, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=136, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=137, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=138, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=139, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=140, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=1, tick=0, node->id=141, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=1, tick=0, node->id=142, node->name=aten::resize_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=143, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=144, node->name=aten::mean, node->type=4
+Issue node, sys->id=1, tick=0, node->id=145, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=146, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=147, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=148, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=149, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=150, node->name=[pytorch|profiler|execution_trace|thread], node->type=4
+Issue node, sys->id=1, tick=0, node->id=151, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=152, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=153, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=154, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=155, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=156, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=157, node->name=aten::zero_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=158, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=159, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=160, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=161, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=162, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=163, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=164, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=165, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=166, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=167, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=168, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=169, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=170, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=171, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=172, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=173, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=174, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=175, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=176, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=177, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=178, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=179, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=180, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=181, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=182, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=183, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=184, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=185, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=186, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=187, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=188, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=189, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=190, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=191, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=192, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=193, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=194, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=195, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=196, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=197, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=198, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=199, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=200, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=201, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=202, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=203, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=204, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=205, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=206, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=207, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=208, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=209, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=210, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=211, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=212, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=213, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=214, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=215, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=216, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=217, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=218, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=219, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=220, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=221, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=222, node->name=aten::cat, node->type=4
+Issue node, sys->id=1, tick=0, node->id=223, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=224, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=225, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=226, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=227, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=228, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=229, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=0, node->id=230, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=231, node->name=aten::chunk, node->type=4
+Issue node, sys->id=1, tick=0, node->id=232, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=0, node->id=233, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=234, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=235, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=236, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=237, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=238, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=239, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=240, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=241, node->name=aten::div_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=242, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=243, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=244, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=1, tick=0, node->id=245, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=246, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=0, node->id=247, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=1, tick=0, node->id=248, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=249, node->name=aten::result_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=250, node->name=ProfilerStep#1, node->type=4
+Issue node, sys->id=1, tick=0, node->id=251, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=252, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=253, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=254, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=1, tick=0, node->id=255, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=256, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=257, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=258, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=1, tick=0, node->id=259, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=260, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=261, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=262, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=263, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=1, tick=0, node->id=264, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=265, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=266, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=267, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=268, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=269, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=270, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=271, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=272, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=273, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=1, tick=0, node->id=274, node->name=aten::expand, node->type=4
+Issue node, sys->id=1, tick=0, node->id=275, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=276, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=277, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=278, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=279, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=280, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=281, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=282, node->name=aten::relu, node->type=4
+Issue node, sys->id=1, tick=0, node->id=283, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=1, tick=0, node->id=284, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=285, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=286, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=287, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=288, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=289, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=290, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=291, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=292, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=1, tick=0, node->id=293, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=1, tick=0, node->id=294, node->name=aten::resize_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=295, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=296, node->name=aten::mean, node->type=4
+Issue node, sys->id=1, tick=0, node->id=297, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=298, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=299, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=300, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=301, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=302, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=303, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=304, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=305, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=306, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=307, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=308, node->name=aten::zero_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=309, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=310, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=311, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=312, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=313, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=314, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=315, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=316, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=317, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=318, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=319, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=320, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=321, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=322, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=323, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=324, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=325, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=326, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=327, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=328, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=329, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=330, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=331, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=332, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=333, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=334, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=335, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=336, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=337, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=338, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=339, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=340, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=341, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=342, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=343, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=344, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=345, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=346, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=347, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=348, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=349, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=350, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=351, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=352, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=353, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=354, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=355, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=356, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=357, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=358, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=359, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=360, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=361, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=362, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=363, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=364, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=365, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=366, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=367, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=368, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=369, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=370, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=371, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=372, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=373, node->name=aten::cat, node->type=4
+Issue node, sys->id=1, tick=0, node->id=374, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=375, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=376, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=377, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=378, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=379, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=380, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=0, node->id=381, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=382, node->name=aten::chunk, node->type=4
+Issue node, sys->id=1, tick=0, node->id=383, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=0, node->id=384, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=385, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=386, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=387, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=388, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=389, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=390, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=391, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=392, node->name=aten::div_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=393, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=394, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=395, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=1, tick=0, node->id=396, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=397, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=0, node->id=398, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=1, tick=0, node->id=399, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=400, node->name=aten::result_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=401, node->name=ProfilerStep#2, node->type=4
+Issue node, sys->id=1, tick=0, node->id=402, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=403, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=404, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=405, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=1, tick=0, node->id=406, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=407, node->name=FullyShardedDataParallel.rate_limiter, node->type=4
+Issue node, sys->id=1, tick=0, node->id=408, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=409, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=410, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=1, tick=0, node->id=411, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=0, node->id=412, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=413, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=414, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=415, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=1, tick=0, node->id=416, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=417, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=418, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=419, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=420, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=421, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=422, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=423, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=424, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=425, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=1, tick=0, node->id=426, node->name=aten::expand, node->type=4
+Issue node, sys->id=1, tick=0, node->id=427, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=428, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=429, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=430, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=431, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=432, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=433, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=434, node->name=aten::relu, node->type=4
+Issue node, sys->id=1, tick=0, node->id=435, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=1, tick=0, node->id=436, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=0, node->id=437, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=438, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=439, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=440, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=441, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=442, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=443, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=444, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=1, tick=0, node->id=445, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=1, tick=0, node->id=446, node->name=aten::resize_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=447, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=448, node->name=aten::mean, node->type=4
+Issue node, sys->id=1, tick=0, node->id=449, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=450, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=451, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=452, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=453, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=454, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=455, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=456, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=457, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=458, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=459, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=0, node->id=460, node->name=aten::zero_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=461, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=0, node->id=462, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=463, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=464, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=465, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=466, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=467, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=468, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=469, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=470, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=471, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=472, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=473, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=474, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=475, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=476, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=477, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=478, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=479, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=480, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=481, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=482, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=483, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=484, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=485, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=486, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=487, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=488, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=489, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=490, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=1, tick=0, node->id=491, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=492, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=493, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=494, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=495, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=496, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=0, node->id=497, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=498, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=499, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=500, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=0, node->id=501, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=502, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=503, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=504, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=0, node->id=505, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=0, node->id=506, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=507, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=508, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=509, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=510, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=511, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=512, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=513, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=514, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=515, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=516, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=517, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=518, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=519, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=520, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=521, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=0, node->id=522, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=0, node->id=523, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=524, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=0, node->id=525, node->name=aten::cat, node->type=4
+Issue node, sys->id=1, tick=0, node->id=526, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=527, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=0, node->id=528, node->name=aten::detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=529, node->name=detach, node->type=4
+Issue node, sys->id=1, tick=0, node->id=530, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=1, tick=0, node->id=531, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=0, node->id=532, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=0, node->id=533, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=0, node->id=534, node->name=aten::chunk, node->type=4
+Issue node, sys->id=1, tick=0, node->id=535, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=0, node->id=536, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=537, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=538, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=539, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=0, node->id=540, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=0, node->id=541, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=0, node->id=542, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=0, node->id=543, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=1, node->id=544, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=1, node->id=545, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=1, node->id=546, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=1, node->id=547, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=1, node->id=548, node->name=aten::div_, node->type=4
+Issue node, sys->id=0, tick=1, node->id=549, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=0, tick=1, node->id=550, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=1, node->id=551, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=0, tick=1, node->id=552, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=1, node->id=553, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=1, node->id=554, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=0, tick=1, node->id=555, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=0, tick=1, node->id=556, node->name=aten::result_type, node->type=4
+Issue node, sys->id=0, tick=1, node->id=557, node->name=aten::item, node->type=4
+Issue node, sys->id=0, tick=1, node->id=558, node->name=aten::_local_scalar_dense, node->type=4
+Issue node, sys->id=0, tick=1, node->id=559, node->name=ProfilerStep#3, node->type=4
+Issue node, sys->id=0, tick=1, node->id=560, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=1, tick=1, node->id=544, node->name=aten::div_, node->type=4
+Issue node, sys->id=1, tick=1, node->id=545, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=1, tick=1, node->id=546, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=1, node->id=547, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=1, tick=1, node->id=548, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=1, node->id=549, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=1, node->id=550, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=1, tick=1, node->id=551, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=1, tick=1, node->id=552, node->name=aten::result_type, node->type=4
+Issue node, sys->id=1, tick=1, node->id=553, node->name=ProfilerStep#3, node->type=4
+Issue node, sys->id=1, tick=1, node->id=554, node->name=Optimizer.zero_grad#SGD.zero_grad, node->type=4
+Issue node, sys->id=1, tick=86001, node->id=555, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=0, tick=123001, node->id=561, node->name=FullyShardedDataParallel.forward, node->type=4
+Issue node, sys->id=1, tick=250001, node->id=556, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=0, tick=286001, node->id=562, node->name=FullyShardedDataParallel._root_pre_forward, node->type=4
+Issue node, sys->id=1, tick=1253001, node->id=557, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=0, tick=1290001, node->id=563, node->name=FullyShardedDataParallel._to_kwargs, node->type=4
+Issue node, sys->id=1, tick=1316001, node->id=558, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=0, tick=1363001, node->id=564, node->name=FullyShardedDataParallel._pre_forward, node->type=4
+Issue node, sys->id=1, tick=2047001, node->id=559, node->name=FullyShardedDataParallel.rate_limiter, node->type=4
+Issue node, sys->id=0, tick=2079001, node->id=565, node->name=FullyShardedDataParallel.rate_limiter, node->type=4
+Issue node, sys->id=1, tick=2084001, node->id=560, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=0, tick=2117001, node->id=566, node->name=c10d::_allgather_base_, node->type=4
+Issue node, sys->id=1, tick=2146001, node->id=561, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=2180001, node->id=567, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=2197001, node->id=562, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=0, tick=2238001, node->id=568, node->name=nccl:_all_gather_base, node->type=4
+Issue node, sys->id=1, tick=2276001, node->id=563, node->name=ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=1, tick=2276001, node->id=564, node->name=record_param_comms, node->type=4
+Issue node, sys->id=1, tick=2294001, node->id=565, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=2323001, node->id=566, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2346001, node->id=567, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=2354001, node->id=568, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=0, tick=2361001, node->id=569, node->name=ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=0, tick=2361001, node->id=570, node->name=record_param_comms, node->type=4
+Collective communication finished, sys->id=1, tick=2362581, node->id=563, node->name=ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Collective communication finished, sys->id=0, tick=2363081, node->id=569, node->name=ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=0, tick=2379001, node->id=571, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=2404001, node->id=569, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2415001, node->id=572, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2423001, node->id=570, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2433001, node->id=571, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2442001, node->id=572, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2443001, node->id=573, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=2450001, node->id=573, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=2450001, node->id=574, node->name=aten::split_with_sizes, node->type=4
+Issue node, sys->id=1, tick=2467001, node->id=574, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=2477001, node->id=575, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=2486001, node->id=576, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=2495001, node->id=577, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=0, tick=2500001, node->id=575, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2518001, node->id=576, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2528001, node->id=577, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2537001, node->id=578, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2548001, node->id=579, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=2559001, node->id=578, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=0, tick=2565001, node->id=580, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=2572001, node->id=579, node->name=aten::expand, node->type=4
+Issue node, sys->id=0, tick=2575001, node->id=581, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=2584001, node->id=582, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=2592001, node->id=583, node->name=FullyShardedDataParallel._pre_forward_prefetch, node->type=4
+Issue node, sys->id=1, tick=2594001, node->id=580, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2619001, node->id=581, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=2639001, node->id=582, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=2652001, node->id=584, node->name=aten::expand_as, node->type=4
+Issue node, sys->id=1, tick=2657001, node->id=583, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=2665001, node->id=585, node->name=aten::expand, node->type=4
+Issue node, sys->id=1, tick=2673001, node->id=584, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=2687001, node->id=586, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2692001, node->id=585, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=2707001, node->id=587, node->name=aten::linear, node->type=4
+Issue node, sys->id=0, tick=2730001, node->id=588, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=2747001, node->id=589, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=2764001, node->id=590, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2785001, node->id=586, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=2788001, node->id=591, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=2812001, node->id=587, node->name=ampere_sgemm_32x128_tn, node->type=4
+Issue node, sys->id=1, tick=2812001, node->id=588, node->name=aten::relu, node->type=4
+Issue node, sys->id=1, tick=2829001, node->id=589, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=1, tick=2865001, node->id=590, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::launch_clamp_scalar(at::TensorIteratorBase&, c10::Scalar, c10::Scalar, at::native::detail::ClampLimits)::{lambda()#1}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::launch_clamp_scalar(at::TensorIteratorBase&, c10::Scalar, c10::Scalar, at::native::detail::ClampLimits)::{lambda()#1}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>), node->type=4
+Issue node, sys->id=1, tick=2865001, node->id=591, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=2881001, node->id=592, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=2893001, node->id=593, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=2902001, node->id=592, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=2908001, node->id=594, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=2926001, node->id=595, node->name=aten::addmm, node->type=4
+Issue node, sys->id=0, tick=2937001, node->id=593, node->name=ampere_sgemm_32x128_tn, node->type=4
+Issue node, sys->id=0, tick=2937001, node->id=594, node->name=aten::relu, node->type=4
+Issue node, sys->id=0, tick=2957001, node->id=595, node->name=aten::clamp_min, node->type=4
+Issue node, sys->id=1, tick=2981001, node->id=596, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=3002001, node->id=596, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::launch_clamp_scalar(at::TensorIteratorBase&, c10::Scalar, c10::Scalar, at::native::detail::ClampLimits)::{lambda()#1}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::launch_clamp_scalar(at::TensorIteratorBase&, c10::Scalar, c10::Scalar, at::native::detail::ClampLimits)::{lambda()#1}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>), node->type=4
+Issue node, sys->id=0, tick=3002001, node->id=597, node->name=aten::linear, node->type=4
+Issue node, sys->id=1, tick=3003001, node->id=597, node->name=ampere_sgemm_32x128_tn, node->type=4
+Issue node, sys->id=1, tick=3003001, node->id=598, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=0, tick=3017001, node->id=598, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=3029001, node->id=599, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=3043001, node->id=600, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=3061001, node->id=601, node->name=aten::addmm, node->type=4
+Issue node, sys->id=1, tick=3108001, node->id=599, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=3116001, node->id=602, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=3116001, node->id=600, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=1, tick=3138001, node->id=601, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=0, tick=3141001, node->id=603, node->name=ampere_sgemm_32x128_tn, node->type=4
+Issue node, sys->id=0, tick=3141001, node->id=604, node->name=FullyShardedDataParallel._post_forward, node->type=4
+Issue node, sys->id=1, tick=3203001, node->id=602, node->name=aten::resize_, node->type=4
+Issue node, sys->id=1, tick=3216001, node->id=603, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=3236001, node->id=604, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::mse_kernel_cuda(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float)#1}, std::array<char*, 3ul> >(int, at::native::mse_kernel_cuda(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float)#1}, std::array<char*, 3ul>), node->type=4
+Issue node, sys->id=1, tick=3236001, node->id=605, node->name=aten::mean, node->type=4
+Issue node, sys->id=0, tick=3247001, node->id=605, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=3254001, node->id=606, node->name=aten::broadcast_tensors, node->type=4
+Issue node, sys->id=0, tick=3275001, node->id=607, node->name=aten::mse_loss, node->type=4
+Issue node, sys->id=1, tick=3290001, node->id=606, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=3304001, node->id=607, node->name=void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=1, tick=3304001, node->id=608, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=1, tick=3330001, node->id=609, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=3341001, node->id=608, node->name=aten::resize_, node->type=4
+Issue node, sys->id=1, tick=3348001, node->id=610, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=3352001, node->id=609, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=3373001, node->id=610, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::mse_kernel_cuda(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float)#1}, std::array<char*, 3ul> >(int, at::native::mse_kernel_cuda(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float)#1}, std::array<char*, 3ul>), node->type=4
+Issue node, sys->id=0, tick=3373001, node->id=611, node->name=aten::mean, node->type=4
+Issue node, sys->id=1, tick=3375001, node->id=611, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=3403001, node->id=612, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>), node->type=4
+Issue node, sys->id=1, tick=3403001, node->id=613, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=0, tick=3417001, node->id=612, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=3431001, node->id=613, node->name=void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::MeanOps<float, float, float, float>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=0, tick=3431001, node->id=614, node->name=aten::ones_like, node->type=4
+Issue node, sys->id=1, tick=3435001, node->id=614, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=3457001, node->id=615, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=3462001, node->id=615, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=3479001, node->id=616, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=3504001, node->id=616, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=0, tick=3505001, node->id=617, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=3532001, node->id=618, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>), node->type=4
+Issue node, sys->id=0, tick=3532001, node->id=619, node->name=autograd::engine::evaluate_function: MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=3548001, node->id=617, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=3566001, node->id=620, node->name=MseLossBackward0, node->type=4
+Issue node, sys->id=1, tick=3587001, node->id=618, node->name=aten::empty, node->type=4
+Issue node, sys->id=0, tick=3588001, node->id=621, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=3640001, node->id=622, node->name=aten::zeros_like, node->type=4
+Issue node, sys->id=1, tick=3655001, node->id=619, node->name=aten::zero_, node->type=4
+Issue node, sys->id=1, tick=3677001, node->id=620, node->name=aten::fill_, node->type=4
+Issue node, sys->id=0, tick=3686001, node->id=623, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=0, tick=3725001, node->id=624, node->name=aten::empty, node->type=4
+Issue node, sys->id=1, tick=3750001, node->id=621, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>), node->type=4
+Issue node, sys->id=1, tick=3750001, node->id=622, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=3797001, node->id=625, node->name=aten::zero_, node->type=4
+Issue node, sys->id=1, tick=3809001, node->id=623, node->name=void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1}>(at::TensorIteratorBase&, at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1}>(at::TensorIteratorBase&, at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1} const&)::{lambda(int)#1}), node->type=4
+Issue node, sys->id=1, tick=3809001, node->id=624, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=3820001, node->id=626, node->name=aten::fill_, node->type=4
+Issue node, sys->id=1, tick=3889001, node->id=625, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=0, tick=3894001, node->id=627, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<float>, std::array<char*, 1ul> >(int, at::native::FillFunctor<float>, std::array<char*, 1ul>), node->type=4
+Issue node, sys->id=0, tick=3894001, node->id=628, node->name=aten::mse_loss_backward, node->type=4
+Issue node, sys->id=0, tick=3954001, node->id=629, node->name=void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1}>(at::TensorIteratorBase&, at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1}>(at::TensorIteratorBase&, at::native::mse_backward_cuda_kernel(at::TensorIterator&, c10::Scalar const&)::{lambda()#1}::operator()() const::{lambda()#2}::operator()() const::{lambda(float, float, float)#1} const&)::{lambda(int)#1}), node->type=4
+Issue node, sys->id=0, tick=3954001, node->id=630, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=4054001, node->id=631, node->name=FullyShardedDataParallel._pre_backward_hook, node->type=4
+Issue node, sys->id=1, tick=4144001, node->id=626, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=4166001, node->id=627, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4192001, node->id=628, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=4199001, node->id=629, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=4262001, node->id=630, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=4285001, node->id=631, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4296001, node->id=632, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4311001, node->id=633, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4332001, node->id=634, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=4375001, node->id=632, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=4378001, node->id=635, node->name=ampere_sgemm_128x32_nn, node->type=4
+Issue node, sys->id=1, tick=4378001, node->id=636, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4388001, node->id=637, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4397001, node->id=633, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4401001, node->id=638, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=4417001, node->id=634, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=4418001, node->id=639, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=4424001, node->id=635, node->name=FullyShardedDataParallel._pre_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=4451001, node->id=640, node->name=ampere_sgemm_32x128_nt, node->type=4
+Issue node, sys->id=1, tick=4451001, node->id=641, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4460001, node->id=642, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4472001, node->id=643, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4487001, node->id=644, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=4493001, node->id=636, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=4517001, node->id=637, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=4528001, node->id=638, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4530001, node->id=645, node->name=void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=1, tick=4530001, node->id=646, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=4540001, node->id=647, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=4543001, node->id=639, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4557001, node->id=648, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=4562001, node->id=649, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=4567001, node->id=640, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=4572001, node->id=650, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4585001, node->id=651, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4601001, node->id=652, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=1, tick=4613001, node->id=653, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=4614001, node->id=641, node->name=ampere_sgemm_128x32_nn, node->type=4
+Issue node, sys->id=0, tick=4614001, node->id=642, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4622001, node->id=654, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=0, tick=4624001, node->id=643, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4636001, node->id=644, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=4654001, node->id=645, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=4662001, node->id=655, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::(anonymous namespace)::threshold_kernel_impl<float>(at::TensorIteratorBase&, float, float)::{lambda(float, float)#1}>, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::(anonymous namespace)::threshold_kernel_impl<float>(at::TensorIteratorBase&, float, float)::{lambda(float, float)#1}>, std::array<char*, 3ul>), node->type=4
+Issue node, sys->id=1, tick=4662001, node->id=656, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=4687001, node->id=646, node->name=ampere_sgemm_32x128_nt, node->type=4
+Issue node, sys->id=0, tick=4687001, node->id=647, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4695001, node->id=657, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=0, tick=4696001, node->id=648, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4708001, node->id=649, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4710001, node->id=658, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4719001, node->id=659, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4724001, node->id=650, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=4733001, node->id=660, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4747001, node->id=661, node->name=aten::mm, node->type=4
+Issue node, sys->id=0, tick=4764001, node->id=651, node->name=void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=0, tick=4764001, node->id=652, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=4774001, node->id=653, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=4783001, node->id=662, node->name=ampere_sgemm_32x128_nt, node->type=4
+Issue node, sys->id=1, tick=4783001, node->id=663, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=4791001, node->id=654, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=4792001, node->id=664, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4796001, node->id=655, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4804001, node->id=665, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=4805001, node->id=656, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=4818001, node->id=657, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4822001, node->id=666, node->name=aten::sum, node->type=4
+Issue node, sys->id=0, tick=4834001, node->id=658, node->name=autograd::engine::evaluate_function: ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=4846001, node->id=659, node->name=ReluBackward0, node->type=4
+Issue node, sys->id=0, tick=4855001, node->id=660, node->name=aten::threshold_backward, node->type=4
+Issue node, sys->id=1, tick=4860001, node->id=667, node->name=void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=1, tick=4860001, node->id=668, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=4870001, node->id=669, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=0, tick=4894001, node->id=661, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::(anonymous namespace)::threshold_kernel_impl<float>(at::TensorIteratorBase&, float, float)::{lambda(float, float)#1}>, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::(anonymous namespace)::threshold_kernel_impl<float>(at::TensorIteratorBase&, float, float)::{lambda(float, float)#1}>, std::array<char*, 3ul>), node->type=4
+Issue node, sys->id=0, tick=4894001, node->id=662, node->name=autograd::engine::evaluate_function: AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=4897001, node->id=670, node->name=TBackward0, node->type=4
+Issue node, sys->id=1, tick=4902001, node->id=671, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4911001, node->id=672, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4924001, node->id=673, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=0, tick=4927001, node->id=663, node->name=AddmmBackward0, node->type=4
+Issue node, sys->id=1, tick=4940001, node->id=674, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=4942001, node->id=664, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=4949001, node->id=675, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=4951001, node->id=665, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=4955001, node->id=676, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=4964001, node->id=666, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=4965001, node->id=677, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=4975001, node->id=678, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=4979001, node->id=667, node->name=aten::mm, node->type=4
+Issue node, sys->id=1, tick=4982001, node->id=679, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=4988001, node->id=680, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=5008001, node->id=681, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=5015001, node->id=668, node->name=ampere_sgemm_32x128_nt, node->type=4
+Issue node, sys->id=0, tick=5015001, node->id=669, node->name=aten::t, node->type=4
+Issue node, sys->id=1, tick=5015001, node->id=682, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=5022001, node->id=683, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5024001, node->id=670, node->name=aten::transpose, node->type=4
+Issue node, sys->id=1, tick=5028001, node->id=684, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=5036001, node->id=671, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5036001, node->id=685, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=5044001, node->id=686, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5051001, node->id=672, node->name=aten::sum, node->type=4
+Issue node, sys->id=1, tick=5058001, node->id=687, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=5063001, node->id=688, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=5072001, node->id=689, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=5079001, node->id=690, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=5089001, node->id=673, node->name=void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4> >(at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, float>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, float, 4, 4>), node->type=4
+Issue node, sys->id=0, tick=5089001, node->id=674, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=5098001, node->id=675, node->name=autograd::engine::evaluate_function: TBackward0, node->type=4
+Issue node, sys->id=1, tick=5101001, node->id=691, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=1, tick=5112001, node->id=692, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=5114001, node->id=676, node->name=TBackward0, node->type=4
+Issue node, sys->id=0, tick=5119001, node->id=677, node->name=aten::t, node->type=4
+Issue node, sys->id=0, tick=5128001, node->id=678, node->name=aten::transpose, node->type=4
+Issue node, sys->id=0, tick=5140001, node->id=679, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5151001, node->id=693, node->name=void at::native::(anonymous namespace)::CatArrayBatchedCopy_aligned16_contig<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 1, 128, 1>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int), node->type=4
+Issue node, sys->id=1, tick=5151001, node->id=694, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=5153001, node->id=680, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5161001, node->id=681, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5167001, node->id=682, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=5176001, node->id=683, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=5185001, node->id=684, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5192001, node->id=685, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5198001, node->id=686, node->name=aten::reshape, node->type=4
+Issue node, sys->id=1, tick=5206001, node->id=695, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=1, tick=5212001, node->id=696, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=5215001, node->id=687, node->name=aten::view, node->type=4
+Issue node, sys->id=1, tick=5221001, node->id=697, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=5222001, node->id=688, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=1, tick=5225001, node->id=698, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=0, tick=5228001, node->id=689, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5233001, node->id=690, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=5241001, node->id=691, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=5249001, node->id=692, node->name=autograd::engine::evaluate_function: ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5262001, node->id=693, node->name=ViewBackward0, node->type=4
+Issue node, sys->id=0, tick=5267001, node->id=694, node->name=aten::reshape, node->type=4
+Issue node, sys->id=0, tick=5275001, node->id=695, node->name=aten::view, node->type=4
+Issue node, sys->id=0, tick=5282001, node->id=696, node->name=autograd::engine::evaluate_function: SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=5304001, node->id=697, node->name=SplitWithSizesBackward0, node->type=4
+Issue node, sys->id=0, tick=5323001, node->id=698, node->name=aten::cat, node->type=4
+Issue node, sys->id=0, tick=5366001, node->id=699, node->name=void at::native::(anonymous namespace)::CatArrayBatchedCopy_aligned16_contig<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 1, 128, 1>(at::native::(anonymous namespace)::OpaqueType<4u>*, at::native::(anonymous namespace)::CatArrInputTensorMetadata<at::native::(anonymous namespace)::OpaqueType<4u>, unsigned int, 128, 1>, at::native::(anonymous namespace)::TensorSizeStride<unsigned int, 4u>, int, unsigned int), node->type=4
+Issue node, sys->id=0, tick=5366001, node->id=700, node->name=autograd::engine::evaluate_function: torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=5423001, node->id=701, node->name=torch::autograd::AccumulateGrad, node->type=4
+Issue node, sys->id=0, tick=5429001, node->id=702, node->name=aten::detach, node->type=4
+Issue node, sys->id=0, tick=5438001, node->id=703, node->name=detach, node->type=4
+Issue node, sys->id=0, tick=5442001, node->id=704, node->name=FullyShardedDataParallel._post_backward_hook, node->type=4
+Issue node, sys->id=1, tick=5563001, node->id=699, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=1, tick=5570001, node->id=700, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=1, tick=5579001, node->id=701, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=5613001, node->id=702, node->name=aten::chunk, node->type=4
+Issue node, sys->id=1, tick=5628001, node->id=703, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=5650001, node->id=704, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=5662001, node->id=705, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=5682001, node->id=706, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5708001, node->id=707, node->name=aten::narrow, node->type=4
+Issue node, sys->id=1, tick=5718001, node->id=708, node->name=aten::slice, node->type=4
+Issue node, sys->id=1, tick=5731001, node->id=709, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5740001, node->id=710, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=5757001, node->id=711, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=0, tick=5774001, node->id=705, node->name=aten::_has_compatible_shallow_copy_type, node->type=4
+Issue node, sys->id=0, tick=5781001, node->id=706, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=5790001, node->id=707, node->name=FullyShardedDataParallel._post_backward_prefetch, node->type=4
+Issue node, sys->id=1, tick=5791001, node->id=712, node->name=aten::div_, node->type=4
+Issue node, sys->id=1, tick=5824001, node->id=713, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>), node->type=4
+Issue node, sys->id=1, tick=5824001, node->id=714, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=0, tick=5827001, node->id=708, node->name=aten::chunk, node->type=4
+Issue node, sys->id=0, tick=5842001, node->id=709, node->name=aten::split, node->type=4
+Issue node, sys->id=1, tick=5861001, node->id=715, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=5863001, node->id=710, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=5875001, node->id=711, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=5894001, node->id=712, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5905001, node->id=716, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=0, tick=5924001, node->id=713, node->name=aten::narrow, node->type=4
+Issue node, sys->id=0, tick=5934001, node->id=714, node->name=aten::slice, node->type=4
+Issue node, sys->id=0, tick=5949001, node->id=715, node->name=aten::as_strided, node->type=4
+Issue node, sys->id=1, tick=5952001, node->id=717, node->name=ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=1, tick=5952001, node->id=718, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=5960001, node->id=716, node->name=aten::empty_like, node->type=4
+Issue node, sys->id=1, tick=5973001, node->id=719, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=5977001, node->id=717, node->name=aten::empty_strided, node->type=4
+Issue node, sys->id=1, tick=5983001, node->id=720, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=1, tick=5983001, node->id=721, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=0, tick=6012001, node->id=718, node->name=aten::div_, node->type=4
+Issue node, sys->id=1, tick=6025001, node->id=722, node->name=aten::result_type, node->type=4
+Issue node, sys->id=1, tick=6038001, node->id=723, node->name=void at::native::(anonymous namespace)::multi_tensor_apply_kernel<at::native::(anonymous namespace)::TensorListMetadata<2>, at::native::(anonymous namespace)::BinaryOpListAlphaFunctor<float, 2, 2, 0>, std::plus<float>, float>(at::native::(anonymous namespace)::TensorListMetadata<2>, at::native::(anonymous namespace)::BinaryOpListAlphaFunctor<float, 2, 2, 0>, std::plus<float>, float), node->type=4
+Issue node, sys->id=0, tick=6044001, node->id=719, node->name=void at::native::vectorized_elementwise_kernel<4, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul> >(int, at::native::BUnaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 2ul>), node->type=4
+Issue node, sys->id=0, tick=6044001, node->id=720, node->name=c10d::_reduce_scatter_base_, node->type=4
+Issue node, sys->id=0, tick=6081001, node->id=721, node->name=record_param_comms, node->type=4
+Issue node, sys->id=0, tick=6126001, node->id=722, node->name=nccl:_reduce_scatter_base, node->type=4
+Issue node, sys->id=0, tick=6173001, node->id=723, node->name=ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=0, tick=6173001, node->id=724, node->name=record_param_comms, node->type=4
+Collective communication finished, sys->id=1, tick=6174581, node->id=717, node->name=ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Collective communication finished, sys->id=0, tick=6175081, node->id=723, node->name=ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>), node->type=7
+Issue node, sys->id=0, tick=6189001, node->id=725, node->name=aten::record_stream, node->type=4
+Issue node, sys->id=0, tick=6199001, node->id=726, node->name=Optimizer.step#SGD.step, node->type=4
+Issue node, sys->id=0, tick=6199001, node->id=727, node->name=aten::_foreach_add_, node->type=4
+Issue node, sys->id=0, tick=6245001, node->id=728, node->name=aten::result_type, node->type=4
+Issue node, sys->id=0, tick=6258001, node->id=729, node->name=[2025-07-29 01:19:14.126] [workload] [info] sys[1] finished, 6174581 cycles, exposed communication 6130581 cycles.
+void at::native::(anonymous namespace)::multi_tensor_apply_kernel<at::native::(anonymous namespace)::TensorListMetadata<2>, at::native::(anonymous namespace)::BinaryOpListAlphaFunctor<float, 2, 2, 0>, std::plus<float>, float>(at::native::(anonymous namespace)::TensorListMetadata<2>, at::native::(anonymous namespace)::BinaryOpListAlphaFunctor<float, 2, 2, 0>, std::plus<float>, float), node->type=4
+Issue node, sys->id=0, tick=6258001, node->id=730, node->name=aten::item, node->type=4
+Issue node, sys->id=0, tick=6268001, node->id=731, node->name=aten::_local_scalar_dense, node->type=4
+Issue node, sys->id=0, tick=6319001, node->id=732, node->name=Memcpy DtoH (Device -> Pinned), node->type=4
+[2025-07-29 01:19:14.126] [workload] [info] sys[0] finished, 6320001 cycles, exposed communication 6275001 cycles.
+
+[ASTRA-sim] Finished the execution.

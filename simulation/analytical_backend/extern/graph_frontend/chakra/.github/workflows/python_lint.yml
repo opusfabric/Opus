@@ -1,0 +1,32 @@
+name: Python Lint
+
+on: pull_request
+
+jobs:
+  python-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Setup Python Environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10.14'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements-dev.txt
+
+    - name: Lint Python Code
+      run: |
+        ruff format .
+        ruff check .
+
+    - name: Run Pyright
+      run: |
+        pyright
+
+    - name: Run vulture check
+      run: vulture src/ tests/

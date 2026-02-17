@@ -32,9 +32,18 @@ Please note that the source code is under active reconfiguration. The experiment
   ```bash
   cd Opus
   ```
-3. Follow the setup instructions under `environment`. We provide two installation methods. One is suitable for private testbeds with circuit-switching hardware, `testbed-env`. The other is useful for public clouds or super-computing platform with Slurm, `emulation-env`. We use docker containers for package and environment configuration.
 
-4. The exeperiments and execution scripts are stored under `torchtitan/opus-test`
+3. Clone related subdirectories:
+  ```bash
+  git submodule update --init --recursive
+  ```
+
+4. Follow the setup instructions under `environment`. We provide two installation methods. One is suitable for private testbeds with circuit-switching hardware, `testbed-env`. The other is useful for public clouds or super-computing platform with Slurm, `emulation-env`. We use docker containers for package and environment configuration.
+
+5. The exeperiments and execution scripts are stored under `torchtitan/opus-test`.
+
+6. The simulation scripts are stored under `simulation`
+
  
 ## Directory Structure
 
