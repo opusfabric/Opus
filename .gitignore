@@ -18,3 +18,12 @@ pytorch
 __pycache__
 
 .venv
+# Keep the portable simulator build drivers; generated build output remains ignored.
+!simulation/analytical_backend/build/
+!simulation/analytical_backend/build/astra_analytical/
+!simulation/analytical_backend/build/astra_analytical/CMakeLists.txt
+!simulation/analytical_backend/build/astra_analytical/build.sh
+!simulation/reconfig_backend/build/
+!simulation/reconfig_backend/build/astra_analytical/
+!simulation/reconfig_backend/build/astra_analytical/CMakeLists.txt
+!simulation/reconfig_backend/build/astra_analytical/build.sh

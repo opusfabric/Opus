@@ -278,6 +278,18 @@ int getOrInitCtlSock() {
   if (!persistentCtlSockInitialized) {
     struct sockaddr_in controller_addr;
     int port = 1234;
+    if (const char* port_env = std::getenv("OPUS_CONTROLLER_PORT")) {
+      try {
+        port = std::stoi(port_env);
+      } catch (const std::exception&) {
+        printf("[CTL Init] Invalid OPUS_CONTROLLER_PORT; using 1234\n");
+        port = 1234;
+      }
+    }
+    if (port < 1 || port > 65535) {
+      printf("[CTL Init] OPUS_CONTROLLER_PORT must be between 1 and 65535\n");
+      return -1;
+    }
 
     persistentCtlSock = socket(AF_INET, SOCK_STREAM, 0);
     if (persistentCtlSock < 0) {

@@ -52,8 +52,12 @@ RUN python -m pip install --upgrade pip
 # -------------------------------
 RUN cd /Opus/torchtitan && \
     pip install -r requirements.txt && \
-    cd /Opus/scale-out/pypolatis-controller/PyPolatis-0.4.5 && \
-    python setup.py install
+    pip install pyyaml
+
+# The emulation controller does not require the hardware-only PyPolatis
+# package. Build the small TCP controller here so the container can run the
+# software emulation without depending on the caller's working directory.
+RUN make -C /Opus/src/opus-controller
 
 # Default command
 CMD ["/bin/bash"]

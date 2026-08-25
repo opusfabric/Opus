@@ -1,10 +1,5 @@
-cd /Opus/torchtitan && \
-pip install -r requirements.txt && \
-# cd /Opus/src/opus-shim && \
-# python setup.py develop && \
-cd /Opus/scale-out/pypolatis-controller/PyPolatis-0.4.5 && \
-python setup.py install
+# Hardware-only testbed note
 
+The Polatis/PyPolatis package and switch configuration are not part of this software artifact. The emulation Dockerfile does not install them. The commands below are retained only as a record of the original hardware setup and are not required for software emulation or simulation.
 
-
-./opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh
+For the available software path, install the Torchtitan requirements and build the controller and NCCL shim as documented in the repository root README. Physical mode requires a separately provided, site-approved PyPolatis package, a compatible Polatis switch, and the paper testbed configuration.

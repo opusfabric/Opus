@@ -17,6 +17,27 @@
 #include <string>
 #include <iomanip>
 #include <netinet/tcp.h>
+#include <filesystem>
+#include <cstdlib>
+
+namespace {
+std::string command_quote(const std::string& value) {
+    return "\"" + value + "\"";
+}
+
+int env_port(const char* name, int fallback) {
+    const char* value = std::getenv(name);
+    if (value == nullptr || *value == 0) return fallback;
+    try {
+        int port = std::stoi(value);
+        if (port < 1 || port > 65535) throw std::out_of_range("port");
+        return port;
+    } catch (const std::exception&) {
+        std::cerr << "[STATUS] Invalid " << name << "; using " << fallback << std::endl;
+        return fallback;
+    }
+}
+}
 
 bool send_all(int sock, const char* data, size_t len) {
     size_t sent = 0;
@@ -29,7 +50,7 @@ bool send_all(int sock, const char* data, size_t len) {
 }
 
 
-Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, int num_rails, const std::vector<int>& topoIds, std::string outputDir) : reconfigDelay(reconfigDelay), isEmulation(isEmulation), num_rails(num_rails), topoIds(topoIds), bindIp(bindIp), outputDir(outputDir) {
+Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, int num_rails, const std::vector<int>& topoIds, std::string outputDir, std::string controllerDir) : bindIp(bindIp), topoIds(topoIds), num_rails(num_rails), reconfigDelay(reconfigDelay), isEmulation(isEmulation), outputDir(outputDir), controllerDir(controllerDir) {
     // Read environment variables
     const char* numNodesEnv = std::getenv("NUM_NODES");
     const char* numRanksPerNodeEnv = std::getenv("NUM_RANKS_PER_NODE");
@@ -37,6 +58,24 @@ Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, 
 
     num_nodes = numNodesEnv ? std::stoi(numNodesEnv) : 1;
     num_ranks_per_node = numRanksPerNodeEnv ? std::stoi(numRanksPerNodeEnv) : 1;
+    controllerPort = env_port("OPUS_CONTROLLER_PORT", controllerPort);
+    if (const char* value = std::getenv("OPUS_IPC_DIR")) {
+        if (*value != 0) ipcDir = value;
+    }
+    if (const char* value = std::getenv("OPUS_IPC_PREFIX")) {
+        if (*value != 0) ipcPrefix = value;
+    }
+    if (ipcPrefix.empty()) {
+        ipcPrefix = "opus_controller_ipc_" + std::to_string(static_cast<long long>(getpid()));
+    }
+
+    std::error_code fsError;
+    std::filesystem::create_directories(outputDir, fsError);
+    if (fsError) {
+        std::cerr << "[STATUS] ERROR: Cannot create output directory " << outputDir
+                  << ": " << fsError.message() << std::endl;
+        return;
+    }
 
     std::vector<std::string> server_domains;
 
@@ -70,15 +109,21 @@ Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, 
         std::cout << " - " << ip << std::endl;
     }
 
-    // Start the Python process to run config.py
-    std::string pythonCommand = std::string("python3 -u config.py") + (isEmulation? " -e " : " ") + 
-                                (std::to_string(reconfigDelay)) + 
-                                (" " + std::to_string(num_rails));
+    // Start one Python worker per rail using paths relative to the executable.
+    std::string configScript = (std::filesystem::path(controllerDir) / "config.py").string();
+    std::string pythonCommand = "OPUS_IPC_DIR=" + command_quote(ipcDir) +
+                                " OPUS_IPC_PREFIX=" + command_quote(ipcPrefix) +
+                                " python3 -u " + command_quote(configScript) +
+                                (isEmulation ? " -e " : " ") +
+                                std::to_string(reconfigDelay) +
+                                " " + std::to_string(num_rails);
     std::cout << "[STATUS] Starting Python process: " << pythonCommand << std::endl;
 
     for (int i = 0; i < num_rails; i++) {
-
-        std::string command = pythonCommand + " " + std::to_string(i) + " > " + outputDir + "/python_output_rail_" + std::to_string(i) + ".log 2>&1 &";
+        std::string logPath = (std::filesystem::path(outputDir) /
+                               ("python_output_rail_" + std::to_string(i) + ".log")).string();
+        std::string command = pythonCommand + " " + std::to_string(i) + " > " +
+                              command_quote(logPath) + " 2>&1 &";
         int ret = std::system(command.c_str());
 
         if (ret != 0) {
@@ -87,8 +132,7 @@ Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, 
         }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    
+    // The IPC connection below retries while the Python rail worker starts.
     // TODO
     bool success = reconfig_all(0);
     if (!success) {
@@ -375,24 +419,28 @@ void Controller::handle_comm(const std::string& body, const std::string& peerIp,
 bool Controller::reconfig(int topoId, int rail) {
     // std::string command = buildCommand(topoId);
 
-    // Set up IPC socket path
-    const std::string IPC_SOCKET_PATH = "/tmp/opus_controller_ipc_" + std::to_string(rail);
-
-    // Create a UNIX domain socket
-    int ipcSocket = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (ipcSocket < 0) {
-        std::cerr << "[STATUS] ERROR: Failed to create IPC socket" << std::endl;
-        return false;
-    }
-
+    const std::string IPC_SOCKET_PATH =
+        (std::filesystem::path(ipcDir) / (ipcPrefix + "_" + std::to_string(rail))).string();
     sockaddr_un ipcAddr{};
     ipcAddr.sun_family = AF_UNIX;
+    if (IPC_SOCKET_PATH.size() >= sizeof(ipcAddr.sun_path)) {
+        std::cerr << "[STATUS] ERROR: IPC socket path is too long: " << IPC_SOCKET_PATH << std::endl;
+        return false;
+    }
     strncpy(ipcAddr.sun_path, IPC_SOCKET_PATH.c_str(), sizeof(ipcAddr.sun_path) - 1);
 
-    // Connect to the IPC server
-    if (connect(ipcSocket, (sockaddr*)&ipcAddr, sizeof(ipcAddr)) < 0) {
-        std::cerr << "[STATUS] ERROR: Failed to connect to IPC server" << std::endl;
-        close(ipcSocket);
+    int ipcSocket = -1;
+    for (int attempt = 0; attempt < 500; ++attempt) {
+        ipcSocket = socket(AF_UNIX, SOCK_STREAM, 0);
+        if (ipcSocket >= 0 && connect(ipcSocket, (sockaddr*)&ipcAddr, sizeof(ipcAddr)) == 0) {
+            break;
+        }
+        if (ipcSocket >= 0) close(ipcSocket);
+        ipcSocket = -1;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    if (ipcSocket < 0) {
+        std::cerr << "[STATUS] ERROR: Failed to connect to IPC server at " << IPC_SOCKET_PATH << std::endl;
         return false;
     }
 
@@ -708,7 +756,7 @@ int Controller::run() {
 
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(PORT);
+    addr.sin_port = htons(controllerPort);
     
     if (inet_pton(AF_INET, bindIp.c_str(), &addr.sin_addr) != 1) {
         std::cerr << "Bad bind IP\n"; return 1;
@@ -775,7 +823,10 @@ int main(int argc, char* argv[]) {
             std::cerr << "Usage: " << argv[0] << " [-I bind_ip] [-d reconfig_delay] [-r number of rails] [-e emulation mode]\n"; return 1;
         }
     }
-    Controller server(bindIp, reconfigDelay, isEmulation, num_rails, topoIds, outputDir);
+    std::error_code executableError;
+    std::filesystem::path executablePath = std::filesystem::read_symlink("/proc/self/exe", executableError);
+    std::string controllerDir = executableError ? "." : executablePath.parent_path().string();
+    Controller server(bindIp, reconfigDelay, isEmulation, num_rails, topoIds, outputDir, controllerDir);
     return server.run();
     
 }

@@ -15,7 +15,7 @@
 
 class Controller {
 public:
-    Controller(std::string bindIp, int reconfigDelay, bool isEmulation, int num_rails, const std::vector<int>& topoIds, std::string outputDir);
+    Controller(std::string bindIp, int reconfigDelay, bool isEmulation, int num_rails, const std::vector<int>& topoIds, std::string outputDir, std::string controllerDir);
     ~Controller();
     // Starts the server, binds, and listens for connections
     int run();
@@ -93,7 +93,9 @@ private:
     // std::mutex clientsMtx;
 
     // Listening port
-    static constexpr int PORT = 1234;
+    int controllerPort = 1234;
+    std::string ipcDir = "/tmp";
+    std::string ipcPrefix;
 
     const std::string POLATIS_HOST = "10.253.51.12";
     const std::string POLATIS_PORT = "830";
@@ -108,4 +110,5 @@ private:
 
     // output directory for logs
     std::string outputDir = "./logs";
+    std::string controllerDir;
 };

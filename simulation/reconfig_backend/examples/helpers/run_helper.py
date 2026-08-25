@@ -53,7 +53,7 @@ def run_with_reconfig_times(reconfig_times, base_dir, skip_analytical=False):
         }
     else:
         print(f"Running with fake analytical: ")
-        subprocess.run(['bash', 'run_network_analytical.sh'], cwd=base_dir)
+        subprocess.run(['bash', 'run_network_analytical.sh'], cwd=base_dir, check=True)
         output_analytical = os.path.join(base_dir, 'debug_analytical.txt')
         output_baseline = os.path.join(base_dir, 'debug_baseline.txt')
         cycles_analytical, exposed_analytical, sys0_cycles_analytical, sys0_exposed_analytical = extract_last_cycles(output_analytical)
@@ -91,7 +91,7 @@ def run_with_reconfig_times(reconfig_times, base_dir, skip_analytical=False):
         
         # Run the script
         print(f"Running with reconfig_time: {time}")
-        subprocess.run(['bash', 'run_network_reconfig.sh'], cwd=base_dir)
+        subprocess.run(['bash', 'run_network_reconfig.sh'], cwd=base_dir, check=True)
 
         # Collect results from outputs (debug_no_provision.txt and debug_provision.txt)
         output_no_prov = os.path.join(base_dir, 'debug_no_provision.txt')

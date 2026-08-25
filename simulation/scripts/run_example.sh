@@ -33,7 +33,7 @@ cd ${OUT_DIR}
 echo "Running EPS + Ideal"
 ./run_network_analytical.sh > /dev/null
 
-if [ ! -f "debug_analytical.txt" ] || [ ! -s "debug_baseline.txt" ]; then
+if [ ! -s "debug_analytical.txt" ] || [ ! -s "debug_baseline.txt" ]; then
     echo "Error: Expected output file not found in ${OUT_DIR}"
     exit 1
 fi

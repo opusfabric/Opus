@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import torch
 from setuptools import setup
 from torch.utils.cpp_extension import (
@@ -10,12 +11,20 @@ from torch.utils.cpp_extension import (
 
 sources = ["src/opus.cpp"]
 
-local_include = os.path.join(os.path.dirname(os.path.abspath(__file__)), "include")
+shim_root = Path(__file__).resolve().parent
+repo_root = shim_root.parents[1]
+local_include = str(shim_root / "include")
 torch_includes = torch.utils.cpp_extension.include_paths()
 
+if CUDA_HOME is None:
+    raise RuntimeError("CUDA_HOME is not set; load a CUDA toolkit before building the Opus shim")
 cuda_include = os.path.join(CUDA_HOME, "include")
 cuda_lib = os.path.join(CUDA_HOME, "lib64")
-NCCL_HOME = "/Opus/nccl/build"
+NCCL_HOME = os.environ.get("NCCL_HOME", str(repo_root / "nccl" / "build"))
+toml_include = os.environ.get(
+    "OPUS_TOML_INCLUDE",
+    str(repo_root / "third_party" / "tomlplusplus" / "include"),
+)
 
 include_dirs = [
     local_include,
@@ -24,8 +33,9 @@ include_dirs = [
     os.path.join(NCCL_HOME, "include"),
     # "/opt/conda/lib/python3.11/site-packages/nvidia/nccl/include",
     # "/opt/udiImage/modules/nccl-2.18/include",
-    os.path.expanduser("~/Opus/third_party/tomlplusplus/include"),
 ]
+if os.path.isdir(toml_include):
+    include_dirs.append(toml_include)
 
 library_dirs = [
     cuda_lib,

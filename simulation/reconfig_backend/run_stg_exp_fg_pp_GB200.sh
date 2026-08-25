@@ -1,6 +1,7 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
-: "${STG_DIR:=/home/soxehli/work/symbolic_tensor_graph}"
+OPUS_ROOT="$(realpath "${SCRIPT_DIR}/../..")"
+: "${STG_DIR:=${OPUS_ROOT}/simulation/symbolic_tensor_graph}"
 EXAMPLE_DIR="${SCRIPT_DIR}/examples"
 TEMPLATE_DIR="${EXAMPLE_DIR}/stg-template"
 
