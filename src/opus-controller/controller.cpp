@@ -2,6 +2,10 @@
 #include "controller.hpp"
 
 #include <arpa/inet.h>
+#include <cerrno>
+#include <csignal>
+#include <poll.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -21,6 +25,12 @@
 #include <cstdlib>
 
 namespace {
+volatile std::sig_atomic_t stop_requested = 0;
+
+void request_stop(int) {
+    stop_requested = 1;
+}
+
 std::string command_quote(const std::string& value) {
     return "\"" + value + "\"";
 }
@@ -37,6 +47,20 @@ int env_port(const char* name, int fallback) {
         return fallback;
     }
 }
+}
+
+int forced_domain() {
+    const char* value = std::getenv("OPUS_FORCE_DOMAIN");
+    if (value == nullptr || *value == 0) return -1;
+
+    std::string domain(value);
+    if (domain == "0" || domain == "scale-out") return 0;
+    if (domain == "1" || domain == "scale-up") return 1;
+
+    std::cerr << "[STATUS] Invalid OPUS_FORCE_DOMAIN='" << domain
+              << "'; ignoring override (use 0/1 or scale-out/scale-up)"
+              << std::endl;
+    return -1;
 }
 
 bool send_all(int sock, const char* data, size_t len) {
@@ -134,7 +158,7 @@ Controller::Controller(std::string bindIp, int reconfigDelay, bool isEmulation, 
 
     // The IPC connection below retries while the Python rail worker starts.
     // TODO
-    bool success = reconfig_all(0);
+    bool success = reconfig_all(topoIds.empty() ? 0 : topoIds[0]);
     if (!success) {
         std::cerr << "[STATUS] Initial network configuration failed\n";
     } else {
@@ -379,6 +403,12 @@ void Controller::handle_comm(const std::string& body, const std::string& peerIp,
             // TODO: select correct topoID even when natural IP assignment is not sequential
             // int domain = determine_topo(hexId, localRank);
             int domain = determine_topo_pm(hexId, localRank);
+            int forcedDomain = forced_domain();
+            if (forcedDomain >= 0) {
+                std::cout << "[STATUS] OPUS_FORCE_DOMAIN overrides detected domain "
+                          << domain << " with " << forcedDomain << std::endl;
+                domain = forcedDomain;
+            }
 
             // TODO: think about topology for comm across multiple rails
             // auto [topoId, railId] = idToTopoId[hexId];
@@ -695,6 +725,13 @@ void Controller::handleClient(int clientSock){
     int flag = 1;
     setsockopt(clientSock, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 
+    // A bounded receive timeout lets the worker notice SIGTERM even when a
+    // client keeps its control socket open after its collectives finish.
+    timeval receiveTimeout{};
+    receiveTimeout.tv_usec = 250000;
+    setsockopt(clientSock, SOL_SOCKET, SO_RCVTIMEO,
+               &receiveTimeout, sizeof(receiveTimeout));
+
     char buf[4096];
     std::string pending;
     pending.reserve(4096);
@@ -708,6 +745,10 @@ void Controller::handleClient(int clientSock){
         }
         if (n < 0) {
             if (errno == EINTR) continue;
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                if (stop_requested) break;
+                continue;
+            }
             perror("recv");
             break;
         }
@@ -753,6 +794,17 @@ void Controller::workerLoop()
 
 int Controller::run() {
     int ls = socket(AF_INET, SOCK_STREAM, 0);
+    if (ls < 0) {
+        perror("socket");
+        return 1;
+    }
+
+    int reuse = 1;
+    if (setsockopt(ls, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+        perror("setsockopt(SO_REUSEADDR)");
+        close(ls);
+        return 1;
+    }
 
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
@@ -761,14 +813,38 @@ int Controller::run() {
     if (inet_pton(AF_INET, bindIp.c_str(), &addr.sin_addr) != 1) {
         std::cerr << "Bad bind IP\n"; return 1;
     }
-    if (bind(ls, (sockaddr*)&addr, sizeof(addr)) < 0 || listen(ls, SOMAXCONN) < 0) {
-        perror("bind/listen"); return 1;
+    if (bind(ls, (sockaddr*)&addr, sizeof(addr)) < 0) {
+        perror("bind controller socket");
+        close(ls);
+        return 1;
+    }
+    if (listen(ls, SOMAXCONN) < 0) {
+        perror("listen controller socket");
+        close(ls);
+        return 1;
     }
 
-    while (true) {
+    while (!stop_requested) {
+        pollfd listener{};
+        listener.fd = ls;
+        listener.events = POLLIN;
+        int ready = poll(&listener, 1, 250);
+        if (ready < 0) {
+            if (errno == EINTR) continue;
+            perror("poll controller socket");
+            break;
+        }
+        if (ready == 0) continue;
+        if ((listener.revents & POLLIN) == 0) continue;
+
         int cs = accept(ls, nullptr, nullptr);
 
-        if (cs < 0) { perror("accept"); continue; }
+        if (cs < 0) {
+            if (errno == EINTR) continue;
+            if (stop_requested) break;
+            perror("accept");
+            continue;
+        }
         // std::cout << "Received connection from " << inet_ntoa(addr.sin_addr)
         //           << ":" << ntohs(addr.sin_port) << "\n";
         {
@@ -777,14 +853,25 @@ int Controller::run() {
         }
         queueCv.notify_one();
     }
+
+    close(ls);
+    {
+        std::lock_guard<std::mutex> lk(queueMtx);
+        shuttingDown = true;
+    }
+    queueCv.notify_all();
     return 0;
 }
 
 int main(int argc, char* argv[]) {
+    std::signal(SIGINT, request_stop);
+    std::signal(SIGTERM, request_stop);
+
     std::string bindIp = "0.0.0.0";
     int reconfigDelay = 0;
     bool isEmulation = false;
     int num_rails = 1;
+    int initial_topology = 0;
     std::string outputDir = "./logs";
     std::vector<int> topoIds;
 
@@ -815,14 +902,25 @@ int main(int argc, char* argv[]) {
             }
             std::cout << "[STATUS] Number of rails set to " << num_rails << "\n";
             topoIds.resize(num_rails, 0);
+        } else if (arg == "-t" && i + 1 < argc) {
+            try {
+                initial_topology = std::stoi(argv[++i]);
+            } catch (const std::exception& e) {
+                std::cerr << "Invalid initial topology: " << argv[i] << std::endl; return 1;
+            }
+            if (initial_topology < 0) {
+                std::cerr << "initial topology must be non-negative" << std::endl; return 1;
+            }
+            std::cout << "[STATUS] Initial topology set to " << initial_topology << std::endl;
         } else if (arg == "-o" && i + 1 < argc) {
             outputDir = argv[++i];
             std::cout << "[STATUS] Output directory set to " << outputDir << "\n";
         } else {
             std::cerr << "Unknown argument: " << arg << "\n";
-            std::cerr << "Usage: " << argv[0] << " [-I bind_ip] [-d reconfig_delay] [-r number of rails] [-e emulation mode]\n"; return 1;
+            std::cerr << "Usage: " << argv[0] << " [-I bind_ip] [-d reconfig_delay] [-r number of rails] [-t initial topology] [-e emulation mode]\n"; return 1;
         }
     }
+    topoIds.assign(num_rails, initial_topology);
     std::error_code executableError;
     std::filesystem::path executablePath = std::filesystem::read_symlink("/proc/self/exe", executableError);
     std::string controllerDir = executableError ? "." : executablePath.parent_path().string();

@@ -1,6 +1,11 @@
 import os
 from pathlib import Path
-import torch
+try:
+    import torch
+except ModuleNotFoundError as exc:
+    raise RuntimeError(
+        "The Opus shim requires a CUDA-enabled PyTorch installation in the active Python environment."
+    ) from exc
 from setuptools import setup
 from torch.utils.cpp_extension import (
     CUDAExtension,
@@ -34,8 +39,12 @@ include_dirs = [
     # "/opt/conda/lib/python3.11/site-packages/nvidia/nccl/include",
     # "/opt/udiImage/modules/nccl-2.18/include",
 ]
-if os.path.isdir(toml_include):
-    include_dirs.append(toml_include)
+if not os.path.isdir(toml_include):
+    raise RuntimeError(
+        f"toml++ headers not found at {toml_include}. "
+        "Restore third_party/tomlplusplus/include or set OPUS_TOML_INCLUDE."
+    )
+include_dirs.append(toml_include)
 
 library_dirs = [
     cuda_lib,

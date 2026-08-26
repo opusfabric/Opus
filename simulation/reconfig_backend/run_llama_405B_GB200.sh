@@ -87,7 +87,7 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
     sed -i "s/REPLACE_SCALE_UP_BW/${SCALE_UP_BW}/g" run_network_analytical.sh
 
     # Replace "REPLACE_LOCAL_MEM_BW" and "REPLACE_PEAK_PERF" in system.json
-    sed -i "s/REPLACE_LOCAL_MEM_BW/${NPU_PEAK_MEM_BW}/g" system.json
-    sed -i "s/REPLACE_PEAK_PERF/${NPU_PEAK_PERF}/g" system.json
+    sed -i "s/\"local-mem-bw\": 4800/\"local-mem-bw\": ${NPU_PEAK_MEM_BW}/" system.json
+    sed -i "s/\"peak-perf\": 989/\"peak-perf\": ${NPU_PEAK_PERF}/" system.json
 
 done

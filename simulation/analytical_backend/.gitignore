@@ -17,6 +17,7 @@ build/astra_garnet/result/
 build/astra_htsim/build/
 
 # Generated Chakra ET files
+!examples/stg_*_ep*/schedules*.txt
 *.eg
 *.et
 # !examples/**/*.et

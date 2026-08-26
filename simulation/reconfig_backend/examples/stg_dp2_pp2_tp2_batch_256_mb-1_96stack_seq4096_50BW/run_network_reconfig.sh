@@ -47,7 +47,7 @@ export ASAN_OPTIONS=detect_container_overflow=0:detect_leaks=0
     --comm-group-configuration="${COMM_GROUP:?}" \
     --circuit-schedules="${CIRCUIT_SCHEDULES:?}" > debug_no_provision.txt
 
-python ${TRACE_PARSER_PATH:?} debug_no_provision.txt
+python3 ${TRACE_PARSER_PATH:?} debug_no_provision.txt
 
 PROVISION_CONFIG="${EXAMPLE_DIR:?}/rank_comm_groups.yaml"
 

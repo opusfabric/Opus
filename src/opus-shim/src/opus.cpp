@@ -7,6 +7,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
+#include <ifaddrs.h>
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -141,6 +143,79 @@ static void getHostName(char* hostname, int maxlen) {
         return;
     }
   }
+}
+
+static std::string trim_host_token(std::string value) {
+  const auto first = value.find_first_not_of(" \t\r\n");
+  if (first == std::string::npos) return {};
+  const auto last = value.find_last_not_of(" \t\r\n");
+  return value.substr(first, last - first + 1);
+}
+
+static std::string short_host_name(const std::string& value) {
+  const std::string token = trim_host_token(value);
+  const auto dot = token.find(46);
+  // Do not truncate dotted IPv4 addresses.
+  if (dot == std::string::npos ||
+      token.find_first_not_of("0123456789.") == std::string::npos) {
+    return token;
+  }
+  return token.substr(0, dot);
+}
+
+static bool resolve_ipv4(const std::string& name, in_addr& address) {
+  addrinfo hints{};
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+  addrinfo* result = nullptr;
+  if (getaddrinfo(name.c_str(), nullptr, &hints, &result) != 0 || result == nullptr) {
+    return false;
+  }
+
+  const auto* resolved = reinterpret_cast<const sockaddr_in*>(result->ai_addr);
+  address = resolved->sin_addr;
+  freeaddrinfo(result);
+  return true;
+}
+
+static bool token_matches_local_interface(const std::string& token) {
+  in_addr token_address{};
+  if (!resolve_ipv4(token, token_address)) return false;
+
+  ifaddrs* interfaces = nullptr;
+  if (getifaddrs(&interfaces) != 0) return false;
+  bool matches = false;
+  for (const ifaddrs* current = interfaces; current != nullptr; current = current->ifa_next) {
+    if (current->ifa_addr == nullptr || current->ifa_addr->sa_family != AF_INET) continue;
+    const auto* address = reinterpret_cast<const sockaddr_in*>(current->ifa_addr);
+    if (token_address.s_addr == address->sin_addr.s_addr) {
+      matches = true;
+      break;
+    }
+  }
+  freeifaddrs(interfaces);
+  return matches;
+}
+
+static bool host_token_matches(const std::string& token,
+                               const std::vector<std::string>& local_names) {
+  for (const auto& local_name : local_names) {
+    if (token == local_name || short_host_name(token) == short_host_name(local_name)) {
+      return true;
+    }
+  }
+
+  in_addr token_address{};
+  if (!resolve_ipv4(token, token_address)) return false;
+  for (const auto& local_name : local_names) {
+    in_addr local_address{};
+    if (resolve_ipv4(local_name, local_address) &&
+        token_address.s_addr == local_address.s_addr) {
+      return true;
+    }
+  }
+  if (token_matches_local_interface(token)) return true;
+  return false;
 }
 
 void setSocketReuse(int sockfd) {
@@ -1129,38 +1204,51 @@ BackendOpus::BackendOpus(int rank, int size, c10::intrusive_ptr<Options> options
 
   // TODO dynamically select server IP using controller
   const char* server_ips_env = std::getenv("SERVER_IPS");
-  const char* hostname_env = std::getenv("HOSTNAME");
-  if (!hostname_env) {
-    throw std::runtime_error("Environment variable HOSTNAME not set");
+  if (server_ips_env == nullptr || *server_ips_env == 0) {
+    throw std::runtime_error("SERVER_IPS must contain a comma-separated host or IPv4 address list");
   }
 
-  std::string hostname(hostname_env);
+  std::vector<std::string> configured_server_ips;
   std::istringstream server_ips_stream(server_ips_env);
   std::string ip;
-  nodeRank_ = -1;
-  int index = 0;
-
   while (std::getline(server_ips_stream, ip, ',')) {
-    if (hostname == ip) {
-      nodeRank_ = index;
-      break;
-    }
-    ++index;
+    ip = trim_host_token(ip);
+    if (!ip.empty()) configured_server_ips.push_back(ip);
+  }
+  if (configured_server_ips.empty()) {
+    throw std::runtime_error("SERVER_IPS must contain at least one host or IPv4 address");
   }
 
+  std::vector<std::string> local_names;
+  char local_hostname[256] = {};
+  if (gethostname(local_hostname, sizeof(local_hostname) - 1) == 0 &&
+      local_hostname[0] != 0) {
+    local_names.emplace_back(local_hostname);
+  }
+  const char* hostname_env = std::getenv("HOSTNAME");
+  if (hostname_env != nullptr && *hostname_env != 0) {
+    local_names.emplace_back(hostname_env);
+  }
+
+  nodeRank_ = -1;
+  for (size_t index = 0; index < configured_server_ips.size(); ++index) {
+    if (host_token_matches(configured_server_ips[index], local_names)) {
+      nodeRank_ = static_cast<int>(index);
+      break;
+    }
+  }
+  // A one-entry list is unambiguously a single-node run. This also supports
+  // Docker, where HOSTNAME is normally a container ID rather than an address.
+  if (nodeRank_ == -1 && configured_server_ips.size() == 1) {
+    nodeRank_ = 0;
+  }
   if (nodeRank_ == -1) {
-    throw std::runtime_error("Hostname not found in SERVER_IPS");
+    throw std::runtime_error(
+        "Local hostname/address was not found in SERVER_IPS; use matching node hostnames or IPv4 addresses");
   }
   customPrint("Node rank: " + std::to_string(nodeRank_), rank_, backendId_);
 
-  if (server_ips_env != nullptr) {
-    SERVER_IPS.clear();
-    std::istringstream iss(server_ips_env);
-    std::string ip;
-    while (std::getline(iss, ip, ',')) {
-      SERVER_IPS.push_back(ip);
-    }
-  }
+  SERVER_IPS = configured_server_ips;
 
   std::string server_ip = SERVER_IPS[0];
   int port = 34567;

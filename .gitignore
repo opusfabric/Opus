@@ -18,6 +18,29 @@ pytorch
 __pycache__
 
 .venv
+
+!simulation/analytical_backend/examples/stg-template/system.json
+!simulation/analytical_backend/examples/stg-template/remote_memory.json
+!simulation/reconfig_backend/examples/stg-template/system.json
+!simulation/reconfig_backend/examples/stg-template/remote_memory.json
+# STG sharding JSON files are runtime inputs, not generated outputs.
+!simulation/symbolic_tensor_graph/sharding_spreadsheets/*.json
+!simulation/symbolic_tensor_graph/sharding_spreadsheets/**/*.json
+
+# Supplemental EP experiment metadata is trackable; raw Chakra traces are not.
+!simulation/analytical_backend/examples/stg_*_ep*/system.json
+!simulation/analytical_backend/examples/stg_*_ep*/remote_memory.json
+!simulation/analytical_backend/examples/stg_*_ep*/workload.json
+!simulation/reconfig_backend/examples/stg_*_ep*/system.json
+!simulation/reconfig_backend/examples/stg_*_ep*/remote_memory.json
+!simulation/reconfig_backend/examples/stg_*_ep*/workload.json
+simulation/analytical_backend/examples/stg_*_ep*/workload*.et
+simulation/reconfig_backend/examples/stg_*_ep*/workload*.et
+torchtitan/outputs/profile_trace/
+
+# NCCL environment-plugin ABI header is a checked-in source input.
+!nccl/src/include/plugin/env/
+!nccl/src/include/plugin/env/env_v1.h
 # Keep the portable simulator build drivers; generated build output remains ignored.
 !simulation/analytical_backend/build/
 !simulation/analytical_backend/build/astra_analytical/

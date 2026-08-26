@@ -1,0 +1,15 @@
+.git
+.venv
+**/__pycache__/
+*.pyc
+simulation/analytical_backend/build/astra_analytical/build/
+simulation/reconfig_backend/build/astra_analytical/build/
+src/opus-shim/build/
+**/CMakeFiles/
+**/dist/
+*.egg-info/
+*.so
+*.log
+*.et
+*.nsys-rep
+torchtitan/outputs/

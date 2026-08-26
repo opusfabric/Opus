@@ -41,6 +41,7 @@ workload.*.et
 debug_*.txt
 
 schedules*.txt
+!examples/stg_*_ep*/schedules*.txt
 
 link_stats_report.txt
 

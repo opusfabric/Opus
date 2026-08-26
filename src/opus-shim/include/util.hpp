@@ -52,6 +52,7 @@ bool is_pp_enabled() {
 }
 
 bool is_1d_parallelism() {
+    int data_parallel_replicate_degree = 1;
     int data_parallel_shard_degree = 1;
     int tensor_parallel_degree = 1;
     int pipeline_parallel_degree = 1;
@@ -71,6 +72,9 @@ bool is_1d_parallelism() {
     if (!parallelism) {
         throw std::runtime_error("Missing [parallelism] section in config file.");
     }
+
+    data_parallel_replicate_degree =
+        parallelism->get("data_parallel_replicate_degree")->value_or(1);
 
     data_parallel_shard_degree =
         parallelism->get("data_parallel_shard_degree")->value_or(1);
@@ -82,6 +86,7 @@ bool is_1d_parallelism() {
         parallelism->get("pipeline_parallel_degree")->value_or(1);
 
     int degrees_greater_than_one = 0;
+    if (data_parallel_replicate_degree > 1) degrees_greater_than_one++;
     if (data_parallel_shard_degree > 1) degrees_greater_than_one++;
     if (tensor_parallel_degree > 1) degrees_greater_than_one++;
     if (pipeline_parallel_degree > 1) degrees_greater_than_one++;
@@ -92,6 +97,7 @@ bool is_1d_parallelism() {
 void determine_server_addr(std::string& server_ip, int& port, int global_rank, int local_rank, int backendId_, const std::vector<std::string>SERVER_IPS) {
     // modify server_ip and port
 
+    int data_parallel_replicate_degree = 1;
     int data_parallel_shard_degree = 1;
     int tensor_parallel_degree = 1;
     int pipeline_parallel_degree = 1;
@@ -111,6 +117,9 @@ void determine_server_addr(std::string& server_ip, int& port, int global_rank, i
     if (!parallelism) {
         throw std::runtime_error("Missing [parallelism] section in config file.");
     }
+
+    data_parallel_replicate_degree =
+        parallelism->get("data_parallel_replicate_degree")->value_or(1);
 
     data_parallel_shard_degree =
         parallelism->get("data_parallel_shard_degree")->value_or(1);
@@ -131,15 +140,18 @@ void determine_server_addr(std::string& server_ip, int& port, int global_rank, i
     int num_nodes = std::stoi(num_nodes_env);
     int num_ranks_per_node = std::stoi(num_ranks_per_node_env);
 
-    if (num_nodes * num_ranks_per_node != data_parallel_shard_degree * tensor_parallel_degree * pipeline_parallel_degree) {
-        std::cerr << "Total ranks: " << num_nodes * num_ranks_per_node 
-              << ", Parallelism degrees product: " 
-              << data_parallel_shard_degree * tensor_parallel_degree * pipeline_parallel_degree 
+    int parallelism_product =
+        data_parallel_replicate_degree * data_parallel_shard_degree *
+        tensor_parallel_degree * pipeline_parallel_degree;
+    if (num_nodes * num_ranks_per_node != parallelism_product) {
+        std::cerr << "Total ranks: " << num_nodes * num_ranks_per_node
+              << ", Parallelism degrees product: " << parallelism_product
               << std::endl;
         throw std::runtime_error("Mismatch between total ranks and parallelism degrees.");
     }
 
-    int total_num_parallelism = (data_parallel_shard_degree > 1 ? 1 : 0)
+    int total_num_parallelism = (data_parallel_replicate_degree > 1 ? 1 : 0)
+        + (data_parallel_shard_degree > 1 ? 1 : 0)
         + (tensor_parallel_degree > 1 ? 1 : 0)
         + (pipeline_parallel_degree > 1 ? 1 : 0);
 

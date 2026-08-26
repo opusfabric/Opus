@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 OPUS_ROOT="$(realpath "${SCRIPT_DIR}/../..")"
@@ -8,12 +11,14 @@ TEMPLATE_DIR="${EXAMPLE_DIR}/stg-template"
 : "${TP:=2}"
 : "${PP:=2}"
 : "${DP:=2}"
+: "${EP:=1}"
+: "${PYTHON:=python3}"
 
 : "${MIXED_PRECISION:=0}"
 
 SCALE_UP_BW=450
 
-if [ -z "${SCALE_OUT_SWEEPS}" ]; then
+if [ -z "${SCALE_OUT_SWEEPS:-}" ]; then
     SCALE_OUT_SWEEPS=(12.5 25 50 100 200)
 else
     # If passed as space-separated string, convert to array
@@ -36,7 +41,11 @@ BATCH=256
 
 MB=-1
 
-NPU_COUNT=$((DP * TP * PP))
+NPU_COUNT=$((DP * TP * PP * EP))
+EP_SUFFIX=""
+if [ "$EP" -gt 1 ]; then
+    EP_SUFFIX="_ep${EP}"
+fi
 
 NPU_PEAK_MEM_BW=4800
 NPU_PEAK_PERF=989
@@ -46,9 +55,9 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
     SCALE_OUT_BW=${bw}
 
     if [ ${MIXED_PRECISION} -eq 1 ]; then
-        OUT_DIR="$EXAMPLE_DIR/llama_dp${DP}_pp${PP}_tp${TP}_batch_${BATCH}_mb${MB}_${NS}stack_seq${SEQ_LEN}_${SCALE_OUT_BW}BW"
+        OUT_DIR="$EXAMPLE_DIR/llama_dp${DP}_pp${PP}_tp${TP}${EP_SUFFIX}_batch_${BATCH}_mb${MB}_${NS}stack_seq${SEQ_LEN}_${SCALE_OUT_BW}BW"
     else
-        OUT_DIR="$EXAMPLE_DIR/stg_dp${DP}_pp${PP}_tp${TP}_batch_${BATCH}_mb${MB}_${NS}stack_seq${SEQ_LEN}_${SCALE_OUT_BW}BW"
+        OUT_DIR="$EXAMPLE_DIR/stg_dp${DP}_pp${PP}_tp${TP}${EP_SUFFIX}_batch_${BATCH}_mb${MB}_${NS}stack_seq${SEQ_LEN}_${SCALE_OUT_BW}BW"
     fi
 
 
@@ -62,9 +71,9 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
     mkdir -p ${OUT_DIR}
 
     echo "Generating workload files..."
-    python ${STG_DIR}/main.py --output_dir ${OUT_DIR} \
+    "${PYTHON}" ${STG_DIR}/main.py --output_dir ${OUT_DIR} \
                 --output_name workload.%d.et \
-                --dp ${DP} --pp ${PP} --tp ${TP} \
+                --dp ${DP} --pp ${PP} --tp ${TP} --ep ${EP} \
                 --micro_batch ${MB} \
                 --batch ${BATCH} \
                 --weight_sharded ${WS} \
@@ -81,11 +90,11 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
 
     echo "Generating analytical topology..."
     #  Usage: Usage: python topo_gen.py <dp> <tp> <pp> <dp_bw> <tp_bw> <pp_bw> <swap_dp_tp> <mono-pp|analy|fg-pp>
-    python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true analy
+    "${PYTHON}" ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true analy
     # python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} 100 450 100 false mono-pp
 
     echo "Generating reconfig topology..."
-    python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true fg-pp
+    "${PYTHON}" "${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py" ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true fg-pp
 
     echo "Customizing run scripts and system configuration..."
     sed -i "s/REPLACE_NPU_COUNT/${NPU_COUNT}/g" network.yml
@@ -99,7 +108,7 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
     sed -i "s/REPLACE_SCALE_UP_BW/${SCALE_UP_BW}/g" run_network_analytical.sh
 
     # Replace "REPLACE_LOCAL_MEM_BW" and "REPLACE_PEAK_PERF" in system.json
-    sed -i "s/REPLACE_LOCAL_MEM_BW/${NPU_PEAK_MEM_BW}/g" system.json
-    sed -i "s/REPLACE_PEAK_PERF/${NPU_PEAK_PERF}/g" system.json
+    sed -i "s/\"local-mem-bw\": 4800/\"local-mem-bw\": ${NPU_PEAK_MEM_BW}/" system.json
+    sed -i "s/\"peak-perf\": 989/\"peak-perf\": ${NPU_PEAK_PERF}/" system.json
 
 done

@@ -1,0 +1,2 @@
+# The first all-reduce ends the first communication stage.
+allreduce start_backend: 0 start_idx: 0 end_backend: 0 end_idx: 0 len: 1

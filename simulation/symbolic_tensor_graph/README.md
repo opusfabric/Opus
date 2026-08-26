@@ -20,24 +20,24 @@ The Symbolic Tensor Graph is a generator for [Chakra Execution Trace (ET)](https
 To set up the environment and install the required dependencies, follow these steps:
 
 ```bash
-# Clone the repository
-git clone git@github.com:astra-sim/symbolic_tensor_graph.git
+# Run from the Opus repository root.
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install numpy sympy graphviz pandas tqdm pyyaml protobuf==5.28.2
 
-# Navigate to the project directory
-cd symbolic_tensor_graph
-
-# Install dependencies via conda
-conda create -n <env_name>
-conda activate <env_name>
-conda install numpy sympy python-graphviz protobuf pandas -c conda-forge
+# The generator is vendored in this checkout; no separate clone is needed.
+cd simulation/symbolic_tensor_graph
 ```
+
+The `sharding_spreadsheets/` directory contains the CSV and companion JSON model inputs required by the dense generator. Keep the working directory at `simulation/symbolic_tensor_graph` when invoking `main.py`, because the model code resolves these inputs relative to that directory.
 
 ## Usage
 
 To generate symbolic workloads, use the following command:
 
 ```bash
-python main.py –h
+python main.py --help
 ```
 
 This will show all available options and their descriptions. Example of running the generator:
