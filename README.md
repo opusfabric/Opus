@@ -130,15 +130,15 @@ The demo uses `MODE=baseline`, not `MODE=provision`. Both ranks send a request a
 
 ## 2. GPU-cluster emulation with the whole control plane
 
-Use the launchers in `scripts/` for the multi-node control-plane run. Each starts one controller on the first allocated node with `-e`, then launches one `torchrun` agent per node. NCCL still uses the cluster's native data network; no physical OCS is needed.
+Use the launchers in `scripts/` for the multi-node control-plane run. Each starts one controller on the first allocated node with `-e`, then launches one `torchrun` agent per node. NCCL still uses the cluster's native data network.
 
 ### What this experiment runs
 
 The default run is a 16-rank Llama 3 8B training job: four nodes with four GPUs each, TP=4, PP=2, and data-parallel shard degree=2. It runs 10 steps on `c4_test` with the Opus backend enabled.
 
-`COMM_PATTERN_PATH` is a filename prefix. Each rank reads `<prefix>_<node-rank>_rank<local-rank>.txt`; these files list the ordered PP and DP communication stages, backend IDs, collective-counter ranges, and stage lengths. They are control metadata, not packet or GPU traces.
+`COMM_PATTERN_PATH` is a filename prefix. Each rank reads `<prefix>_<node-rank>_rank<local-rank>.txt`; these files list the ordered PP and DP communication stages, backend IDs, collective-counter ranges, and stage lengths.
 
-In the default `MODE=baseline`, the shim sends a `CONFIG_REQ` when a communication-stage boundary requires a new rail topology. The controller waits for the participating ranks, updates the logical topology, and passes it to the `config.py` worker. Controller `-e` makes that worker sleep for the configured `-d` delay for changed topology bits before returning `CONFIG_ACK`. The model parallelism does not change, no physical OCS is switched, and NCCL data movement remains on the cluster network.
+In the default `MODE=baseline`, the shim sends a `CONFIG_REQ` when a communication-stage boundary requires a new rail topology. The controller waits for the participating ranks, updates the logical topology, and passes it to the `config.py` worker. Controller `-e` makes that worker sleep for the configured `-d` delay for changed topology bits before returning `CONFIG_ACK`. The model parallelism does not change, and NCCL data movement remains on the cluster network.
 
 ### Any Slurm GPU cluster
 
@@ -152,6 +152,18 @@ sbatch --nodes=4 --gpus-per-node=4 \
 
 The launcher accepts `CONFIG_FILE`, `COMM_PATTERN_PATH`, `MODE`, `RECONFIG_DELAY_MS`, and `OPUS_OUTPUT_DIR` through the environment. It defaults to the tracked Llama 3 8B configuration, communication patterns, and `MODE=baseline`. It uses the host or module-provided CUDA, NCCL, and `torchrun`.
 
+### Provisioning variant
+
+The command above is the reactive `MODE=baseline` run. For look-ahead provisioning, submit the same experiment through the provisioning wrapper:
+
+```bash
+sbatch --nodes=4 --gpus-per-node=4 \
+  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4 \
+  scripts/run_slurm_provision.sbatch
+```
+
+Provisioning requests the next communication topology after the current stage completes, allowing its controller delay to overlap with subsequent work. It uses the same model and communication-pattern files; only the timing of topology requests changes.
+
 ### Perlmutter
 
 Use the Shifter launcher:
@@ -162,7 +174,15 @@ sbatch --nodes=4 --gpus-per-node=4 --constraint=gpu \
   scripts/perlmutter/run_opus_emulation.sbatch
 ```
 
-It contains the Perlmutter defaults from the reference environment (`rocep` NCCL settings and `ericd16/opus:2.0`); override the image, `NCCL_*` variables, paths, account, partition, and resources for the allocation. Both launchers require a shared checkout and built controller/shim binaries; logs are written below `OPUS_OUTPUT_DIR`.
+It contains the Perlmutter defaults from the reference environment (`rocep` NCCL settings and `ericd16/opus:2.0`). For Perlmutter provisioning, submit:
+
+```bash
+sbatch --nodes=4 --gpus-per-node=4 --constraint=gpu \
+  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE=ericd16/opus:2.0 \
+  scripts/perlmutter/run_opus_provision.sbatch
+```
+
+Override the image, `NCCL_*` variables, paths, account, partition, and resources for the allocation. Both launchers require a shared checkout and built controller/shim binaries; logs are written below `OPUS_OUTPUT_DIR`.
 
 ### Hardware prototype overview (not runnable)
 
