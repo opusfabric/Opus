@@ -130,41 +130,21 @@ The demo uses `MODE=baseline`, not `MODE=provision`. Both ranks send a request a
 
 ## 2. GPU-cluster emulation with the whole control plane
 
-This experiment runs Llama 3 8B for 10 steps on four Perlmutter nodes
-(16 GPUs): TP=4, PP=2, and DP shard degree=2. NCCL uses Slingshot for data
-movement; Opus emulates rail reconfiguration in the control plane.
+This experiment runs Llama 3 8B for 10 steps on four GPU nodes
+(16 GPUs): TP=4, PP=2, and DP shard degree=2. Opus emulates rail reconfiguration in the control plane.
 
 ### Emulation architecture
-
-```text
-4 torchrun agents / 16 TorchTitan ranks
-        |                         \
-        | control requests         \ tensor data
-        v                           v
-Opus process-group shim       NCCL over Slingshot
-        |
-        | TCP: CHECKIN, CONFIG_REQ, CONFIG_ACK
-        v
-C++ controller on the first node
-        |
-        | one Unix socket per logical rail
-        v
-4 config.py rail workers: update the logical topology and sleep 50 ms
-```
 
 Each rank's shim reads its tracked communication pattern and asks the controller
 for the topology required by the next DP or PP stage. The controller waits until
 all ranks in that communicator are ready, sends the topology to the four rail
 workers, and acknowledges the ranks. In emulation mode the workers model a
-changed rail by sleeping for 50 ms; they do not configure a physical optical
-switch. NCCL tensor traffic continues over Perlmutter's normal Slingshot network.
+changed rail by sleeping for 50 ms when there is a topology reconfiguration event.
 
 Provisioning means requesting the topology for the *next* communication group
-while the current group's NCCL operation is still running. The controller and
-rail workers perform a real CONFIG_REQ/CONFIG_ACK transaction; only the physical
-switch operation is emulated by the 50 ms rail-worker delay. When the look-ahead
-finishes before the next group starts, that group does not pay the delay on its
-critical path.
+while the current group's NCCL operation just finished. The controller and
+rail workers perform a real CONFIG_REQ/CONFIG_ACK transaction. The physical
+switch operation is emulated by the 50 ms rail-worker delay. If the provisioned reconfiguration finishes before the next group starts, that group does not pay the delay on its critical path.
 
 ### Setup
 
@@ -202,11 +182,8 @@ pipeline_parallel_degree = 2
 ```
 
 ### Profile and compile the communication schedule
-
-The schedule is derived from the workload rather than from a hand-written stage
-cursor. TorchTitan labels every training iteration, and `MODE=profile` records
-the actual ordered `(iteration, backend, counter)` events independently in every
-rank. By default iterations 1, 2, and 3 are captured:
+Opus needs to capture the workload schedule for topology provisioning.
+The schedule is derived from the workload. By default iterations 1, 2, and 3 are captured:
 
 ```bash
 PROFILE_JOB=$(sbatch --parsable \
@@ -226,11 +203,11 @@ python scripts/compile_opus_schedule.py \
   --mode=provision
 ```
 
-The compiler emits one schedule per rank. A baseline trigger is placed on the
-first event of each new backend. A provisioning trigger is placed on the last
-event of the preceding backend in the same iteration. This avoids the old shared
-asynchronous cursor, which could be advanced by PP before a DP callback observed
-its boundary.
+The compiler treats PP and DP as the two topology classes. It emits a
+reconfiguration only for a `PP -> DP` or `DP -> PP` shift; moving between
+backend IDs inside the same class is part of the current stage and does not
+reconfigure. Transition targets are synchronized across every participating
+rank so the controller receives the complete communicator request.
 
 ### Experiment A: baseline, without provisioning
 

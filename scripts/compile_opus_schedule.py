@@ -41,10 +41,37 @@ def transitions(events, provision: bool):
     result = []
     previous = None
     for event in events:
-        changed = previous is None or event["backend"] != previous["backend"]
+        changed = previous is None or event["kind"] != previous["kind"]
         if changed:
             trigger = previous if provision and previous is not None else event
             # Do not move provisioning across an iteration boundary.
+            if trigger["iteration"] != event["iteration"]:
+                trigger = event
+            result.append((trigger, event))
+        previous = event
+    return result
+
+
+def transition_keys(all_events):
+    """Return the union of boundaries observed by any participating rank."""
+    keys = set()
+    for events in all_events:
+        previous = None
+        for event in events:
+            if previous is None or event["kind"] != previous["kind"]:
+                keys.add((event["iteration"], event["backend"], event["counter"]))
+            previous = event
+    return keys
+
+
+def synchronized_transitions(events, keys, provision: bool):
+    """Emit every global boundary present in this rank's event stream."""
+    result = []
+    previous = None
+    for event in events:
+        key = (event["iteration"], event["backend"], event["counter"])
+        if key in keys:
+            trigger = previous if provision and previous is not None else event
             if trigger["iteration"] != event["iteration"]:
                 trigger = event
             result.append((trigger, event))
@@ -64,11 +91,13 @@ def main():
         parser.error(f"no events_*_rank*.csv files found in {args.profile_dir}")
     args.output_prefix.parent.mkdir(parents=True, exist_ok=True)
 
+    traces = {source: read_events(source) for source in inputs}
+    keys = transition_keys(traces.values())
     total = 0
-    for source in inputs:
+    for source, events in traces.items():
         suffix = source.name.removeprefix("events_")
         destination = Path(f"{args.output_prefix}_{suffix}")
-        rows = transitions(read_events(source), args.mode == "provision")
+        rows = synchronized_transitions(events, keys, args.mode == "provision")
         with destination.open("w", newline="") as stream:
             stream.write("# iteration,trigger_backend,trigger_counter,target_backend,target_counter\n")
             writer = csv.writer(stream)
