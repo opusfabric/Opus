@@ -7,8 +7,11 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-SCRIPT_PATH=${SCRIPT_DIR}/$(basename -- "${BASH_SOURCE[0]}")
 OPUS_ROOT=${OPUS_ROOT:-$(cd -- "${SCRIPT_DIR}/../.." && pwd)}
+# Under sbatch, BASH_SOURCE points at Slurm's node-local spool copy.  Workers on
+# other nodes (and inside Shifter) cannot see that path, so recurse through the
+# shared checkout instead.
+SCRIPT_PATH=${OPUS_ROOT}/scripts/perlmutter/run_opus_emulation.sbatch
 
 if [[ ${1:-} == "--controller" ]]; then
     if [[ -f /opt/conda/etc/profile.d/conda.sh ]]; then
@@ -53,6 +56,9 @@ CONTROLLER_IP=${CONTROLLER_IP:-${CONTROLLER_NODE}}
 SERVER_IPS=${SERVER_IPS:-$(IFS=,; printf '%s' "${NODES[*]}")}
 
 export OPUS_ROOT NUM_NODES NUM_RANKS_PER_NODE CONTROLLER_IP SERVER_IPS
+# Prefer this checkout's in-place extension over an older editable installation
+# that may exist in the user's site-packages.
+export PYTHONPATH=${OPUS_ROOT}/src/opus-shim${PYTHONPATH:+:${PYTHONPATH}}
 export MASTER_ADDR=${MASTER_ADDR:-${CONTROLLER_IP}}
 export MASTER_PORT=${MASTER_PORT:-29500}
 export OPUS_CONTROLLER_PORT=${OPUS_CONTROLLER_PORT:-1234}
@@ -91,9 +97,9 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Starting Opus controller on ${CONTROLLER_NODE} via Shifter"
-srun --nodes=1 --ntasks=1 --nodelist="${CONTROLLER_NODE}" --export=ALL \
+srun --overlap --nodes=1 --ntasks=1 --nodelist="${CONTROLLER_NODE}" --export=ALL \
     shifter --image="${OPUS_SHIFTER_IMAGE}" --module="${SHIFTER_MODULE}" \
-    "${SCRIPT_PATH}" --controller \
+    bash "${SCRIPT_PATH}" --controller \
     >"${OPUS_OUTPUT_DIR}/controller.log" 2>&1 &
 CONTROLLER_STEP_PID=$!
 
@@ -104,11 +110,11 @@ if ! kill -0 "${CONTROLLER_STEP_PID}" 2>/dev/null; then
 fi
 
 echo "Starting ${NUM_NODES} Perlmutter tasks with ${NUM_RANKS_PER_NODE} GPUs per node"
-srun --nodes="${NUM_NODES}" \
+srun --overlap --nodes="${NUM_NODES}" \
     --ntasks="${NUM_NODES}" \
     --ntasks-per-node=1 \
     --gpus-per-task="${NUM_RANKS_PER_NODE}" \
     --export=ALL \
     --output="${OPUS_OUTPUT_DIR}/torchrun_%N.log" \
     shifter --image="${OPUS_SHIFTER_IMAGE}" --module="${SHIFTER_MODULE}" \
-    "${SCRIPT_PATH}" --worker
+    bash "${SCRIPT_PATH}" --worker

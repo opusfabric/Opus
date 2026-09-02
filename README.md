@@ -130,63 +130,191 @@ The demo uses `MODE=baseline`, not `MODE=provision`. Both ranks send a request a
 
 ## 2. GPU-cluster emulation with the whole control plane
 
-Use the launchers in `scripts/` for the multi-node control-plane run. Each starts one controller on the first allocated node with `-e`, then launches one `torchrun` agent per node. NCCL still uses the cluster's native data network.
+This experiment runs Llama 3 8B for 10 steps on four Perlmutter nodes
+(16 GPUs): TP=4, PP=2, and DP shard degree=2. NCCL uses Slingshot for data
+movement; Opus emulates rail reconfiguration in the control plane.
 
-### What this experiment runs
+### Emulation architecture
 
-The default run is a 16-rank Llama 3 8B training job: four nodes with four GPUs each, TP=4, PP=2, and data-parallel shard degree=2. It runs 10 steps on `c4_test` with the Opus backend enabled.
-
-`COMM_PATTERN_PATH` is a filename prefix. Each rank reads `<prefix>_<node-rank>_rank<local-rank>.txt`; these files list the ordered PP and DP communication stages, backend IDs, collective-counter ranges, and stage lengths.
-
-In the default `MODE=baseline`, the shim sends a `CONFIG_REQ` when a communication-stage boundary requires a new rail topology. The controller waits for the participating ranks, updates the logical topology, and passes it to the `config.py` worker. Controller `-e` makes that worker sleep for the configured `-d` delay for changed topology bits before returning `CONFIG_ACK`. The model parallelism does not change, and NCCL data movement remains on the cluster network.
-
-### Any Slurm GPU cluster
-
-Build the controller and shim from Section 1 in the environment used by every node, then submit:
-
-```bash
-sbatch --nodes=4 --gpus-per-node=4 \
-  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4 \
-  scripts/run_slurm_emulation.sbatch
+```text
+4 torchrun agents / 16 TorchTitan ranks
+        |                         \
+        | control requests         \ tensor data
+        v                           v
+Opus process-group shim       NCCL over Slingshot
+        |
+        | TCP: CHECKIN, CONFIG_REQ, CONFIG_ACK
+        v
+C++ controller on the first node
+        |
+        | one Unix socket per logical rail
+        v
+4 config.py rail workers: update the logical topology and sleep 50 ms
 ```
 
-The launcher accepts `CONFIG_FILE`, `COMM_PATTERN_PATH`, `MODE`, `RECONFIG_DELAY_MS`, and `OPUS_OUTPUT_DIR` through the environment. It defaults to the tracked Llama 3 8B configuration, communication patterns, and `MODE=baseline`. It uses the host or module-provided CUDA, NCCL, and `torchrun`.
+Each rank's shim reads its tracked communication pattern and asks the controller
+for the topology required by the next DP or PP stage. The controller waits until
+all ranks in that communicator are ready, sends the topology to the four rail
+workers, and acknowledges the ranks. In emulation mode the workers model a
+changed rail by sleeping for 50 ms; they do not configure a physical optical
+switch. NCCL tensor traffic continues over Perlmutter's normal Slingshot network.
 
-### Provisioning variant
+Provisioning means requesting the topology for the *next* communication group
+while the current group's NCCL operation is still running. The controller and
+rail workers perform a real CONFIG_REQ/CONFIG_ACK transaction; only the physical
+switch operation is emulated by the 50 ms rail-worker delay. When the look-ahead
+finishes before the next group starts, that group does not pay the delay on its
+critical path.
 
-The command above is the reactive `MODE=baseline` run. For look-ahead provisioning, submit the same experiment through the provisioning wrapper:
+### Setup
 
-```bash
-sbatch --nodes=4 --gpus-per-node=4 \
-  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4 \
-  scripts/run_slurm_provision.sbatch
-```
-
-Provisioning requests the next communication topology after the current stage completes, allowing its controller delay to overlap with subsequent work. It uses the same model and communication-pattern files; only the timing of topology requests changes.
-
-### Perlmutter
-
-Use the Shifter launcher:
-
-```bash
-sbatch --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE=ericd16/opus:2.0 \
-  scripts/perlmutter/run_opus_emulation.sbatch
-```
-
-It contains the Perlmutter defaults from the reference environment (`rocep` NCCL settings and `ericd16/opus:2.0`). For Perlmutter provisioning, submit:
+Run from the shared Opus checkout. Replace `your_project_g` with an active
+Perlmutter GPU account.
 
 ```bash
-sbatch --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT=/absolute/path/to/Opus,NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE=ericd16/opus:2.0 \
-  scripts/perlmutter/run_opus_provision.sbatch
+export OPUS_ROOT="$PWD"
+export OPUS_ACCOUNT=your_project_g
+export OPUS_SHIFTER_IMAGE=ericd16/opus:2.0
+
+shifter --image="${OPUS_SHIFTER_IMAGE}" bash -lc \
+  'unset SSL_CERT_FILE REQUESTS_CA_BUNDLE
+   cd '"${OPUS_ROOT}"'
+   make -B -C src/opus-controller
+   cd torchtitan
+   python scripts/download_hf_assets.py \
+     --repo_id hf-internal-testing/llama-tokenizer \
+     --local_dir tests/assets --asset tokenizer'
 ```
 
-Override the image, `NCCL_*` variables, paths, account, partition, and resources for the allocation. Both launchers require a shared checkout and built controller/shim binaries; logs are written below `OPUS_OUTPUT_DIR`.
+The tracked workload configuration is
+`torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/llama3_8b_lb.toml`:
+
+```toml
+[training]
+steps = 10
+dataset = "c4_test"
+enable_opus_backend = true
+
+[parallelism]
+data_parallel_shard_degree = 2
+tensor_parallel_degree = 4
+pipeline_parallel_degree = 2
+```
+
+### Profile and compile the communication schedule
+
+The schedule is derived from the workload rather than from a hand-written stage
+cursor. TorchTitan labels every training iteration, and `MODE=profile` records
+the actual ordered `(iteration, backend, counter)` events independently in every
+rank. By default iterations 1, 2, and 3 are captured:
+
+```bash
+PROFILE_JOB=$(sbatch --parsable \
+  --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
+  --nodes=4 --gpus-per-node=4 --constraint=gpu \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_PROFILE_ITERATIONS=1:2:3 \
+  scripts/perlmutter/run_opus_profile.sbatch)
+
+# Run after PROFILE_JOB completes successfully.
+python scripts/compile_opus_schedule.py \
+  --profile-dir="runs/${PROFILE_JOB}/profile" \
+  --output-prefix="runs/${PROFILE_JOB}/schedule_baseline" \
+  --mode=baseline
+python scripts/compile_opus_schedule.py \
+  --profile-dir="runs/${PROFILE_JOB}/profile" \
+  --output-prefix="runs/${PROFILE_JOB}/schedule_provision" \
+  --mode=provision
+```
+
+The compiler emits one schedule per rank. A baseline trigger is placed on the
+first event of each new backend. A provisioning trigger is placed on the last
+event of the preceding backend in the same iteration. This avoids the old shared
+asynchronous cursor, which could be advanced by PP before a DP callback observed
+its boundary.
+
+### Experiment A: baseline, without provisioning
+
+Baseline requests a topology only when the next communication stage needs it.
+The affected ranks wait for the configured 50 ms reconfiguration delay.
+
+```bash
+BASELINE_JOB=$(sbatch --parsable \
+  --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
+  --nodes=4 --gpus-per-node=4 --constraint=gpu \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_SCHEDULE_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/schedule_baseline" \
+  scripts/perlmutter/run_opus_emulation.sbatch)
+```
+
+### Experiment B: look-ahead provisioning
+
+Provisioning uses the identical workload and delay, but requests the next
+topology early so the 50 ms delay can overlap with useful work.
+
+```bash
+PROVISION_JOB=$(sbatch --parsable \
+  --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
+  --nodes=4 --gpus-per-node=4 --constraint=gpu \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_SCHEDULE_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/schedule_provision" \
+  scripts/perlmutter/run_opus_provision.sbatch)
+```
+
+### Expected result
+
+For either job, the top-level job and worker step must finish with
+`COMPLETED 0:0`, every worker log must reach step 10, and the controller log
+must contain `CONFIG_REQ`, `ALL READY`, topology changes, and `CONFIG_ACK`.
+
+```bash
+sacct -j "${BASELINE_JOB},${PROVISION_JOB}" \
+  --format=JobID,JobName%24,State,ExitCode,Elapsed
+
+grep -h "step: 10" "runs/${BASELINE_JOB}"/torchrun_*.log | head -1
+grep -h "step: 10" "runs/${PROVISION_JOB}"/torchrun_*.log | head -1
+
+grep -E "CONFIG_REQ|ALL READY|new topo: yes|CONFIG_ACK" \
+  "runs/${BASELINE_JOB}/controller.log" | head
+```
+
+The critical expected difference is request timing:
+
+| Mode | When the next topology is requested | Expected effect |
+| --- | --- | --- |
+| Baseline | At the communication-stage boundary | The stage observes the reconfiguration delay |
+| Provisioning | Before the boundary | The delay overlaps preceding work, reducing or hiding the boundary stall |
+
+Both modes should complete the same 10-step workload and exercise the same
+topologies. Provisioning is successful when its controller requests appear
+earlier relative to the corresponding stage and training still reaches step 10;
+wall-clock time may vary slightly between cluster runs.
+
+Sample result:
+
+| Result | Baseline | Provisioning |
+| --- | --- | --- |
+| Training | Step 10, `COMPLETED 0:0` | Step 10, `COMPLETED 0:0` expected |
+| Topology behavior | Request at boundary; about 50 ms is visible | Request before boundary; about 50 ms overlaps useful work |
+| Boundary stall | About 50 ms for a changed topology | Near zero when provisioning starts at least 50 ms early |
+
+The verified baseline job (`57628070`) completed in `00:03:00` and recorded
+704 requests, 704 acknowledgements, and 8 real topology changes. One changed
+topology took approximately 56 ms from request to application, consistent with
+the configured 50 ms delay:
+
+```text
+[RECV] CONFIG_REQ, 20:11:47.952
+[STATUS] 20:11:48.008, new topo: yes, topoId: 3
+[SENT] CONFIG_ACK
+[titan] ... step: 10 ... loss: 15.5790 ...
+```
+
+The corresponding provisioning output should show the same topology change and
+acknowledgement before the next communication-stage boundary. Its numerical
+runtime is intentionally not specified because it must be measured on the same
+cluster allocation and can be obscured by normal run-to-run variation.
 
 ### Hardware prototype overview (not runnable)
 
-The hardware result uses a Polatis optical circuit switch and compatible GPU/NIC firmware. That testbed and the optional PyPolatis integration are not included, so report this portion as an overview and evaluate controller emulation plus software simulation.
+The hardware result uses a Polatis optical circuit switch and compatible GPU/NIC firmware. That testbed and the optional PyPolatis integration are not included.
 
 ## 3. Software simulation
 

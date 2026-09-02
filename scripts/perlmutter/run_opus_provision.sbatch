@@ -5,5 +5,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-MODE=provision exec "${SCRIPT_DIR}/run_opus_emulation.sbatch" "$@"
+: "${OPUS_ROOT:?Set OPUS_ROOT to the shared Opus checkout}"
+MODE=provision exec bash \
+    "${OPUS_ROOT}/scripts/perlmutter/run_opus_emulation.sbatch" "$@"
