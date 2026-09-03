@@ -195,103 +195,115 @@ PROFILE_JOB=$(sbatch --parsable \
 # Run after PROFILE_JOB completes successfully.
 python scripts/compile_opus_schedule.py \
   --profile-dir="runs/${PROFILE_JOB}/profile" \
-  --output-prefix="runs/${PROFILE_JOB}/schedule_baseline" \
-  --mode=baseline
-python scripts/compile_opus_schedule.py \
-  --profile-dir="runs/${PROFILE_JOB}/profile" \
-  --output-prefix="runs/${PROFILE_JOB}/schedule_provision" \
-  --mode=provision
+  --output-prefix="runs/${PROFILE_JOB}/comm_pattern" \
+  --mode=baseline --format=legacy
 ```
 
-The compiler treats PP and DP as the two topology classes. It emits a
-reconfiguration only for a `PP -> DP` or `DP -> PP` shift; moving between
-backend IDs inside the same class is part of the current stage and does not
-reconfigure. Transition targets are synchronized across every participating
-rank so the controller receives the complete communicator request.
+### Experiment A: EPS baseline, zero reconfiguration delay
 
-### Experiment A: baseline, without provisioning
-
-Baseline requests a topology only when the next communication stage needs it.
-The affected ranks wait for the configured 50 ms reconfiguration delay.
+This control run uses the same workload and on-demand path, but sets the
+emulated switch delay to zero. It measures the training and Opus control-plane
+overhead without a reconfiguration penalty.
 
 ```bash
-BASELINE_JOB=$(sbatch --parsable \
+EPS_JOB=$(sbatch --parsable \
   --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_SCHEDULE_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/schedule_baseline" \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=0 \
   scripts/perlmutter/run_opus_emulation.sbatch)
 ```
 
-### Experiment B: look-ahead provisioning
+### Experiment B: on-demand reconfiguration
+
+The next communication stage requests its topology at the stage boundary and
+waits for the 10 ms emulated reconfiguration.
+
+```bash
+ONDEMAND_JOB=$(sbatch --parsable \
+  --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
+  --nodes=4 --gpus-per-node=4 --constraint=gpu \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=10 \
+  scripts/perlmutter/run_opus_emulation.sbatch)
+```
+
+### Experiment C: topology provisioning
 
 Provisioning uses the identical workload and delay, but requests the next
-topology early so the 50 ms delay can overlap with useful work.
+topology early so the 10 ms delay can overlap with useful work.
 
 ```bash
 PROVISION_JOB=$(sbatch --parsable \
   --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_SCHEDULE_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/schedule_provision" \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=10 \
   scripts/perlmutter/run_opus_provision.sbatch)
 ```
 
 ### Expected result
 
-For either job, the top-level job and worker step must finish with
+For all three jobs, the top-level job and worker step must finish with
 `COMPLETED 0:0`, every worker log must reach step 10, and the controller log
 must contain `CONFIG_REQ`, `ALL READY`, topology changes, and `CONFIG_ACK`.
 
 ```bash
-sacct -j "${BASELINE_JOB},${PROVISION_JOB}" \
+sacct -j "${EPS_JOB},${ONDEMAND_JOB},${PROVISION_JOB}" \
   --format=JobID,JobName%24,State,ExitCode,Elapsed
 
-grep -h "step: 10" "runs/${BASELINE_JOB}"/torchrun_*.log | head -1
+grep -h "step: 10" "runs/${EPS_JOB}"/torchrun_*.log | head -1
+grep -h "step: 10" "runs/${ONDEMAND_JOB}"/torchrun_*.log | head -1
 grep -h "step: 10" "runs/${PROVISION_JOB}"/torchrun_*.log | head -1
 
 grep -E "CONFIG_REQ|ALL READY|new topo: yes|CONFIG_ACK" \
-  "runs/${BASELINE_JOB}/controller.log" | head
+  "runs/${ONDEMAND_JOB}/controller.log" | head
 ```
 
 The critical expected difference is request timing:
 
-| Mode | When the next topology is requested | Expected effect |
-| --- | --- | --- |
-| Baseline | At the communication-stage boundary | The stage observes the reconfiguration delay |
-| Provisioning | Before the boundary | The delay overlaps preceding work, reducing or hiding the boundary stall |
+| Mode | Delay | When the topology is requested | Expected effect |
+| --- | --- | --- | --- |
+| EPS baseline | 0 ms | At the communication-stage boundary | Reference time without switch latency |
+| On demand | 10 ms | At the communication-stage boundary | The stage observes the reconfiguration delay |
+| Provisioning | 10 ms | Before the boundary | The delay overlaps preceding work, reducing or hiding the boundary stall |
 
-Both modes should complete the same 10-step workload and exercise the same
+All three modes should complete the same 10-step workload and exercise the same
 topologies. Provisioning is successful when its controller requests appear
 earlier relative to the corresponding stage and training still reaches step 10;
 wall-clock time may vary slightly between cluster runs.
 
 Sample result:
 
-| Result | Baseline | Provisioning |
-| --- | --- | --- |
-| Training | Step 10, `COMPLETED 0:0` | Step 10, `COMPLETED 0:0` expected |
-| Topology behavior | Request at boundary; about 50 ms is visible | Request before boundary; about 50 ms overlaps useful work |
-| Boundary stall | About 50 ms for a changed topology | Near zero when provisioning starts at least 50 ms early |
+| Result | EPS baseline | On demand | Provisioning |
+| --- | --- | --- | --- |
+| Training | Step 10 | Step 10 | Step 10 |
+| Reconfiguration delay | 0 ms | 10 ms at boundary | 10 ms requested early |
+| Expected iteration time | Lowest reference | Higher than EPS | Closer to EPS than on demand |
 
-The verified baseline job (`57628070`) completed in `00:03:00` and recorded
-704 requests, 704 acknowledgements, and 8 real topology changes. One changed
-topology took approximately 56 ms from request to application, consistent with
-the configured 50 ms delay:
+### Hardware prototype (original testbed)
 
-```text
-[RECV] CONFIG_REQ, 20:11:47.952
-[STATUS] 20:11:48.008, new topo: yes, topoId: 3
-[SENT] CONFIG_ACK
-[titan] ... step: 10 ... loss: 15.5790 ...
+We also evaluated Opus on a four-node, eight-GPU prototype connected through a
+Polatis optical circuit switch. This was a real hardware run, not the emulation
+used above: the controller launched one worker per optical rail, the worker
+logged in to the switch through PyPolatis, installed the requested
+cross-connects, and returned `CONFIG-ACK` before GPU communication continued.
+
+The repository retains the exact
+[hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh),
+the [Polatis control worker](src/opus-controller/config.py), and the recorded
+[cross-connect maps](src/opus-controller/config/config.yaml). On every testbed
+node, the experiment was launched from the repository root with:
+
+```bash
+bash torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh
 ```
 
-The corresponding provisioning output should show the same topology change and
-acknowledgement before the next communication-stage boundary. Its numerical
-runtime is intentionally not specified because it must be measured on the same
-cluster allocation and can be obscured by normal run-to-run variation.
-
-### Hardware prototype overview (not runnable)
-
-The hardware result uses a Polatis optical circuit switch and compatible GPU/NIC firmware. That testbed and the optional PyPolatis integration are not included.
+The launcher sets `IS_EMULATION=0`, starts the Opus controller on the first
+node, and runs two GPU processes on each of four nodes. Successful hardware
+operation is visible in the controller/worker logs as switch product
+information, `Applying <configuration>`, `Connections set`, and
+`SUCCESS, CONFIG-ACK` messages. Re-running this command requires the original
+Polatis switch, its site-approved PyPolatis package, the listed testbed hosts,
+and compatible GPU/NIC firmware. Those external components are not distributed
+with this artifact.
 
 ## 3. Software simulation
 
