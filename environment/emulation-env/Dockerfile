@@ -57,6 +57,8 @@ RUN python -m pip install \
         sympy \
         graphviz \
         pandas \
+        matplotlib \
+        seaborn \
         tqdm \
         pyyaml \
         protobuf==5.28.2 && \

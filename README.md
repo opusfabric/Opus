@@ -1,12 +1,12 @@
 # Opus artifact
 
-Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, archived emulation inputs and outputs, and the analytical software simulator.
+Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, archived emulation inputs and outputs, and the reconfigurable software simulator.
 
 This README is the artifact-evaluation guide. It deliberately separates the three evaluation surfaces:
 
 | Surface | What is provided | What a reader needs |
 | --- | --- | --- |
-| Software simulation | CPU/C++ analytical and reconfigurable ASTRA-sim backends, workload generators, sweep and plotting scripts | Linux build host or the simulator container, Python packages, and enough disk for generated traces |
+| Software simulation | CPU/C++ reconfigurable ASTRA-sim backend, workload generators, sweep and plotting scripts | Linux build host or the simulator container, Python packages, and enough disk for generated traces |
 | Network emulation | Controller, NCCL shim, Slingshot/NCCL launch scripts, communication-pattern inputs, and archived CSV/notebook outputs | A multi-GPU cluster with the site’s Slingshot provider and NCCL/GPUDirect RDMA support |
 | Hardware prototype | Controller-side hardware integration and paper description | The Polatis OCS testbed and firmware; this is an overview only and is not expected to run on a reader’s cluster |
 
@@ -21,7 +21,6 @@ Opus/
 ├── nccl/                    vendored NCCL source used to build the Opus shim
 ├── scripts/                 portable Slurm and Perlmutter launchers
 ├── simulation/
-│   ├── analytical_backend/  vendored ASTRA-sim analytical backend
 │   ├── reconfig_backend/    ASTRA-sim backend with reconfigurable topology support
 │   ├── symbolic_tensor_graph/ workload/Chakra trace generator
 │   └── scripts/             backend build, experiment sweeps, and figure plots
@@ -181,9 +180,11 @@ tensor_parallel_degree = 4
 pipeline_parallel_degree = 2
 ```
 
-### Profile and compile the communication schedule
-Opus needs to capture the workload schedule for topology provisioning.
-The schedule is derived from the workload. By default iterations 1, 2, and 3 are captured:
+### Track a communication pattern
+
+When the workload or parallelism changes, capture a fresh communication trace
+before updating the tracked pattern. The profile launcher writes raw per-rank
+traces under `runs/${PROFILE_JOB}/profile`:
 
 ```bash
 PROFILE_JOB=$(sbatch --parsable \
@@ -191,13 +192,37 @@ PROFILE_JOB=$(sbatch --parsable \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
   --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",OPUS_PROFILE_ITERATIONS=1:2:3 \
   scripts/perlmutter/run_opus_profile.sbatch)
+```
 
-# Run after PROFILE_JOB completes successfully.
+After `PROFILE_JOB` completes successfully, compile the legacy-format files
+directly into the example workload directory:
+
+```bash
+sacct -j "${PROFILE_JOB}" --format=JobID,State,Elapsed,ExitCode
+
 python scripts/compile_opus_schedule.py \
   --profile-dir="runs/${PROFILE_JOB}/profile" \
-  --output-prefix="runs/${PROFILE_JOB}/comm_pattern" \
+  --output-prefix="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern" \
   --mode=baseline --format=legacy
 ```
+
+Review the generated files and commit them when the new pattern is intended.
+The raw traces remain runtime artifacts under `runs/`.
+
+### Tracked communication pattern
+
+The example uses the captured communication pattern in
+[`torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern`](torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern).
+It contains the 16 per-rank legacy-format files required by the four-node,
+four-GPU-per-node workload. `COMM_PATTERN_PATH` is the filename prefix, so
+the value for this example is:
+
+```bash
+export COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern"
+```
+
+The checked-in files are the useful output of profiling; raw profiler traces,
+alternate formats, and intermediate schedules are kept out of the example.
 
 ### Experiment A: EPS baseline
 
@@ -209,7 +234,7 @@ overhead without a reconfiguration penalty.
 EPS_JOB=$(sbatch --parsable \
   --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=0 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern",RECONFIG_DELAY_MS=0 \
   scripts/perlmutter/run_opus_emulation.sbatch)
 ```
 
@@ -222,7 +247,7 @@ waits for the 10 ms emulated reconfiguration.
 ONDEMAND_JOB=$(sbatch --parsable \
   --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=10 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern",RECONFIG_DELAY_MS=10 \
   scripts/perlmutter/run_opus_emulation.sbatch)
 ```
 
@@ -235,7 +260,7 @@ topology early so the 10 ms delay can overlap with useful work.
 PROVISION_JOB=$(sbatch --parsable \
   --account="${OPUS_ACCOUNT}" --qos=debug --time=00:30:00 \
   --nodes=4 --gpus-per-node=4 --constraint=gpu \
-  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/runs/${PROFILE_JOB}/comm_pattern",RECONFIG_DELAY_MS=10 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern",RECONFIG_DELAY_MS=10 \
   scripts/perlmutter/run_opus_provision.sbatch)
 ```
 
@@ -244,7 +269,8 @@ PROVISION_JOB=$(sbatch --parsable \
 For all four jobs, the top-level job and worker step must finish with
 `COMPLETED 0:0` and every worker log must reach step 10. For the three Opus
 jobs, the controller log must also contain `CONFIG_REQ`, `ALL READY`, topology
-changes, and `CONFIG_ACK`; A0 intentionally has no controller log.
+changes, and `CONFIG_ACK`; the native reference intentionally has no
+controller log.
 
 ```bash
 sacct -j "${NATIVE_JOB},${EPS_JOB},${ONDEMAND_JOB},${PROVISION_JOB}" \
@@ -275,8 +301,8 @@ From the repository root, check run health and reproduce the latency summary
 with:
 
 ```bash
-scripts/check_run_output.sh <job_ids>
-scripts/summarize_iteration_latency.py <job_ids>
+scripts/check_run_output.sh "${NATIVE_JOB}" "${EPS_JOB}" "${ONDEMAND_JOB}" "${PROVISION_JOB}"
+scripts/summarize_iteration_latency.py "${NATIVE_JOB}" "${EPS_JOB}" "${ONDEMAND_JOB}" "${PROVISION_JOB}"
 ```
 
 The checker reports step completion, fatal errors, ACK timeouts, and topology
@@ -312,8 +338,8 @@ node, the experiment was launched from the repository root with:
 bash torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh
 ```
 
-The launcher sets `IS_EMULATION=0`, starts the Opus controller on the first
-node, and runs two GPU processes on each of four nodes. Successful hardware
+The launcher starts the Opus controller on the first node and
+runs two GPU processes on each of four nodes. Successful hardware
 operation is visible in the controller/worker logs as switch product
 information, `Applying <configuration>`, `Connections set`, and
 `SUCCESS, CONFIG-ACK` messages. Re-running this command requires the original
@@ -356,33 +382,55 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install \
-  numpy sympy graphviz pandas tqdm pyyaml protobuf==5.28.2
+  numpy sympy graphviz pandas matplotlib seaborn tqdm pyyaml protobuf==5.28.2
 ```
 
 Activate this `.venv` in every shell before running `build_backends.sh`, `run_example.sh`, the expert-parallel launcher, or the paper sweep scripts. The environment is local to the checkout and is ignored by git. If activation is not convenient, use the interpreter explicitly, for example `PYTHON="$PWD/.venv/bin/python" ./simulation/scripts/run_example.sh`.
 
-### Build the two simulator backends
+### Build the reconfigurable simulator
 
 ```bash
 ./simulation/scripts/build_backends.sh
 ```
 
-The executables are written to:
+This builds only the reconfigurable ASTRA-Sim executable:
 
 ```text
-simulation/analytical_backend/build/astra_analytical/build/bin/
-simulation/reconfig_backend/build/astra_analytical/build/bin/
+simulation/reconfig_backend/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable
 ```
 
-If CMake stops at `find_package(Protobuf)`, install `libprotobuf-dev` and `protobuf-compiler` (or load the site Protobuf module). The build needs the C++ headers, library, and CMake metadata. Chakra generates `et_def.pb.h` and `et_def.pb.cc` under the ignored `build/chakra_proto/` directory; do not copy them into the source tree. Set `CMAKE_BUILD_PARALLEL_LEVEL` if memory is limited.
+If CMake stops at `find_package(Protobuf)`, install `libprotobuf-dev` and
+`protobuf-compiler` (or load the site Protobuf module). Chakra generates
+`et_def.pb.h` and `et_def.pb.cc` under the ignored
+`simulation/reconfig_backend/build/astra_analytical/build/chakra_proto/` directory. Set
+`CMAKE_BUILD_PARALLEL_LEVEL` if memory is limited.
 
-### Minimal simulation smoke test
+### Minimal simulation test
 
 ```bash
 ./simulation/scripts/run_example.sh
 ```
 
-This generates a small DP/PP/TP workload, runs both simulator backends, and checks for non-empty output. Generated traces and logs are ignored; the sharding JSON files under `simulation/symbolic_tensor_graph/sharding_spreadsheets/` are tracked runtime inputs.
+This generates a small DP/PP/TP workload and runs only the reconfigurable
+backend. It sweeps 0, 1, 10, and 50 ms. The 0 ms run is the EPS reference:
+the topology-change delay is zero. Positive values inject reconfiguration
+delay. Every delay runs:
+
+- baseline: the next topology is requested at the communication boundary;
+- provisioning: the next topology is requested early using
+  `rank_comm_groups.yaml`.
+
+The generated `schedules.txt` contains the fine-grained candidate topologies.
+The output directory is
+`simulation/reconfig_backend/examples/stg_dp2_pp2_tp2_batch_256_mb-1_96stack_seq4096_50BW/`.
+It contains `debug_no_provision_<delay>ms.txt`,
+`debug_provision_<delay>ms.txt`, and the Markdown summary printed by the
+driver.
+
+The small experiment uses DP=2, PP=2, TP=2 (8 simulated NPUs), batch 256,
+sequence length 4096, 96 stacks, and scale-out/scale-up bandwidths 50/450
+GB/s. The simulator is CPU-only; the Docker image does not need
+`--gpus`.
 
 ### Paper Figure 12
 
@@ -428,7 +476,7 @@ cd simulation/scripts/fig14
 ./plot_fig14.sh
 ```
 
-The output is `simulation/scripts/fig14/fig14.pdf`. This figure depends on generated run directories from both backends; it is not a hardware measurement.
+The output is `simulation/scripts/fig14/fig14.pdf`. This figure depends on generated H200-style and GB200-style run directories; it is not a hardware measurement.
 
 ### Supplemental expert-parallel experiments
 

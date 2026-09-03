@@ -15,11 +15,5 @@ chakra_converter PyTorch --input chakra_host_device_trace_1.json --output chakra
 ```
 
 ## Simulation
-https://github.com/mlcommons/chakra/wiki/Running-Simulation-with-Chakra
-
-```
-docker run --rm --gpus all  -it -v "$(pwd)":/app/astra-sim -w /app/astra-sim astra-env bash
-
-cd examples/test
-./run_network_analytical.sh
-```
+The one-comm-group files are archived inputs. Use the maintained two-comm-group
+reconfigurable example or the top-level simulator command in the artifact README.

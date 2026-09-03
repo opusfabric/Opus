@@ -52,3 +52,6 @@ torchtitan/tests/assets/llama-tokenizer/
 !simulation/reconfig_backend/build/astra_analytical/
 !simulation/reconfig_backend/build/astra_analytical/CMakeLists.txt
 !simulation/reconfig_backend/build/astra_analytical/build.sh
+
+# Slurm and local emulation outputs are runtime artifacts.
+runs/

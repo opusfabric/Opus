@@ -1,7 +1,6 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 OPUS_ROOT="$(realpath ${SCRIPT_DIR:?}/../../..)"
 
-ANALYTICAL_BACKEND="${OPUS_ROOT}/simulation/analytical_backend"
 RECONFIG_BACKEND="${OPUS_ROOT}/simulation/reconfig_backend"
 
 PLOT_SCRIPT="${RECONFIG_BACKEND}/examples/helpers/plot_sweep_combined.py"

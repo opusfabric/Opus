@@ -35,7 +35,7 @@ mkdir -p /tmp/hf/datasets
 JOB="dp-2-pp-2-tp-4-pm-8b-provision"
 CONFIG_FILE=${CONFIG_FILE:-"~/Opus/torchtitan/opus-test/$JOB/llama3_8b.toml"}
 TRAIN_FILE=${TRAIN_FILE:-"torchtitan.train"}
-COMM_PATTERN_PATH=${COMM_PATTERN_PATH:-"~/Opus/evaluation/llama-3-3d-16-latency/comm_pattern"}
+COMM_PATTERN_PATH=${COMM_PATTERN_PATH:-"~/Opus/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern"}
 export LOG_RANK=0,1,2,3
 NUM_NODES=${NUM_NODES:-$SLURM_JOB_NUM_NODES}
 NUM_RANKS_PER_NODE=${NUM_RANKS_PER_NODE:-4}

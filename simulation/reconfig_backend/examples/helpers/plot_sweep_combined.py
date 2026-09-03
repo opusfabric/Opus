@@ -7,12 +7,12 @@ import re
 
 
 def parse_results(filepath):
-    """Parse results_for_sheet_import.txt."""
+    """Parse the EPS and reconfigurable-backend results file."""
     with open(filepath, "r") as f:
         lines = f.readlines()
 
-    analytical = None
-    baseline = None
+    eps = None
+    ideal = None
     reconfig_realtime = {}
     reconfig_preplanned = {}
 
@@ -23,21 +23,21 @@ def parse_results(filepath):
         line = line.strip()
         if not line:
             continue
-        if line == "Analytical":
-            section = "analytical"
+        if line in ("EPS", "Analytical"):
+            section = "eps"
             continue
-        elif line == "Baseline":
-            section = "baseline"
+        if line == "Baseline":
+            section = "ideal"
             continue
-        elif line == "Reconfigurable":
+        if line == "Reconfigurable":
             section = "reconfigurable"
             continue
 
-        parts = line.split("\t")
-        if section == "analytical":
-            analytical = int(parts[1])
-        elif section == "baseline":
-            baseline = int(parts[1])
+        parts = line.split("	")
+        if section == "eps":
+            eps = int(parts[1])
+        elif section == "ideal":
+            ideal = int(parts[1])
         elif section == "reconfigurable":
             latency_str = parts[0]
             value = int(parts[2])
@@ -52,7 +52,7 @@ def parse_results(filepath):
 
             reconfig_count[latency_str] += 1
 
-    return analytical, baseline, reconfig_realtime, reconfig_preplanned
+    return eps, ideal, reconfig_realtime, reconfig_preplanned
 
 
 def latency_str_to_seconds(s):
@@ -134,7 +134,7 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
 
     # ── Left plot: Reconfiguration Latency ────────────────────────────────
     results_path = os.path.join(folder_path, "results_for_sheet_import.txt")
-    analytical, baseline, reconfig_rt, reconfig_pp = parse_results(results_path)
+    eps, ideal, reconfig_rt, reconfig_pp = parse_results(results_path)
 
     latencies_str = sorted(reconfig_rt.keys(), key=latency_str_to_seconds)
     latencies_str = [l for l in latencies_str if latency_str_to_seconds(l) <= 1.0]
@@ -145,8 +145,8 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
     # Raw values in seconds (convert from ns)
     rt_raw = [reconfig_rt[l] / 1e9 for l in latencies_str]
     pp_raw = [reconfig_pp[l] / 1e9 for l in latencies_str]
-    analytical_s = analytical / 1e9
-    baseline_s = baseline / 1e9
+    eps_s = eps / 1e9
+    ideal_s = None if ideal is None else ideal / 1e9
 
     # Opus
     ax1.plot(
@@ -164,18 +164,18 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
     )
     # EPS
     ax1.plot(
-        x_indices_lat, [analytical_s] * len(x_indices_lat),
+        x_indices_lat, [eps_s] * len(x_indices_lat),
         color=COLORS["eps"], marker=MARKERS["eps"], linestyle=LINESTYLES["eps"],
         label="EPS", markersize=7, linewidth=1.5,
         markerfacecolor="none", markeredgecolor=COLORS["eps"], markeredgewidth=1.5,
     )
-    # Ideal
-    ax1.plot(
-        x_indices_lat, [baseline_s] * len(x_indices_lat),
-        color=COLORS["ideal"], marker=MARKERS["ideal"], linestyle=LINESTYLES["ideal"],
-        label="Ideal", markersize=7, linewidth=1.5,
-        markerfacecolor="none", markeredgecolor=COLORS["ideal"], markeredgewidth=1.5,
-    )
+    if ideal_s is not None:
+        ax1.plot(
+            x_indices_lat, [ideal_s] * len(x_indices_lat),
+            color=COLORS["ideal"], marker=MARKERS["ideal"], linestyle=LINESTYLES["ideal"],
+            label="Ideal", markersize=7, linewidth=1.5,
+            markerfacecolor="none", markeredgecolor=COLORS["ideal"], markeredgewidth=1.5,
+        )
 
     ax1.set_xlabel("Reconfiguration Latency (ms)")
     ax1.set_xticks(x_indices_lat)
@@ -212,7 +212,8 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
             opus_values = [d["opus"] / 1e9 for d in raw_data]
             provision_values = [d["provision"] / 1e9 for d in raw_data]
             eps_values = [d["analytical"] / 1e9 for d in raw_data]
-            ideal_values = [d["baseline"] / 1e9 for d in raw_data]
+            has_ideal = all(d["baseline"] is not None for d in raw_data)
+            ideal_values = [d["baseline"] / 1e9 for d in raw_data] if has_ideal else []
 
             x_indices_bw = list(range(len(bandwidths)))
 
@@ -234,12 +235,13 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
                 markersize=7, linewidth=1.5,
                 markerfacecolor="none", markeredgecolor=COLORS["eps"], markeredgewidth=1.5,
             )
-            ax2.plot(
-                x_indices_bw, ideal_values,
-                color=COLORS["ideal"], marker=MARKERS["ideal"], linestyle=LINESTYLES["ideal"],
-                markersize=7, linewidth=1.5,
-                markerfacecolor="none", markeredgecolor=COLORS["ideal"], markeredgewidth=1.5,
-            )
+            if has_ideal:
+                ax2.plot(
+                    x_indices_bw, ideal_values,
+                    color=COLORS["ideal"], marker=MARKERS["ideal"], linestyle=LINESTYLES["ideal"],
+                    markersize=7, linewidth=1.5,
+                    markerfacecolor="none", markeredgecolor=COLORS["ideal"], markeredgewidth=1.5,
+                )
 
             ax2.set_xlabel("Scale-Out Bandwidth (Gbps)")
             ax2.set_ylabel("Step Latency (s)")

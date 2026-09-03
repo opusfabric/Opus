@@ -3,16 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 OPUS_ROOT="$(realpath ${SCRIPT_DIR:?}/../..)"
-
-ORIG_BACKEND="${OPUS_ROOT}/simulation/orig_backend"
-ANALYTICAL_BACKEND="${OPUS_ROOT}/simulation/analytical_backend"
 RECONFIG_BACKEND="${OPUS_ROOT}/simulation/reconfig_backend"
 
-ORIG_EXE="${ORIG_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
-ANALYTICAL_EXE="${ANALYTICAL_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
-RECONFIG_EXE="${RECONFIG_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
-
-STG_DIR="${OPUS_ROOT}/simulation/symbolic_tensor_graph"
 
 # Try to generate an example workload
 TP=1
@@ -35,7 +27,3 @@ if [ ! -d "${OUT_DIR}" ]; then
 fi
 
 echo "Generated example workload in ${OUT_DIR}"
-# cd ${OUT_DIR}
-
-# echo "Running EPS + Ideal"
-# ./run_network_analytical.sh > /dev/null

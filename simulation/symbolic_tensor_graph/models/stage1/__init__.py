@@ -1,6 +1,7 @@
 import os
 
-CACHE_DIR = os.path.join(
-    os.path.split(os.path.abspath(__file__))[0], "../../generated/.cache"
+CACHE_DIR = os.environ.get(
+    "OPUS_STG_CACHE_DIR",
+    os.path.join(os.path.split(os.path.abspath(__file__))[0], "../../generated/.cache"),
 )
 os.makedirs(CACHE_DIR, exist_ok=True)

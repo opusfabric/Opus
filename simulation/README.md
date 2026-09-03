@@ -32,7 +32,7 @@ sudo apt-get install build-essential cmake libprotobuf-dev protobuf-compiler gra
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
-python -m pip install numpy sympy graphviz pandas tqdm pyyaml protobuf==5.28.2
+python -m pip install numpy sympy graphviz pandas matplotlib seaborn tqdm pyyaml protobuf==5.28.2
 ```
 
 Activate this `.venv` in every shell before running simulator commands or the toy workload generator. The environment is local to the checkout and is ignored by git.
@@ -48,9 +48,9 @@ Run from the repository root:
 ./simulation/scripts/run_example.sh
 ```
 
-The tracked CMake drivers under `analytical_backend/build/astra_analytical/` and `reconfig_backend/build/astra_analytical/` replace the generated build directories expected by older upstream ASTRA-sim scripts.
+The reconfigurable CMake driver under `reconfig_backend/build/astra_analytical/` builds the simulator used by this artifact.
 
-The build drivers also generate Chakra's `et_def.pb.h` and `et_def.pb.cc` automatically under each backend's ignored `build/chakra_proto/` directory. These files come from `extern/graph_frontend/chakra/schema/protobuf/et_def.proto`; no generated source files need to be committed.
+The build drivers also generate Chakra's `et_def.pb.h` and `et_def.pb.cc` automatically under `reconfig_backend/build/astra_analytical/build/chakra_proto/`. These files come from `extern/graph_frontend/chakra/schema/protobuf/et_def.proto`; no generated source files need to be committed.
 
 ## Supplemental expert-parallel workloads
 

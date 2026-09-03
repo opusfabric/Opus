@@ -61,30 +61,17 @@ for bw in "${SCALE_OUT_SWEEPS[@]}"; do
                 --seq 8192
 
 
-    echo "Copying run template files..."
-    cp -r ${TEMPLATE_DIR}/* ${OUT_DIR}/
+    echo "Copying reconfigurable-backend run files..."
+    cp "${TEMPLATE_DIR}/network.yml" "${TEMPLATE_DIR}/remote_memory.json" "${TEMPLATE_DIR}/run_network_reconfig.sh" "${TEMPLATE_DIR}/system.json" "${OUT_DIR}/"
 
 
     cd ${OUT_DIR} 
 
-    echo "Generating analytical topology..."
-    #  Usage: Usage: python topo_gen.py <dp> <tp> <pp> <dp_bw> <tp_bw> <pp_bw> <swap_dp_tp> <mono-pp|analy|fg-pp>
-    python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true analy
-    # python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} 100 450 100 false mono-pp
-
-    echo "Generating reconfig topology..."
+    echo "Generating reconfigurable topology..."
     python ${EXAMPLE_DIR}/helpers/topo_gen_pp_split.py ${DP} ${TP} ${PP} ${SCALE_OUT_BW} ${SCALE_UP_BW} ${SCALE_OUT_BW} true fg-pp
 
     echo "Customizing run scripts and system configuration..."
     sed -i "s/REPLACE_NPU_COUNT/${NPU_COUNT}/g" network.yml
-
-    # Replace "REPLACE_DP", "REPLACE_TP", and "REPLACE_PP" in run_network_analytical.sh
-    sed -i "s/REPLACE_DP/${DP}/g" run_network_analytical.sh
-    sed -i "s/REPLACE_TP/${TP}/g" run_network_analytical.sh
-    sed -i "s/REPLACE_PP/${PP}/g" run_network_analytical.sh
-
-    sed -i "s/REPLACE_SCALE_OUT_BW/${SCALE_OUT_BW}/g" run_network_analytical.sh
-    sed -i "s/REPLACE_SCALE_UP_BW/${SCALE_UP_BW}/g" run_network_analytical.sh
 
     # Replace "REPLACE_LOCAL_MEM_BW" and "REPLACE_PEAK_PERF" in system.json
     sed -i "s/\"local-mem-bw\": 4800/\"local-mem-bw\": ${NPU_PEAK_MEM_BW}/" system.json

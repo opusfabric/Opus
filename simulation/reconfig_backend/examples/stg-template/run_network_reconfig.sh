@@ -25,15 +25,17 @@ CIRCUIT_SCHEDULES="${EXAMPLE_DIR:?}/schedules.txt"
 TRACE_PARSER_PATH="${PROJECT_DIR:?}/examples/helpers/trace_parser.py"
 
 # start
-echo "[ASTRA-sim] Compiling ASTRA-sim with the Analytical Network Backend..."
+echo "[ASTRA-sim] Compiling ASTRA-sim with the Reconfigurable Network Backend..."
 echo ""
 
 # Compile
-"${PROJECT_DIR:?}"/build/astra_analytical/build.sh
+if [[ "${OPUS_SKIP_LEGACY_BUILD:-0}" != "1" ]]; then
+    "${PROJECT_DIR:?}"/build/astra_analytical/build.sh
+fi
 
 echo ""
 echo "[ASTRA-sim] Compilation finished."
-echo "[ASTRA-sim] Running ASTRA-sim Example with Analytical Network Backend..."
+echo "[ASTRA-sim] Running ASTRA-sim Example with Reconfigurable Network Backend..."
 echo ""
 
 # run ASTRA-sim

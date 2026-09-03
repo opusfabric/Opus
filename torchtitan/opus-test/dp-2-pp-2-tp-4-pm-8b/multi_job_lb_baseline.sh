@@ -43,7 +43,7 @@ for LATENCY in "${LATENCIES[@]}"; do
     JOB="dp-2-pp-2-tp-4-pm-8b-provision"
     CONFIG_FILE=${CONFIG_FILE:-"~/Opus/torchtitan/opus-test/$JOB/llama3_8b_lb.toml"}
     TRAIN_FILE=${TRAIN_FILE:-"torchtitan.train"}
-    COMM_PATTERN_PATH=${COMM_PATTERN_PATH:-"~/Opus/evaluation/llama-3-3d-16-latency/comm_pattern/comm_pattern"}
+    COMM_PATTERN_PATH=${COMM_PATTERN_PATH:-"~/Opus/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern"}
     OUTPUT_DIR="<path-to-opus>/Opus/torchtitan/opus-test/$JOB/output-opus-v3-l_$LATENCY-b16-$MODE-nflag"
     export LOG_RANK=0,1,2,3
     if [ -d "$OUTPUT_DIR" ]; then

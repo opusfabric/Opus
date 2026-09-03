@@ -1,13 +1,9 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 OPUS_ROOT="$(realpath ${SCRIPT_DIR:?}/../../..)"
 
-ANALYTICAL_BACKEND="${OPUS_ROOT}/simulation/analytical_backend"
 RECONFIG_BACKEND="${OPUS_ROOT}/simulation/reconfig_backend"
 
-ANALYTICAL_EXE="${ANALYTICAL_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
-RECONFIG_EXE="${RECONFIG_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
 
-STG_DIR="${OPUS_ROOT}/simulation/symbolic_tensor_graph"
 
 TP=32
 PP=4
@@ -54,7 +50,7 @@ for bw in ${SCALE_OUT_SWEEPS}; do
     echo "Using Run Helper to run all experiments in ${OUT_DIR}"
 
     RUN_HELPER=${RECONFIG_BACKEND}/examples/helpers/run_helper.py
-    python ${RUN_HELPER} . --reconfig-times 0.01
+    python ${RUN_HELPER} . --reconfig-times 0,0.01
 
 
     if [ ! -f "results_for_sheet_import.txt" ]; then

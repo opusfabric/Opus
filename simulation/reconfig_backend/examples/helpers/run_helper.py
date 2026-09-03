@@ -1,176 +1,148 @@
-# Run ./run_network_reconfig.sh but edit the network.yml's reconfig_time according to input list
+"""Run the reconfigurable backend at several reconfiguration delays."""
+
+import argparse
 import os
-import yaml
 import subprocess
 
+import yaml
 
-# find last occurence of (read from last lines)
-# [2026-01-31 14:52:23.140] [workload] [info] sys[3] finished, 2369313572 cycles, exposed communication 2086471304 cycles.
-# Extract cycles and exposed communication cycles
+
 def extract_last_cycles(file_path):
+    """Return the last and sys[0] cycle counts from an ASTRA-Sim log."""
     last_cycles = None
     last_exposed = None
     sys0_cycles = None
     sys0_exposed = None
-    with open(file_path, 'r') as f:
-        for line in f:
-            if "finished" in line and "exposed communication" in line:
-                # Only parse after "[WORKLOAD] [INFO]"
-                line = line.split("[info]")[-1].strip()
 
-                parts = line.split(',')
-                cycles_part = parts[1].strip()
-                exposed_part = parts[2].strip()
+    with open(file_path, "r") as stream:
+        for line in stream:
+            if "finished" not in line or "exposed communication" not in line:
+                continue
 
-                cycles = int(cycles_part.split()[0])
-                exposed_cycles = int(exposed_part.split()[2])
+            payload = line.split("[info]")[-1].strip()
+            parts = payload.split(",")
+            cycles = int(parts[1].strip().split()[0])
+            exposed_cycles = int(parts[2].strip().split()[2])
 
-                last_cycles = cycles
-                last_exposed = exposed_cycles
+            last_cycles = cycles
+            last_exposed = exposed_cycles
+            if "sys[0] finished" in payload:
+                sys0_cycles = cycles
+                sys0_exposed = exposed_cycles
 
-                if "sys[0] finished" in line:
-                    sys0_cycles = cycles
-                    sys0_exposed = exposed_cycles
-                    
     return last_cycles, last_exposed, sys0_cycles, sys0_exposed
 
-def run_with_reconfig_times(reconfig_times, base_dir, skip_analytical=False):
+
+def _result(log_path):
+    cycles, exposed, sys0_cycles, sys0_exposed = extract_last_cycles(log_path)
+    return {
+        "cycles": cycles,
+        "exposed_cycles": exposed,
+        "sys0_cycles": sys0_cycles,
+        "sys0_exposed_cycles": sys0_exposed,
+    }
+
+
+def _latency_label(seconds):
+    if seconds < 1:
+        return f"{int(round(seconds * 1000))} ms"
+    return f"{seconds:g} s"
+
+
+def run_with_reconfig_times(reconfig_times, base_dir):
+    """Run baseline and provisioning for every delay in seconds.
+
+    The zero-delay baseline result is the EPS reference.  All runs use
+    run_network_reconfig.sh and the reconfigurable simulator.
+    """
     results = {}
+    network_file = os.path.join(base_dir, "network.yml")
 
-    if skip_analytical:
-        print("Skipping analytical run")
-        results['analytical'] = {
-            'cycles': None,
-            'exposed_cycles': None,
-            'sys0_cycles': None,
-            'sys0_exposed_cycles': None
-        }
-        results['baseline'] = {
-            'cycles': None,
-            'exposed_cycles': None,
-            'sys0_cycles': None,
-            'sys0_exposed_cycles': None
-        }
-    else:
-        print(f"Running with fake analytical: ")
-        subprocess.run(['bash', 'run_network_analytical.sh'], cwd=base_dir, check=True)
-        output_analytical = os.path.join(base_dir, 'debug_analytical.txt')
-        output_baseline = os.path.join(base_dir, 'debug_baseline.txt')
-        cycles_analytical, exposed_analytical, sys0_cycles_analytical, sys0_exposed_analytical = extract_last_cycles(output_analytical)
-        cycles_baseline, exposed_baseline, sys0_cycles_baseline, sys0_exposed_baseline = extract_last_cycles(output_baseline)
+    for seconds in reconfig_times:
+        with open(network_file, "r") as stream:
+            network_config = yaml.safe_load(stream)
 
-        results['analytical'] = {
-            'cycles': cycles_analytical,
-            'exposed_cycles': exposed_analytical,
-            'sys0_cycles': sys0_cycles_analytical,
-            'sys0_exposed_cycles': sys0_exposed_analytical
+        network_config["reconfig_time"] = [seconds * 1e9]
+        with open(network_file, "w") as stream:
+            yaml.safe_dump(network_config, stream, sort_keys=False)
+
+        print(f"Running reconfigurable backend with reconfig_time: {seconds} s")
+        subprocess.run(["bash", "run_network_reconfig.sh"], cwd=base_dir, check=True)
+
+        results[seconds] = {
+            "no_provision": _result(os.path.join(base_dir, "debug_no_provision.txt")),
+            "provision": _result(os.path.join(base_dir, "debug_provision.txt")),
         }
 
-        results['baseline'] = {
-            'cycles': cycles_baseline,
-            'exposed_cycles': exposed_baseline,
-            'sys0_cycles': sys0_cycles_baseline,
-            'sys0_exposed_cycles': sys0_exposed_baseline
-        }
-
-    for time in reconfig_times:
-        # Load the existing network.yml
-        network_file = os.path.join(base_dir, 'network.yml')
-
-
-        with open(network_file, 'r') as f:
-            network_config = yaml.safe_load(f)
-        
-        # Update the reconfig_time
-        network_config['reconfig_time'] = [time * 1e9]  # Convert seconds to nanoseconds
-        
-        # Write back the updated network.yml
-        with open(network_file, 'w') as f:
-            yaml.dump(network_config, f)
-
-        
-        # Run the script
-        print(f"Running with reconfig_time: {time}")
-        subprocess.run(['bash', 'run_network_reconfig.sh'], cwd=base_dir, check=True)
-
-        # Collect results from outputs (debug_no_provision.txt and debug_provision.txt)
-        output_no_prov = os.path.join(base_dir, 'debug_no_provision.txt')
-        output_prov = os.path.join(base_dir, 'debug_provision.txt')
-
-        cycles_no_prov, exposed_no_prov, sys0_cycles_no_prov, sys0_exposed_no_prov = extract_last_cycles(output_no_prov)
-        cycles_prov, exposed_prov, sys0_cycles_prov, sys0_exposed_prov = extract_last_cycles(output_prov)
-
-        results[time] = {
-            'no_provision': {
-                'cycles': cycles_no_prov,
-                'exposed_cycles': exposed_no_prov,
-                'sys0_cycles': sys0_cycles_no_prov,
-                'sys0_exposed_cycles': sys0_exposed_no_prov
-            },
-            'provision': {
-                'cycles': cycles_prov,
-                'exposed_cycles': exposed_prov,
-                'sys0_cycles': sys0_cycles_prov,
-                'sys0_exposed_cycles': sys0_exposed_prov
-            }
-        }
-    
     return results
 
+
 def write_result_for_sheet_import(results, filename):
-    with open(filename, 'w') as f:
-        f.write("Analytical\n")
-        a_str = "\t".join([str(results['analytical']['sys0_cycles']), str(results['analytical']['cycles']), str(results['analytical']['exposed_cycles'])])
-        f.write(a_str + "\n")
-        f.write("\nBaseline\n")
-        b_str = "\t".join([str(results['baseline']['sys0_cycles']), str(results['baseline']['cycles']), str(results['baseline']['exposed_cycles'])])
-        f.write(b_str + "\n")
-        f.write("\nReconfigurable\n")
-        for time, data in results.items():
-            if time == 'analytical':
-                continue
-            if time == 'baseline':
-                continue
-            np_str = "\t".join([str(data['no_provision']['sys0_cycles']), str(data['no_provision']['cycles']), str(data['no_provision']['exposed_cycles'])])
-            time_str = f"{int(time)} s"
-            if time < 1:
-                time_str = f"{int(time*1000)} ms"
-            
-            f.write(f"{time_str}\t{np_str}\n")
-            p_str = "\t".join([str(data['provision']['sys0_cycles']), str(data['provision']['cycles']), str(data['provision']['exposed_cycles'])])
-            f.write(f"{time_str}\t{p_str}\n")
+    zero_delay = next(
+        (data for seconds, data in results.items() if abs(seconds) < 1e-12),
+        None,
+    )
+    if zero_delay is None:
+        raise ValueError("reconfig_times must include 0 for the EPS reference")
 
-if __name__ == "__main__":
-    import argparse
+    with open(filename, "w") as stream:
+        stream.write("EPS\n")
+        eps = zero_delay["no_provision"]
+        stream.write(
+            f"{eps['sys0_cycles']}\t{eps['cycles']}\t"
+            f"{eps['exposed_cycles']}\n"
+        )
 
-    parser = argparse.ArgumentParser(description="Run reconfig experiments with different reconfig times")
-    parser.add_argument("base_dir", help="Base directory containing the experiment files")
-    parser.add_argument("--reconfig-times", default="0,0.01,0.05,0.1,0.25,0.5,0.75,1",
-                        help="Comma-separated list of reconfig times in seconds (default: 0,0.01,0.05,0.1,0.25,0.5,0.75,1)")
-    parser.add_argument("--skip-analytical", action="store_true",
-                        help="Skip running the analytical/baseline experiments")
+        stream.write("\nReconfigurable\n")
+        for seconds, data in results.items():
+            label = _latency_label(seconds)
+            for mode in ("no_provision", "provision"):
+                result = data[mode]
+                stream.write(
+                    f"{label}\t{result['sys0_cycles']}\t"
+                    f"{result['cycles']}\t{result['exposed_cycles']}\n"
+                )
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Run reconfigurable-backend experiments with different delays"
+    )
+    parser.add_argument(
+        "base_dir",
+        help="Directory containing network.yml and run_network_reconfig.sh",
+    )
+    parser.add_argument(
+        "--reconfig-times",
+        default="0,0.01,0.05,0.1,0.25,0.5,0.75,1",
+        help="Comma-separated delay values in seconds; include 0 for EPS",
+    )
     args = parser.parse_args()
 
-    base_dir = args.base_dir
-    reconfig_times = [float(x) for x in args.reconfig_times.split(',')]
+    reconfig_times = [float(value) for value in args.reconfig_times.split(",")]
+    results = run_with_reconfig_times(reconfig_times, args.base_dir)
 
-    results = run_with_reconfig_times(reconfig_times, base_dir, skip_analytical=args.skip_analytical)
+    eps = next(
+        data["no_provision"]
+        for seconds, data in results.items()
+        if abs(seconds) < 1e-12
+    )
+    print(f"EPS (0 s) - Cycles: {eps['cycles']}, Exposed Cycles: {eps['exposed_cycles']}")
+    for seconds, data in results.items():
+        print(f"Reconfig Time: {seconds} seconds")
+        print(
+            f"  Baseline    - Cycles: {data['no_provision']['cycles']}, "
+            f"Exposed Cycles: {data['no_provision']['exposed_cycles']}"
+        )
+        print(
+            f"  Provision   - Cycles: {data['provision']['cycles']}, "
+            f"Exposed Cycles: {data['provision']['exposed_cycles']}"
+        )
 
-    print("Results:")
-    if not args.skip_analytical:
-        print(f"Analytical - Cycles: {results['analytical']['cycles']}, Exposed Cycles: {results['analytical']['exposed_cycles']}")
-        print(f"Baseline   - Cycles: {results['baseline']['cycles']}, Exposed Cycles: {results['baseline']['exposed_cycles']}")
-    else:
-        print("Analytical - Skipped")
-        print("Baseline   - Skipped")
+    output_path = os.path.join(args.base_dir, "results_for_sheet_import.txt")
+    write_result_for_sheet_import(results, output_path)
+    print(f"Wrote {output_path}")
 
-    for time, data in results.items():
-        if time == 'analytical':
-            continue
-        if time == 'baseline':
-            continue
-        print(f"Reconfig Time: {time} seconds")
-        print(f"  No Provision - Cycles: {data['no_provision']['cycles']}, Exposed Cycles: {data['no_provision']['exposed_cycles']}")
-        print(f"  Provision    - Cycles: {data['provision']['cycles']}, Exposed Cycles: {data['provision']['exposed_cycles']}")
 
-    write_result_for_sheet_import(results, os.path.join(base_dir, 'results_for_sheet_import.txt'))
+if __name__ == "__main__":
+    main()
