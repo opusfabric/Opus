@@ -199,7 +199,7 @@ python scripts/compile_opus_schedule.py \
   --mode=baseline --format=legacy
 ```
 
-### Experiment A: EPS baseline, zero reconfiguration delay
+### Experiment A: EPS baseline
 
 This control run uses the same workload and on-demand path, but sets the
 emulated switch delay to zero. It measures the training and Opus control-plane
@@ -241,14 +241,16 @@ PROVISION_JOB=$(sbatch --parsable \
 
 ### Expected result
 
-For all three jobs, the top-level job and worker step must finish with
-`COMPLETED 0:0`, every worker log must reach step 10, and the controller log
-must contain `CONFIG_REQ`, `ALL READY`, topology changes, and `CONFIG_ACK`.
+For all four jobs, the top-level job and worker step must finish with
+`COMPLETED 0:0` and every worker log must reach step 10. For the three Opus
+jobs, the controller log must also contain `CONFIG_REQ`, `ALL READY`, topology
+changes, and `CONFIG_ACK`; A0 intentionally has no controller log.
 
 ```bash
-sacct -j "${EPS_JOB},${ONDEMAND_JOB},${PROVISION_JOB}" \
+sacct -j "${NATIVE_JOB},${EPS_JOB},${ONDEMAND_JOB},${PROVISION_JOB}" \
   --format=JobID,JobName%24,State,ExitCode,Elapsed
 
+grep -h "step: 10" "runs/${NATIVE_JOB}"/torchrun_*.log | head -1
 grep -h "step: 10" "runs/${EPS_JOB}"/torchrun_*.log | head -1
 grep -h "step: 10" "runs/${ONDEMAND_JOB}"/torchrun_*.log | head -1
 grep -h "step: 10" "runs/${PROVISION_JOB}"/torchrun_*.log | head -1
@@ -257,26 +259,40 @@ grep -E "CONFIG_REQ|ALL READY|new topo: yes|CONFIG_ACK" \
   "runs/${ONDEMAND_JOB}/controller.log" | head
 ```
 
-The critical expected difference is request timing:
+The expected difference between two reconfiguration modes is request timing:
 
 | Mode | Delay | When the topology is requested | Expected effect |
 | --- | --- | --- | --- |
-| EPS baseline | 0 ms | At the communication-stage boundary | Reference time without switch latency |
 | On demand | 10 ms | At the communication-stage boundary | The stage observes the reconfiguration delay |
 | Provisioning | 10 ms | Before the boundary | The delay overlaps preceding work, reducing or hiding the boundary stall |
 
-All three modes should complete the same 10-step workload and exercise the same
-topologies. Provisioning is successful when its controller requests appear
-earlier relative to the corresponding stage and training still reaches step 10;
-wall-clock time may vary slightly between cluster runs.
-
 Sample result:
 
-| Result | EPS baseline | On demand | Provisioning |
-| --- | --- | --- | --- |
-| Training | Step 10 | Step 10 | Step 10 |
-| Reconfiguration delay | 0 ms | 10 ms at boundary | 10 ms requested early |
-| Expected iteration time | Lowest reference | Higher than EPS | Closer to EPS than on demand |
+Average iteration latency is measured from worker timestamps over the last five
+iterations (steps 6–10) and averaged across the four node logs.
+
+From the repository root, check run health and reproduce the latency summary
+with:
+
+```bash
+scripts/check_run_output.sh <job_ids>
+scripts/summarize_iteration_latency.py <job_ids>
+```
+
+The checker reports step completion, fatal errors, ACK timeouts, and topology
+changes (or confirms that a native run has no Opus markers). The summarizer
+prints one tab-separated row per job; pass `--last N` to change the measurement
+window.
+
+| Experiment | Stack | Reconfiguration | Result | Last-five average |
+| --- | --- | --- | --- | ---: |
+| A | Opus EPS baseline | 0 ms | Step 10, `COMPLETED 0:0`; 0 ACK timeouts | **11.175 s** |
+| B | Opus baseline | On demand, 10 ms | Step 10, `COMPLETED 0:0`; 0 ACK timeouts | **11.767 s** |
+| C | Opus provisioning | Provisioned early, 10 ms | Step 10, `COMPLETED 0:0`; 0 ACK timeouts | **10.880 s** |
+
+We can see that adding the
+10 ms delay on demand makes B 5.3% slower than the zero-delay A baseline.
+Provisioning hides that delay and is 7.5% faster than B.
 
 ### Hardware prototype (original testbed)
 
