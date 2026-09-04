@@ -242,6 +242,17 @@ EPS_JOB=$(sbatch --parsable \
   scripts/perlmutter/run_opus_emulation.sbatch)
 ```
 
+For Docker or another non-Shifter environment, use the site-neutral launcher
+instead:
+
+```bash
+EPS_JOB=$(sbatch --parsable \
+  --nodes=4 --gpus-per-node=4 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,RECONFIG_DELAY_MS=0 \
+  scripts/run_slurm_emulation.sbatch)
+```
+
+
 ### Experiment B: on-demand reconfiguration
 
 The next communication stage requests its topology at the stage boundary and
@@ -255,6 +266,17 @@ ONDEMAND_JOB=$(sbatch --parsable \
   scripts/perlmutter/run_opus_emulation.sbatch)
 ```
 
+For Docker or another non-Shifter environment, use the site-neutral launcher
+instead:
+
+```bash
+ONDEMAND_JOB=$(sbatch --parsable \
+  --nodes=4 --gpus-per-node=4 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,RECONFIG_DELAY_MS=10 \
+  scripts/run_slurm_emulation.sbatch)
+```
+
+
 ### Experiment C: topology provisioning
 
 Provisioning uses the identical workload and delay, but requests the next
@@ -267,6 +289,17 @@ PROVISION_JOB=$(sbatch --parsable \
   --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,OPUS_SHIFTER_IMAGE="${OPUS_SHIFTER_IMAGE}",COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern",RECONFIG_DELAY_MS=10 \
   scripts/perlmutter/run_opus_provision.sbatch)
 ```
+
+For Docker or another non-Shifter environment, use the site-neutral
+provisioning launcher instead:
+
+```bash
+PROVISION_JOB=$(sbatch --parsable \
+  --nodes=4 --gpus-per-node=4 \
+  --export=ALL,OPUS_ROOT="${OPUS_ROOT}",NUM_RANKS_PER_NODE=4,RECONFIG_DELAY_MS=10 \
+  scripts/run_slurm_provision.sbatch)
+```
+
 
 ### Expected result
 
@@ -418,8 +451,7 @@ If CMake stops at `find_package(Protobuf)`, install `libprotobuf-dev` and
 This generates a small DP/PP/TP workload and runs only the reconfigurable
 backend. It sweeps 0, 1, 10, and 50 ms. The 0 ms run is the EPS reference:
 the topology-change delay is zero. Positive values inject reconfiguration
-delay. The 0 ms case runs EPS only; it does not launch a provisioning
-run. For each positive delay:
+delay.
 
 - baseline: the next topology is requested at the communication boundary;
 - provisioning: the next topology is requested early using
@@ -447,12 +479,11 @@ Expected result:
 
 ## 4. Paper figure replication
 
-The following subsections are ordered by paper figure number. Figures requiring the original hardware are explicitly marked overview-only; the software and emulation paths are the reproducible focus of this artifact.
-
 
 ### Paper Figure 12
-
 Figure 12 is the Llama/H200-style scale-out study: DP=4, PP=4, TP=8, with reconfiguration-latency and scale-out-bandwidth sweeps.
+
+From the previous simulation docker environment:
 
 ```bash
 cd simulation/scripts/fig12
@@ -468,7 +499,7 @@ cd simulation/scripts/fig12
 ./plot_fig12.sh
 ```
 
-The scripts generate the workload and topology files and write `fig12.pdf`; the center run is under `simulation/reconfig_backend/examples/llama_dp4_pp4_tp8_batch_256_mb-1_96stack_seq4096_50BW`. The bandwidth sweep invokes both backends: the analytical backend supplies the EPS and fixed-topology baseline columns, while the reconfigurable backend supplies the positive-delay Opus columns. The two sweeps intentionally write different files: the latency sweep writes `latency_results_for_sheet_import.txt` in the 50BW center directory, while the bandwidth sweep writes `bandwidth_results_for_sheet_import.txt` in each bandwidth directory. The plotter reads those files independently, so rerunning the bandwidth sweep no longer destroys the latency data. Run the latency sweep once, then the bandwidth sweep, and finally `./plot_fig12.sh`.
+The scripts generate the workload and topology files and write `fig12.pdf`. The center run is under `simulation/reconfig_backend/examples/llama_dp4_pp4_tp8_batch_256_mb-1_96stack_seq4096_50BW`. The bandwidth sweep invokes both backends: the analytical backend supplies the EPS and fixed-topology baseline columns, while the reconfigurable backend supplies the positive-delay Opus columns.
 
 ### Paper Figure 13
 
@@ -481,7 +512,7 @@ cd simulation/scripts/fig13
 ./plot_fig13.sh
 ```
 
-The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directory is `simulation/reconfig_backend/examples/gb200_stg_dp4_pp4_tp32_batch_256_mb-1_96stack_seq4096_100BW`. The latency and bandwidth sweeps use the analytical backend for EPS and the fixed-topology baseline; positive-delay points use the reconfigurable backend.
+The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directory is `simulation/reconfig_backend/examples/gb200_stg_dp4_pp4_tp32_batch_256_mb-1_96stack_seq4096_100BW`. The latency and bandwidth sweeps use the analytical backend for EPS and the fixed-topology baseline. Positive-delay points use the reconfigurable backend.
 
 ### Paper Figure 14
 
@@ -493,9 +524,7 @@ Run the fixed-GPU software reconstruction from the repository root after buildin
 ./simulation/expert_parallel/run_ep.sh
 ```
 
-By default this generates the 256/512-GPU, EP+TP+DP/EP+DP, and 0/0.5/1/10/50/100-ms cases, writes `fig14_ep_results.csv`, and renders `fig14_ep.pdf`. These are simulated NPUs, not 256 or 512 physical GPUs. The 0-ms row is EPS (no OCS delay); positive rows use the reconfigurable backend with the requested delay. The launcher reconstructs the published topology and sweep from generated Chakra traces; the original paper raw EP traces are not part of this checkout, so exact paper data equality is not claimed. Narrow the run while debugging, for example `CLUSTER_SIZES=256 PLACEMENTS=tpdp EP_SIZES_256_TPDP="1 2" EP_LAYERS=1 LATENCIES_MS="0 0.5" ./simulation/expert_parallel/run_ep.sh`.
-
-Raw `workload*.et` and simulator logs are ignored and regenerated under the example directories; the launcher and its fixed-GPU metadata generation remain tracked.
+By default this generates the 256/512-GPU, EP+TP+DP/EP+DP, and 0/0.5/1/10/50/100-ms cases, writes `fig14_ep_results.csv`, and renders `fig14_ep.pdf`. The 0-ms row is EPS (no OCS delay). Positive rows use the reconfigurable backend with the requested delay. The launcher reconstructs the published topology and sweep from generated Chakra traces. Readers can narrow the run by doing `CLUSTER_SIZES=256 PLACEMENTS=tpdp EP_SIZES_256_TPDP="1 2" EP_LAYERS=1 LATENCIES_MS="0 0.5" ./simulation/expert_parallel/run_ep.sh`.
 
 ### Paper Figure 15
 
@@ -508,7 +537,7 @@ cd simulation/scripts/fig15
 ./plot_fig15.sh
 ```
 
-The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to paper Figure 15; it is not a hardware measurement.
+The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to paper Figure 15.
 
 ### Paper Figure 4
 
