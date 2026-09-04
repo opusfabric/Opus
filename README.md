@@ -151,7 +151,7 @@ switch operation is emulated by the 50 ms rail-worker delay. If the provisioned 
 
 ### Cluster setup (Perlmutter/Shifter)
 
-The commands below are the complete Perlmutter path: they use the common CUDA 12.8 image through Shifter, build the controller, and prepare the tokenizer.
+The commands below are the complete Perlmutter path: they use the common CUDA 12.8 image through Shifter, build the controller, and prepare the tokenizer. The source image is [`ericd16/opus`](https://hub.docker.com/r/ericd16/opus).
 
 On a Docker-based Slurm cluster, build and push the same image from `environment/emulation-env/Dockerfile`, then replace each `shifter --image=... --module=gpu` invocation in the launcher with `docker run --rm --gpus all --network host --ipc host --device=/dev/infiniband --hostname "$SLURMD_NODENAME" -v "$OPUS_ROOT:/Opus" -w /Opus ...`. Keep the same `SERVER_IPS`, controller address, and Slurm experiment commands below.
 
@@ -161,7 +161,7 @@ Perlmutter GPU account.
 ```bash
 export OPUS_ROOT="$PWD"
 export OPUS_ACCOUNT=your_project_g
-export OPUS_SHIFTER_IMAGE=ericd16/opus:2.0
+export OPUS_SHIFTER_IMAGE=ericd16/opus:2.0  # source: https://hub.docker.com/r/ericd16/opus
 
 shifter --image="${OPUS_SHIFTER_IMAGE}" bash -lc \
   'unset SSL_CERT_FILE REQUESTS_CA_BUNDLE
@@ -229,14 +229,10 @@ the value for this example is:
 export COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b/comm_pattern/comm_pattern"
 ```
 
-The checked-in files are the useful output of profiling; raw profiler traces,
-alternate formats, and intermediate schedules are kept out of the example.
-
 ### Experiment A: EPS baseline
 
 This control run uses the same workload and on-demand path, but sets the
-emulated switch delay to zero. It measures the training and Opus control-plane
-overhead without a reconfiguration penalty.
+emulated switch delay to zero.
 
 ```bash
 EPS_JOB=$(sbatch --parsable \
@@ -315,7 +311,7 @@ scripts/summarize_iteration_latency.py "${NATIVE_JOB}" "${EPS_JOB}" "${ONDEMAND_
 
 The checker reports step completion, fatal errors, ACK timeouts, and topology
 changes (or confirms that a native run has no Opus markers). The summarizer
-prints one tab-separated row per job; pass `--last N` to change the measurement
+prints one tab-separated row per job. Pass `--last N` to change the measurement
 window.
 
 | Experiment | Stack | Reconfiguration | Result | Last-five average |
@@ -352,7 +348,8 @@ operation is visible in the controller/worker logs as switch product
 information, `Applying <configuration>`, `Connections set`, and
 `SUCCESS, CONFIG-ACK` messages. Re-running this command requires the original
 Polatis switch, its site-approved PyPolatis package, the listed testbed hosts,
-and compatible GPU/NIC firmware. We can't share those resources in this artifact, unfortunately.
+and compatible GPU/NIC firmware. We won't share those resources in this artifact as the testbed 
+is being actively used.
 
 ## 3. Software simulation
 
