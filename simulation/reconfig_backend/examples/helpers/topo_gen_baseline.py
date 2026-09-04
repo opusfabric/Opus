@@ -1,6 +1,7 @@
 from sys import argv
 import itertools
 import math
+import re
 
 SCALE_OUT_BW = 100
 SCALE_UP_BW = 450
@@ -77,23 +78,36 @@ def write_matrix(id, bw_mat, filename="schedules.txt"):
         f.write("END\n\n")
 
 def parse_link_stats_file(filename="link_stats_report.txt"):
-    links = []
+    parsed_links = []
+    total_npu = None
     with open(filename, "r") as f:
-        lines = f.readlines()
-        for line in lines:
+        for line in f:
             if "Statistics Report" in line:
                 continue
             if "Devices:" in line:
-                parts = line.strip().split()
-                total_npu = int(parts[2])
-                links = [[0 for _ in range(total_npu)] for _ in range(total_npu)]
+                total_npu = int(line.strip().split()[-1])
                 continue
-            if line.startswith("Link"):
-                parts = line.strip().split()
-                src = int(parts[1])
-                dst = int(parts[3][:-1])
-                bw = int(parts[8])
-                links[src][dst] = bw
+            match = re.match(
+                r"^Link\s+(\d+)\s+->\s+(\d+):.*=\s+(\d+)\s+bytes",
+                line.strip(),
+            )
+            if match:
+                parsed_links.append(tuple(int(value) for value in match.groups()))
+
+    # Older simulator builds include a device-count header; newer builds do
+    # not. Infer the size from link IDs when the header is absent.
+    if total_npu is None:
+        if not parsed_links:
+            raise ValueError(f"No link statistics found in {filename}")
+        total_npu = max(max(src, dst) for src, dst, _ in parsed_links) + 1
+
+    links = [[0 for _ in range(total_npu)] for _ in range(total_npu)]
+    for src, dst, transmitted in parsed_links:
+        if src >= total_npu or dst >= total_npu:
+            raise ValueError(
+                f"Link endpoint ({src}, {dst}) exceeds device count {total_npu}"
+            )
+        links[src][dst] = transmitted
     return links
 
 # Swapped DP and TP indices

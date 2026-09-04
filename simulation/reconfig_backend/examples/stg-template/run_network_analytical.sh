@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 ## ******************************************************************************
 ## This source code is licensed under the MIT license found in the
@@ -14,7 +14,8 @@ PROJECT_DIR="${SCRIPT_DIR:?}/../.."
 EXAMPLE_DIR="${SCRIPT_DIR:?}"
 
 # paths
-ASTRA_SIM="${PROJECT_DIR}/../analytical_backend/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
+ANALYTICAL_BACKEND="${PROJECT_DIR}/../analytical_backend"
+ASTRA_SIM="${ANALYTICAL_BACKEND}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
 WORKLOAD="${EXAMPLE_DIR:?}/workload"
 SYSTEM="${EXAMPLE_DIR:?}/system.json"
 NETWORK="${EXAMPLE_DIR:?}/network.yml"
@@ -30,7 +31,7 @@ echo ""
 
 # Compile
 if [[ "${OPUS_SKIP_LEGACY_BUILD:-0}" != "1" ]]; then
-    "${PROJECT_DIR:?}"/build/astra_analytical/build.sh
+    "${ANALYTICAL_BACKEND:?}/build/astra_analytical/build.sh"
 fi
 
 echo ""

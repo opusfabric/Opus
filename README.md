@@ -2,15 +2,13 @@
 
 Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, archived emulation inputs and outputs, and the reconfigurable software simulator.
 
-This README is the artifact-evaluation guide. It deliberately separates the three evaluation surfaces:
+This README is the artifact-evaluation guide. There are three sections:
 
-| Surface | What is provided | What a reader needs |
-| --- | --- | --- |
-| Software simulation | CPU/C++ reconfigurable ASTRA-sim backend, workload generators, sweep and plotting scripts | Linux build host or the simulator container, Python packages, and enough disk for generated traces |
-| Network emulation | Controller, NCCL shim, Slingshot/NCCL launch scripts, communication-pattern inputs, and archived CSV/notebook outputs | A multi-GPU cluster with the site’s Slingshot provider and NCCL/GPUDirect RDMA support |
-| Hardware prototype | Controller-side hardware integration and paper description | The Polatis OCS testbed and firmware. This is an overview only and is not expected to run on a reader’s cluster |
+1. Small experiments on two GPUs for testing the shim (2 NVIDIA GPUs required)
 
-Note that software simulation (Section 3 in this doc) does not require GPUs, and we provide small-scale testing scripts (2 GPUs) for Opus control plane in Section 1.
+2. GPU-cluster emulation with the whole control plane (16 GPUs required, Slurm environment)
+
+3. Software simulation (CPU)
 
 ## Repository layout
 
@@ -32,7 +30,7 @@ Opus/
 └── torchtitan/opus-test/    paper-oriented Slurm training launchers and configs
 ```
 
-## 1. Small experiments on two GPUs for the shim
+## 1. Small experiments on two GPUs for testing the shim
 
 Use this to validate the `cuda:opus` process-group extension on two GPUs. It includes one controller-mediated reconfiguration and needs neither Slingshot nor a physical switch. The common Docker image is the recommended environment; a matching host or module environment also works.
 
@@ -346,8 +344,7 @@ operation is visible in the controller/worker logs as switch product
 information, `Applying <configuration>`, `Connections set`, and
 `SUCCESS, CONFIG-ACK` messages. Re-running this command requires the original
 Polatis switch, its site-approved PyPolatis package, the listed testbed hosts,
-and compatible GPU/NIC firmware. Those external components are not distributed
-with this artifact.
+and compatible GPU/NIC firmware. We can't share those resources in this artifact, unfortunately.
 
 ## 3. Software simulation
 
@@ -509,32 +506,14 @@ The output is `simulation/scripts/fig14/fig14.pdf`. The existing script director
 
 ### Other paper figures and archived artifacts
 
-The artifact does not provide one universal command for every paper figure. Use the following pointers when documenting an evaluation run:
+We list the figures that require identical hardware environments to replicate here.
 
 | Paper material | Artifact pointer | Reproduction status |
 | --- | --- | --- |
-| Emulation latency and provisioning results, including the configurations behind Figures 10 and 11 | `evaluation/llama-3-3d-16-latency`, `evaluation/llama-3-3d-64-latency`, `evaluation/deepseek_v3_16b-2d-16-latency`, `evaluation/deepseek_v3_16b-3d-16-latency` | Archived CSVs, communication patterns, and plotting notebooks; requires Slingshot/NCCL to regenerate raw runs |
-| 128-GPU Llama emulation inputs | `evaluation/llama-3-70b-128` | Communication-pattern notebooks and rank logs are present; full training rerun requires the original GPU/model environment |
-| Simulation scale-out sweeps, Figures 12 and 13 | `simulation/scripts/fig12`, `simulation/scripts/fig13` | Scripts and inputs are provided; rerun on a CPU build host |
-| Expert-parallel experiment, Figure 14 | `simulation/expert_parallel/run_ep.sh` and the EP example directories | Small scripted smoke test; full 256/512-GPU sweep inputs are not included |
-| DP sweep and cost/power plots, Figure 15 | `simulation/scripts/fig14` and `simulation/reconfig_backend/plot_combined_dp_cost_power.py` | Scripted; requires all generated DP directories |
-| Hardware prototype and OCS link recovery | Paper Section 5.1 and the hardware/testbed environment files | Overview only; a Polatis OCS and compatible firmware are not included |
-| Energy/cost topology plots | `evaluation/energy-analysis/topology/plot.ipynb` and the committed PDFs | Notebook plus archived rendered PDFs; use the notebook with its local data assumptions |
-| Motivation and frontier/window studies, Figures 4–6 and 16 | simulator helpers, archived outputs, and paper captions | No single top-level reproduction command is packaged; use archived values unless the original inputs are restored |
+| Emulation latency and provisioning results, including the configurations behind Figures 10 and 11 | `evaluation/llama-3-3d-16-latency`, `evaluation/llama-3-3d-64-latency`, `evaluation/deepseek_v3_16b-2d-16-latency`, `evaluation/deepseek_v3_16b-3d-16-latency` | Archived CSVs, communication patterns, and plotting notebooks. Requires Slingshot/NCCL to regenerate raw runs |
+| 128-GPU Llama emulation inputs | `evaluation/llama-3-70b-128` | Communication-pattern notebooks and rank logs are present. Full training rerun requires the original GPU/model environment |
+| Hardware prototype and OCS link recovery | Paper Section 5.1 and the hardware/testbed environment files | Overview only. A Polatis OCS and compatible firmware are needed |
+| Energy/cost topology plots | `evaluation/energy-analysis/topology/plot.ipynb` and the committed PDFs | Notebook plus archived rendered PDFs |
+| Motivation and frontier/window studies, Figures 4–6 and 16 | simulator helpers, archived outputs, and paper captions | Archived values |
 
-For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful as a reference for checking that a fresh plot has the same axes and trend; do not silently overwrite them during evaluation.
-
-## Known limitations and honest reporting
-
-- Emulation injects control-plane delay while NCCL uses the native network; it is not a packet-level optical-network emulator.
-- Exact cluster results depend on Slingshot firmware, NCCL/provider versions, GPU model, rank placement, and launch settings.
-- Some `evaluation/` directories contain archived patterns or notebooks rather than every raw log needed for a rerun.
-- Physical mode requires the separate `pypolatis` package and a reachable compatible switch.
-- Simulation sweeps generate output and rewrite `network.yml`; report the hardware, CUDA, NCCL, provider, compiler, and container versions with results.
-
-## Suggested artifact-evaluation order
-
-1. Run the controller preflight and, when available, the two-GPU shim test.
-2. Use one Slurm controller-aware configuration before a full cluster sweep.
-3. Build the simulator, run `simulation/scripts/run_example.sh`, and then a narrow Figure 12 sweep.
-4. Treat hardware as an overview unless a compatible Polatis testbed is available.
+For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful as a reference for checking that a fresh plot has the same axes and trend.

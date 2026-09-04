@@ -63,18 +63,18 @@ def run_with_reconfig_times(reconfig_times, base_dir):
         with open(network_file, "r") as stream:
             network_config = yaml.safe_load(stream)
 
-        network_config["reconfig_time"] = [seconds * 1e9]
+        network_config'reconfig_time'] = [seconds * 1e9]
         with open(network_file, "w") as stream:
             yaml.safe_dump(network_config, stream, sort_keys=False)
 
         is_zero_delay = abs(seconds) < 1e-12
         environment = os.environ.copy()
         if is_zero_delay:
-            environment["OPUS_SKIP_PROVISION"] = "1"
+            environment'OPUS_SKIP_PROVISION'] = "1"
 
         print(f"Running reconfigurable backend with reconfig_time: {seconds} s")
         subprocess.run(
-            ["bash", "run_network_reconfig.sh"],
+            'bash", "run_network_reconfig.sh'],
             cwd=base_dir,
             check=True,
             env=environment,
@@ -92,7 +92,23 @@ def run_with_reconfig_times(reconfig_times, base_dir):
     return results
 
 
-def write_result_for_sheet_import(results, filename):
+def run_analytical(base_dir):
+    """Run the analytical and bandwidth-balanced baseline simulations."""
+    print("Running analytical and baseline backends")
+    subprocess.run(
+        'bash", "run_network_analytical.sh'],
+        cwd=base_dir,
+        check=True,
+        env=os.environ.copy(),
+    )
+    analytical_log = os.path.join(base_dir, "debug_analytical.txt")
+    baseline_log = os.path.join(base_dir, "debug_baseline.txt")
+    if not os.path.isfile(analytical_log) or not os.path.isfile(baseline_log):
+        raise RuntimeError("Analytical launcher did not produce both result logs")
+    return _result(analytical_log), _result(baseline_log)
+
+
+def write_result_for_sheet_import(results, filename, analytical=None, baseline=None):
     zero_delay = next(
         (data for seconds, data in results.items() if abs(seconds) < 1e-12),
         None,
@@ -101,12 +117,25 @@ def write_result_for_sheet_import(results, filename):
         raise ValueError("reconfig_times must include 0 for the EPS reference")
 
     with open(filename, "w") as stream:
-        stream.write("EPS\n")
-        eps = zero_delay["no_provision"]
-        stream.write(
-            f"{eps['sys0_cycles']}\t{eps['cycles']}\t"
-            f"{eps['exposed_cycles']}\n"
-        )
+        if analytical is None:
+            stream.write("EPS\n")
+            eps = zero_delay'no_provision']
+            stream.write(
+                f"{eps'sys0_cycles']}\t{eps'cycles']}\t"
+                f"{eps'exposed_cycles']}\n"
+            )
+        else:
+            stream.write("Analytical\n")
+            stream.write(
+                f"{analytical'sys0_cycles']}\t{analytical'cycles']}\t"
+                f"{analytical'exposed_cycles']}\n"
+            )
+            if baseline is not None:
+                stream.write("\nBaseline\n")
+                stream.write(
+                    f"{baseline'sys0_cycles']}\t{baseline'cycles']}\t"
+                    f"{baseline'exposed_cycles']}\n"
+                )
 
         stream.write("\nReconfigurable\n")
         for seconds, data in results.items():
@@ -140,7 +169,7 @@ def main():
     results = run_with_reconfig_times(reconfig_times, args.base_dir)
 
     eps = next(
-        data["no_provision"]
+        data'no_provision']
         for seconds, data in results.items()
         if abs(seconds) < 1e-12
     )
@@ -151,11 +180,11 @@ def main():
             f"  Baseline    - Cycles: {data['no_provision']['cycles']}, "
             f"Exposed Cycles: {data['no_provision']['exposed_cycles']}"
         )
-        if data["provision"] is None:
+        if data'provision'] is None:
             print("  Provision   - skipped at zero delay")
         else:
-            provision_cycles = data["provision"]["cycles"]
-            provision_exposed = data["provision"]["exposed_cycles"]
+            provision_cycles = data'provision']'cycles']
+            provision_exposed = data'provision']'exposed_cycles']
             print(
                 f"  Provision   - Cycles: {provision_cycles}, "
                 f"Exposed Cycles: {provision_exposed}"
