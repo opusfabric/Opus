@@ -52,7 +52,7 @@ The reconfigurable CMake driver under `reconfig_backend/build/astra_analytical/`
 
 The build drivers also generate Chakra's `et_def.pb.h` and `et_def.pb.cc` automatically under `reconfig_backend/build/astra_analytical/build/chakra_proto/`. These files come from `extern/graph_frontend/chakra/schema/protobuf/et_def.proto`; no generated source files need to be committed.
 
-## Supplemental expert-parallel workloads
+## Paper Figure 14: expert-parallel workloads
 
 The copied EP launcher is:
 
@@ -60,7 +60,7 @@ The copied EP launcher is:
 ./simulation/expert_parallel/run_ep.sh
 ```
 
-It generates the DP=2, TP=1, PP=1, EP=2 workload under `simulation/reconfig_backend/examples/`. The additional EP directories include their simulator configuration and topology metadata. Raw Chakra `.et` files and Torchtitan profiler traces are present locally for convenience but are excluded by the repository ignore rules.
+It generates a small DP=2, TP=1, PP=1, EP=2 workload under `simulation/reconfig_backend/examples/`. This is a smoke test for the EP path, not the full 256/512-GPU Figure 14 sweep. The additional EP directories include their simulator configuration and topology metadata. Raw Chakra `.et` files and Torchtitan profiler traces are present locally for convenience but are excluded by the repository ignore rules.
 
 ## Paper sweep commands
 
@@ -81,4 +81,4 @@ cd ../fig14
 ./plot_fig14.sh
 ```
 
-The sweep scripts generate traces under `simulation/reconfig_backend/examples/`, write per-run `results_for_sheet_import.txt`, and render `fig12.pdf`, `fig13.pdf`, or `fig14.pdf` beside the script. Narrow the sweep with the documented environment variables before running a full experiment.
+The sweep scripts generate traces under `simulation/reconfig_backend/examples/`, write per-run `results_for_sheet_import.txt`, and render `fig12.pdf`, `fig13.pdf`, or `fig14.pdf` beside the script. The `fig14` directory/output is the implementation for paper Figure 15; paper Figure 14 is the EP experiment above. Narrow the sweep with the documented environment variables before running a full experiment.

@@ -8,7 +8,9 @@ This README is the artifact-evaluation guide. It deliberately separates the thre
 | --- | --- | --- |
 | Software simulation | CPU/C++ reconfigurable ASTRA-sim backend, workload generators, sweep and plotting scripts | Linux build host or the simulator container, Python packages, and enough disk for generated traces |
 | Network emulation | Controller, NCCL shim, Slingshot/NCCL launch scripts, communication-pattern inputs, and archived CSV/notebook outputs | A multi-GPU cluster with the site’s Slingshot provider and NCCL/GPUDirect RDMA support |
-| Hardware prototype | Controller-side hardware integration and paper description | The Polatis OCS testbed and firmware; this is an overview only and is not expected to run on a reader’s cluster |
+| Hardware prototype | Controller-side hardware integration and paper description | The Polatis OCS testbed and firmware. This is an overview only and is not expected to run on a reader’s cluster |
+
+Note that software simulation (Section 3 in this doc) does not require GPUs, and we provide small-scale testing scripts (2 GPUs) for Opus control plane in Section 1.
 
 ## Repository layout
 
@@ -414,7 +416,8 @@ If CMake stops at `find_package(Protobuf)`, install `libprotobuf-dev` and
 This generates a small DP/PP/TP workload and runs only the reconfigurable
 backend. It sweeps 0, 1, 10, and 50 ms. The 0 ms run is the EPS reference:
 the topology-change delay is zero. Positive values inject reconfiguration
-delay. Every delay runs:
+delay. The 0 ms case runs EPS only; it does not launch a provisioning
+run. For each positive delay:
 
 - baseline: the next topology is requested at the communication boundary;
 - provisioning: the next topology is requested early using
@@ -423,14 +426,22 @@ delay. Every delay runs:
 The generated `schedules.txt` contains the fine-grained candidate topologies.
 The output directory is
 `simulation/reconfig_backend/examples/stg_dp2_pp2_tp2_batch_256_mb-1_96stack_seq4096_50BW/`.
-It contains `debug_no_provision_<delay>ms.txt`,
-`debug_provision_<delay>ms.txt`, and the Markdown summary printed by the
-driver.
+It contains `debug_no_provision_<delay>ms.txt`, `debug_provision_<delay>ms.txt`
+for positive delays, and the Markdown summary printed by the driver.
 
 The small experiment uses DP=2, PP=2, TP=2 (8 simulated NPUs), batch 256,
 sequence length 4096, 96 stacks, and scale-out/scale-up bandwidths 50/450
 GB/s. The simulator is CPU-only; the Docker image does not need
 `--gpus`.
+
+Expected result:
+
+| Reconfiguration | EPS (s) | Baseline (s) | Provisioning (s) |
+| ---: | ---: | ---: | ---: |
+| 1 ms | 62.2416 | 62.2436 | 62.2415 |
+| 10 ms | 62.2416 | 62.2616 | 62.2505 |
+| 50 ms | 62.2416 | 62.3416 | 62.2905 |
+
 
 ### Paper Figure 12
 
@@ -467,20 +478,9 @@ The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directo
 
 ### Paper Figure 14
 
-Figure 14 compares the DP scale-out sweep for the H200-style and GB200-style configurations and feeds both into the cost/power plotter.
+Figure 14 is the expert-parallel (EP) scaling experiment: step latency versus EP degree for Opus and EPS. The left panel co-locates EP with TP/DP; the right spreads EP over DP only, so all EP AllToAll traffic crosses scale-out. The paper uses DeepSeek-V3-style MoE traces with 256 routed experts, top-8 gating, sequence length 4096, and global batch 256 on 256- and 512-GPU H200 configurations.
 
-```bash
-cd simulation/scripts/fig14
-./run_H200_exps.sh
-./run_GB200_exps.sh
-./plot_fig14.sh
-```
-
-The output is `simulation/scripts/fig14/fig14.pdf`. This figure depends on generated H200-style and GB200-style run directories; it is not a hardware measurement.
-
-### Supplemental expert-parallel experiments
-
-The artifact now includes the additional EP workload material from the development checkout:
+The repository provides a smaller EP smoke test and supporting inputs, not the full paper sweep:
 
 - `simulation/expert_parallel/run_ep.sh` generates the small DP=2, TP=1, PP=1, EP=2 workload.
 - `simulation/reconfig_backend/examples/stg_dp2_pp2_tp2_ep2_batch_256_mb-1_96stack_seq4096_50BW` contains the 16-rank EP traces and simulator metadata.
@@ -494,6 +494,19 @@ Run the launcher from the repository root after installing the Python STG depend
 
 Raw `workload*.et` and profiler traces are ignored; the EP launcher, configurations, schedules, and metadata remain tracked.
 
+### Paper Figure 15
+
+Figure 15 is the DP scale-out, performance, cost, and power study: DGX H200 with 400 Gbps links and B200 with 800 Gbps links.
+
+```bash
+cd simulation/scripts/fig14
+./run_H200_exps.sh
+./run_GB200_exps.sh
+./plot_fig14.sh
+```
+
+The output is `simulation/scripts/fig14/fig14.pdf`. The existing script directory keeps the name `fig14`, but this output corresponds to paper Figure 15; it is not a hardware measurement.
+
 ### Other paper figures and archived artifacts
 
 The artifact does not provide one universal command for every paper figure. Use the following pointers when documenting an evaluation run:
@@ -503,10 +516,11 @@ The artifact does not provide one universal command for every paper figure. Use 
 | Emulation latency and provisioning results, including the configurations behind Figures 10 and 11 | `evaluation/llama-3-3d-16-latency`, `evaluation/llama-3-3d-64-latency`, `evaluation/deepseek_v3_16b-2d-16-latency`, `evaluation/deepseek_v3_16b-3d-16-latency` | Archived CSVs, communication patterns, and plotting notebooks; requires Slingshot/NCCL to regenerate raw runs |
 | 128-GPU Llama emulation inputs | `evaluation/llama-3-70b-128` | Communication-pattern notebooks and rank logs are present; full training rerun requires the original GPU/model environment |
 | Simulation scale-out sweeps, Figures 12 and 13 | `simulation/scripts/fig12`, `simulation/scripts/fig13` | Scripts and inputs are provided; rerun on a CPU build host |
-| DP sweep and cost/power plots, Figure 14 | `simulation/scripts/fig14` and `simulation/reconfig_backend/plot_combined_dp_cost_power.py` | Scripted; requires all generated DP directories |
+| Expert-parallel experiment, Figure 14 | `simulation/expert_parallel/run_ep.sh` and the EP example directories | Small scripted smoke test; full 256/512-GPU sweep inputs are not included |
+| DP sweep and cost/power plots, Figure 15 | `simulation/scripts/fig14` and `simulation/reconfig_backend/plot_combined_dp_cost_power.py` | Scripted; requires all generated DP directories |
 | Hardware prototype and OCS link recovery | Paper Section 5.1 and the hardware/testbed environment files | Overview only; a Polatis OCS and compatible firmware are not included |
 | Energy/cost topology plots | `evaluation/energy-analysis/topology/plot.ipynb` and the committed PDFs | Notebook plus archived rendered PDFs; use the notebook with its local data assumptions |
-| Motivation and frontier/window studies, Figures 4–6 and 15–16 | simulator helpers, archived outputs, and paper captions | No single top-level reproduction command is packaged; use archived values unless the original inputs are restored |
+| Motivation and frontier/window studies, Figures 4–6 and 16 | simulator helpers, archived outputs, and paper captions | No single top-level reproduction command is packaged; use archived values unless the original inputs are restored |
 
 For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful as a reference for checking that a fresh plot has the same axes and trend; do not silently overwrite them during evaluation.
 

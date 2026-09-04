@@ -49,7 +49,8 @@ export ASAN_OPTIONS=detect_container_overflow=0:detect_leaks=0
 
 python3 ${TRACE_PARSER_PATH:?} debug_no_provision.txt
 
-PROVISION_CONFIG="${EXAMPLE_DIR:?}/rank_comm_groups.yaml"
+if [[ "${OPUS_SKIP_PROVISION:-0}" != "1" ]]; then
+    PROVISION_CONFIG="${EXAMPLE_DIR:?}/rank_comm_groups.yaml"
 
 "${ASTRA_SIM:?}" \
     --workload-configuration="${WORKLOAD}" \
@@ -59,12 +60,19 @@ PROVISION_CONFIG="${EXAMPLE_DIR:?}/rank_comm_groups.yaml"
     --comm-group-configuration="${COMM_GROUP:?}" \
     --circuit-schedules="${CIRCUIT_SCHEDULES:?}" \
     --provision-config="${PROVISION_CONFIG:?}" > debug_provision.txt
+fi
 
 
 echo ""
 echo "NON-PROVISIONED RUN OUTPUT:"
 tail -n 20 debug_no_provision.txt
 
-echo ""
-echo "PROVISIONED RUN OUTPUT:"
-tail -n 20 debug_provision.txt
+if [[ ${OPUS_SKIP_PROVISION:-0} == "1" ]]; then
+    echo "PROVISIONING RUN SKIPPED"
+elif [[ -s debug_provision.txt ]]; then
+    echo ""
+    echo "PROVISIONED RUN OUTPUT:"
+    tail -n 20 debug_provision.txt
+else
+    echo "PROVISIONING RUN SKIPPED"
+fi

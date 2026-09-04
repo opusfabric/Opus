@@ -70,30 +70,44 @@ printf "| ---: | ---: | ---: | ---: | ---: | ---: |\n"
 
 for RECONFIG_MS in "${RECONFIG_TIMES_MS[@]}"; do
     set_reconfig_latency "${RECONFIG_MS}"
-    echo "Running reconfigurable backend at ${RECONFIG_MS} ms: baseline and provisioning" >&2
-    ./run_network_reconfig.sh > /dev/null
+    if [ "${RECONFIG_MS}" == "0" ]; then
+        echo "Running reconfigurable backend at 0 ms: EPS baseline only" >&2
+        OPUS_SKIP_PROVISION=1 ./run_network_reconfig.sh > /dev/null
+    else
+        echo "Running reconfigurable backend at ${RECONFIG_MS} ms: baseline and provisioning" >&2
+        ./run_network_reconfig.sh > /dev/null
+    fi
 
-    if [ ! -s "debug_no_provision.txt" ] || [ ! -s "debug_provision.txt" ]; then
+    if [ ! -s "debug_no_provision.txt" ] || { [ "${RECONFIG_MS}" != "0" ] && [ ! -s "debug_provision.txt" ]; }; then
         echo "Error: Expected reconfigurable-backend output files not found in ${OUT_DIR}" >&2
         exit 1
     fi
 
     cp debug_no_provision.txt "debug_no_provision_${RECONFIG_MS}ms.txt"
-    cp debug_provision.txt "debug_provision_${RECONFIG_MS}ms.txt"
+    if [ "${RECONFIG_MS}" != "0" ]; then
+        cp debug_provision.txt "debug_provision_${RECONFIG_MS}ms.txt"
+    fi
 
     if [ "${RECONFIG_MS}" == "0" ]; then
         EPS_CYCLES=$(runtime_cycles "debug_no_provision_${RECONFIG_MS}ms.txt")
     fi
     BASELINE_CYCLES=$(runtime_cycles "debug_no_provision_${RECONFIG_MS}ms.txt")
-    PROVISION_CYCLES=$(runtime_cycles "debug_provision_${RECONFIG_MS}ms.txt")
+    if [ "${RECONFIG_MS}" == "0" ]; then
+        PROVISION_SECONDS="-"
+        PROVISION_DELTA="-"
+    else
+        PROVISION_CYCLES=$(runtime_cycles "debug_provision_${RECONFIG_MS}ms.txt")
+        PROVISION_SECONDS=$(cycles_to_seconds "${PROVISION_CYCLES}")
+        PROVISION_DELTA=$(delta_vs_eps "${PROVISION_CYCLES}")
+    fi
 
     printf "| %s ms | %s | %s | %s | %s | %s |\n" \
         "${RECONFIG_MS}" \
         "$(cycles_to_seconds "${EPS_CYCLES}")" \
         "$(cycles_to_seconds "${BASELINE_CYCLES}")" \
-        "$(cycles_to_seconds "${PROVISION_CYCLES}")" \
+        "${PROVISION_SECONDS}" \
         "$(delta_vs_eps "${BASELINE_CYCLES}")" \
-        "$(delta_vs_eps "${PROVISION_CYCLES}")"
+        "${PROVISION_DELTA}"
 done
 
 printf "\nOutput files generated in %s\n" "${OUT_DIR}"

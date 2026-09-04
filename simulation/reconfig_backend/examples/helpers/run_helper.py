@@ -50,10 +50,11 @@ def _latency_label(seconds):
 
 
 def run_with_reconfig_times(reconfig_times, base_dir):
-    """Run baseline and provisioning for every delay in seconds.
+    """Run the reconfigurable simulator for every delay in seconds.
 
-    The zero-delay baseline result is the EPS reference.  All runs use
-    run_network_reconfig.sh and the reconfigurable simulator.
+    The zero-delay baseline result is the EPS reference; provisioning is skipped
+    at zero delay. All runs use the reconfigurable simulator and
+    `run_network_reconfig.sh`.
     """
     results = {}
     network_file = os.path.join(base_dir, "network.yml")
@@ -66,12 +67,26 @@ def run_with_reconfig_times(reconfig_times, base_dir):
         with open(network_file, "w") as stream:
             yaml.safe_dump(network_config, stream, sort_keys=False)
 
+        is_zero_delay = abs(seconds) < 1e-12
+        environment = os.environ.copy()
+        if is_zero_delay:
+            environment["OPUS_SKIP_PROVISION"] = "1"
+
         print(f"Running reconfigurable backend with reconfig_time: {seconds} s")
-        subprocess.run(["bash", "run_network_reconfig.sh"], cwd=base_dir, check=True)
+        subprocess.run(
+            ["bash", "run_network_reconfig.sh"],
+            cwd=base_dir,
+            check=True,
+            env=environment,
+        )
 
         results[seconds] = {
             "no_provision": _result(os.path.join(base_dir, "debug_no_provision.txt")),
-            "provision": _result(os.path.join(base_dir, "debug_provision.txt")),
+            "provision": (
+                None
+                if is_zero_delay
+                else _result(os.path.join(base_dir, "debug_provision.txt"))
+            ),
         }
 
     return results
@@ -95,6 +110,8 @@ def write_result_for_sheet_import(results, filename):
 
         stream.write("\nReconfigurable\n")
         for seconds, data in results.items():
+            if abs(seconds) < 1e-12:
+                continue
             label = _latency_label(seconds)
             for mode in ("no_provision", "provision"):
                 result = data[mode]
@@ -134,10 +151,15 @@ def main():
             f"  Baseline    - Cycles: {data['no_provision']['cycles']}, "
             f"Exposed Cycles: {data['no_provision']['exposed_cycles']}"
         )
-        print(
-            f"  Provision   - Cycles: {data['provision']['cycles']}, "
-            f"Exposed Cycles: {data['provision']['exposed_cycles']}"
-        )
+        if data["provision"] is None:
+            print("  Provision   - skipped at zero delay")
+        else:
+            provision_cycles = data["provision"]["cycles"]
+            provision_exposed = data["provision"]["exposed_cycles"]
+            print(
+                f"  Provision   - Cycles: {provision_cycles}, "
+                f"Exposed Cycles: {provision_exposed}"
+            )
 
     output_path = os.path.join(args.base_dir, "results_for_sheet_import.txt")
     write_result_for_sheet_import(results, output_path)
