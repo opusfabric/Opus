@@ -1,20 +1,20 @@
 # Opus artifact
 
-Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, the reconfigurable network software simulator, and experiment scripts.
+Opus is a photonic-rail control plane for communication traffic in hybrid-parallel distributed LLM training. This artifact contains the source used for the paper, the reconfigurable network software simulator, and experiment scripts.
 
 There are four sections:
 
 1. Small experiments on two GPUs for testing the shim
-- Requirement: 2 NVIDIA GPUs and an NVIDIA driver compatible with CUDA 12.8. The common container provides CUDA 12.8, cuDNN 9, and PyTorch nightly `2.10.0.dev20251209` (`cu128`). No particular NVIDIA GPU model is required.
+- Requirement: 2 NVIDIA GPUs and an NVIDIA driver compatible with CUDA 12.8. The docker container in this artifact provides CUDA 12.8, cuDNN 9, and PyTorch nightly `2.10.0.dev20251209` (`cu128`). No particular NVIDIA GPU model is required.
 
 2. GPU-cluster emulation with the whole control plane
-- Requirement: 16 NVIDIA GPUs (4 nodes × 4 GPUs), a Slurm environment, RDMA-capable networking, and a driver compatible with CUDA 12.8. The Perlmutter launcher uses Shifter and its site-specific image. Use the equivalent CUDA 12.8-compatible image on another cluster.
+- Requirement: 16 NVIDIA GPUs (4 nodes × 4 GPUs), a Slurm environment, RDMA-capable networking, and a driver compatible with CUDA 12.8. The Perlmutter (the cluster we used for the evaluation) launcher uses Shifter and its site-specific image. The reader can use the equivalent CUDA 12.8-compatible image on another cluster. We have only tested with the Perlmutter environment.
 
 3. Software simulation (CPU)
-- Requirement: CPU only. Allow at least 8 GB RAM for the smoke test. 32 GB is recommended for normal sweeps, and 64 GB is recommended for the largest EP or strong-scaling trace-generation runs. No GPU is needed.
+- Requirement: CPU only. We recommend having at least 8 GB RAM for the smoke test. 32 GB is recommended for normal sweeps, and 64 GB is recommended for the largest EP or strong-scaling trace-generation runs. No GPU is needed.
 
 4. Paper figure replication
-- Requirement: figure-dependent. Figures 4(a-c) need Python and the original traces but no GPU; Figures 4(d), 5, and 12–15 use the CPU simulator (use the Section 3 memory guidance); Figures 10–11 need the original Slingshot/NCCL GPU environment; Figure 9 needs the Polatis OCS testbed.
+- Requirement: figure-dependent. Figures 4(d), 5, and 12–15 use the CPU simulator. Figures 4(a-c) and 10–11 need the original Slingshot/NCCL GPU environment. Figure 9 needs the Polatis OCS testbed (we cannot provide access unfortunately).
 
 ## Repository layout
 
@@ -22,7 +22,7 @@ There are four sections:
 Opus/
 ├── environment/
 │   ├── emulation-env/       CUDA/PyTorch/RDMA image for software emulation
-│   └── testbed-env/         hardware/testbed image; overview only here
+│   └── testbed-env/         hardware/testbed image
 ├── evaluation/              archived communication patterns, CSVs, notebooks, PDFs
 ├── nccl/                    vendored NCCL source used to build the Opus shim
 ├── scripts/                 portable Slurm and Perlmutter launchers
@@ -38,7 +38,7 @@ Opus/
 
 ## 1. Small experiments on two GPUs for testing the shim
 
-Use this to validate the `cuda:opus` process-group extension on two GPUs. It includes one controller-mediated reconfiguration and needs neither Slingshot nor a physical switch. The common Docker image is the recommended environment; a matching host or module environment also works.
+This section validate the `cuda:opus` process-group extension on two connected GPUs by NVLink/PCIe. It includes one controller-mediated "reconfiguration", a blocking event in the data plane, with no actual physical reconfigurations.
 
 ### Build and enter the common Docker image
 
@@ -51,7 +51,7 @@ docker run --rm -it --gpus 2 --network host --ipc host \
   -v "$PWD:/Opus" -w /Opus opus-emulation:artifact bash
 ```
 
-Run the Section 1 commands inside this container. Section 2 uses the cluster environment or the Perlmutter launcher below. The bind mount keeps source changes and generated results in the checkout; for a host/module run, omit the `docker run` step.
+Run the Section 1 commands inside this container.
 
 ### Controller-only preflight (no GPU)
 
@@ -61,7 +61,7 @@ Run the self-contained smoke test before allocating GPUs:
 python3 src/opus-controller/test_emulation.py
 ```
 
-It starts `config.py` in emulation mode, sends four topology values through the Unix socket, checks for `SUCCESS, CONFIG-ACK`, and cleans up. This tests only the controller-side delay model; it does not exercise NCCL or a network dataplane.
+It starts `config.py` in emulation mode, sends four topology values through the Unix socket, checks for `SUCCESS, CONFIG-ACK`, and cleans up. This tests the controller-side delay model.
 
 ### Build the controller and shim
 
@@ -79,13 +79,11 @@ python -m pip install --upgrade pip setuptools wheel
 python -m pip install --no-build-isolation -e src/opus-shim
 ```
 
-The active Python must provide CUDA-enabled PyTorch. If pip cannot import `setuptools.build_meta`, run `python -m pip install --upgrade pip setuptools wheel` in the same environment. Rebuild changed C++ shim sources with `bash src/opus-shim/build.sh`. `NCCL_HOME` must contain `include/nccl.h`; the vendored `toml++` headers are under `third_party/tomlplusplus/include` and can be overridden with `OPUS_TOML_INCLUDE`.
-
 ### Run the two-GPU DP reconfiguration demo
 
-The following is a single-host demonstration of the scale-out control path. Since both ranks are on one host, the controller would normally classify them as scale-up and bypass OCS provisioning. The environment variable OPUS_FORCE_DOMAIN=scale-out explicitly selects the scale-out branch for this local demonstration. Do not use that override on a real multi-node run; with multiple nodes, use the actual node addresses in SERVER_IPS and let the controller classify the group.
+The following is a single-host demonstration of the scale-out control path. Since both ranks are on one host, the controller would normally classify them as scale-up and bypass OCS provisioning. The environment variable OPUS_FORCE_DOMAIN=scale-out explicitly selects the scale-out branch for this local demonstration. Do not use that override on a real multi-node run. With multiple nodes, use the actual node addresses in SERVER_IPS and let the controller classify the group.
 
-The -t 1 option seeds one active logical topology bit. The first DP stage then requests topology 0, which clears that bit. With -e -d 50, the Python worker sleeps for 50 ms for the changed bit and returns an acknowledgement. This makes the runtime request an observable emulated reconfiguration rather than a no-op transition from topology 0 to topology 0.
+The -t 1 option seeds one active logical topology bit. The first DP stage then requests topology 0, which clears that bit. With -e -d 50, the Python worker sleeps for 50 ms for the changed bit and returns an acknowledgement. This makes the runtime request an observable emulated reconfiguration rather than a no-op transition from topology 1 to topology 0.
 
 ```bash
 export CONTROLLER_IP=127.0.0.1
@@ -129,14 +127,14 @@ grep -E "CONFIG_REQ|ALL READY|CONFIG_ACK|topoId|OPUS_FORCE_DOMAIN" "${RUN_DIR}/c
 cat "${RUN_DIR}/python_output_rail_0.log"
 ```
 
-A successful run shows both ranks checking in, a CONFIG_REQ from each rank for the first all-reduce, cnt/size: 2/2, a topology transition from 1 to 0, and CONFIG_ACK delivery. The first all-reduce should include approximately the configured 50 ms control-plane delay; later all-reduces use the already-selected topology and should not trigger another transition.
+A successful run shows both ranks checking in, a CONFIG_REQ from each rank for the first all-reduce, cnt/size: 2/2, a topology transition from 1 to 0, and CONFIG_ACK delivery. The first all-reduce should include approximately the configured 50 ms control-plane delay. Later all-reduces use the already-selected topology and should not trigger another transition.
 
-The demo uses `MODE=baseline`, not `MODE=provision`. Both ranks send a request at the first all-reduce boundary; the controller waits for both, changes logical topology `1 -> 0`, delays for 50 ms, and acknowledges the ranks. The later all-reduces reuse the selected topology. NCCL still moves data over the host’s normal network.
+Both ranks send a request at the first all-reduce boundary. The controller waits for both, changes logical topology `1 -> 0`, delays for 50 ms, and acknowledges the ranks. The later all-reduces reuse the selected topology. NCCL still moves data over the host’s normal network.
 
 ## 2. GPU-cluster emulation with the whole control plane
 
 This experiment runs Llama 3 8B for 10 steps on four GPU nodes
-(16 GPUs): TP=4, PP=2, and DP shard degree=2. Opus emulates rail reconfiguration in the control plane.
+(16 GPUs): TP=4, PP=2, and DP shard degree=2. Opus emulates rail reconfiguration in the control plane across DP and PP commmunication groups.
 
 ### Emulation architecture
 
@@ -551,10 +549,48 @@ The four result directories contain ASTRA-Sim outputs for 2048, 4096, 8192, and 
 
 Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Util = Tcompute / (Tcompute + Tnon_overlap_comm + Tstall)`, with `Tstall = sum_i max(0, Treconfig - Twindow_i)`. It evaluates OCS reconfiguration latencies of 0, 1, 5, 10, 50, 100, 250, 500, 750, and 1000 ms for the four frontier scales. Use the rounded median windows 187, 94, 47, and 24 ms as a sanity check for 2048, 4096, 8192, and 16384 GPUs. The paper conclusion is that sub-10-ms OCS reconfiguration preserves high utilization, while latency comparable to or above the work window produces visible stalls. This is a derived software calculation and does not require a physical OCS.
 
+### Paper Figure 10/11
+
+Requirement: Slurm with CUDA-enabled PyTorch, NCCL/RDMA, and 16 NVIDIA GPUs
+(4 nodes × 4 GPUs) for the 16-GPU cases or 64 GPUs (16 nodes × 4 GPUs) for
+Llama-64. No physical OCS is required; raw reruns require a compatible
+Slingshot/NCCL cluster.
+
+Scripts:
+
+- [Generic emulation](scripts/run_slurm_emulation.sbatch)
+- [Generic provisioning](scripts/run_slurm_provision.sbatch)
+- [Perlmutter emulation](scripts/perlmutter/run_opus_emulation.sbatch)
+- [Perlmutter provisioning](scripts/perlmutter/run_opus_provision.sbatch)
+- [Output checker](scripts/check_run_output.sh)
+- [Latency summarizer](scripts/summarize_iteration_latency.py)
+- [Llama 3D, 16-GPU plot notebook](evaluation/llama-3-3d-16-latency/provision.ipynb)
+- [Llama 3D, 64-GPU plot notebook](evaluation/llama-3-3d-64-latency/provision.ipynb)
+- [DeepSeek 2D plot notebook](evaluation/deepseek_v3_16b-2d-16-latency/plot.ipynb)
+- [DeepSeek 3D plot notebook](evaluation/deepseek_v3_16b-3d-16-latency/plot.ipynb)
+
+After the Section 2 setup, set the case-specific config, communication-pattern
+prefix, GPU allocation, delay, and output directory, then submit:
+
+```bash
+# Generic Slurm
+sbatch --nodes=4 --gpus-per-node=4 scripts/run_slurm_emulation.sbatch
+sbatch --nodes=4 --gpus-per-node=4 scripts/run_slurm_provision.sbatch
+
+# Perlmutter/Shifter
+sbatch -N 4 -G 16 -C gpu -A <account> scripts/perlmutter/run_opus_emulation.sbatch
+sbatch -N 4 -G 16 -C gpu -A <account> scripts/perlmutter/run_opus_provision.sbatch
+
+# EPS uses RECONFIG_DELAY_MS=0; repeat for the archived delay values.
+scripts/check_run_output.sh <run-id>
+scripts/summarize_iteration_latency.py <run-id> --last 5
+```
+
 
 ### Other paper figures and archived artifacts
 
 These entries are ordered by figure number. Links point to files or directories that are present in this checkout. The archived notebooks and CSVs are useful for checking communication patterns and trends; a fresh raw emulation requires the original Slingshot/NCCL environment.
+
 
 | Paper figure/material | Artifact pointer | Reproduction status |
 | --- | --- | --- |

@@ -9,6 +9,7 @@ if (( $# == 0 )); then
 fi
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+EXPECTED_RANKS=${EXPECTED_RANKS:-16}
 
 for job_id in "$@"; do
     run_dir="${ROOT}/runs/${job_id}"
@@ -32,13 +33,13 @@ for job_id in "$@"; do
         timeouts=$(awk '/CONFIG_ACK timeout/ {count++} END {print count + 0}' "${worker_logs[@]}")
         ready=$(grep -c 'ALL READY' "${run_dir}/controller.log" || true)
         changes=$(grep -c 'new topo: yes' "${run_dir}/controller.log" || true)
-        printf '%s: %s; step10=%d/16, ACK_timeouts=%d, ALL_READY=%d, topology_changes=%d, fatal_markers=%d\n' \
-            "${job_id}" "$([[ ${step10} -eq 16 && ${timeouts} -eq 0 && ${fatal} -eq 0 ]] && echo PASS || echo FAIL)" \
-            "${step10}" "${timeouts}" "${ready}" "${changes}" "${fatal}"
+        printf '%s: %s; step10=%d/%d, ACK_timeouts=%d, ALL_READY=%d, topology_changes=%d, fatal_markers=%d\n' \
+            "${job_id}" "$([[ ${step10} -eq ${EXPECTED_RANKS} && ${timeouts} -eq 0 && ${fatal} -eq 0 ]] && echo PASS || echo FAIL)" \
+            "${step10}" "${EXPECTED_RANKS}" "${timeouts}" "${ready}" "${changes}" "${fatal}"
     else
         opus_markers=$(awk '/CONFIG_REQ|CONFIG_ACK|PROVISION topo|Backend [0-9]+ RANK/ {count++} END {print count + 0}' "${worker_logs[@]}")
-        printf '%s: %s (native); step10=%d/16, Opus_markers=%d, fatal_markers=%d\n' \
-            "${job_id}" "$([[ ${step10} -eq 16 && ${opus_markers} -eq 0 && ${fatal} -eq 0 ]] && echo PASS || echo FAIL)" \
-            "${step10}" "${opus_markers}" "${fatal}"
+        printf '%s: %s (native); step10=%d/%d, Opus_markers=%d, fatal_markers=%d\n' \
+            "${job_id}" "$([[ ${step10} -eq ${EXPECTED_RANKS} && ${opus_markers} -eq 0 && ${fatal} -eq 0 ]] && echo PASS || echo FAIL)" \
+            "${step10}" "${EXPECTED_RANKS}" "${opus_markers}" "${fatal}"
     fi
 done
