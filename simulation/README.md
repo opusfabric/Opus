@@ -19,7 +19,7 @@ Inside the container:
 ./simulation/scripts/run_example.sh
 ```
 
-The simulator is CPU-only, so GPU passthrough is not needed.
+The simulator is CPU-only, so GPU passthrough is not needed. Allow at least 8 GB RAM for `run_example.sh`; 32 GB is recommended for normal sweeps, and 64 GB for the largest EP or strong-scaling trace-generation runs.
 
 ## Host fallback dependencies
 
@@ -60,7 +60,7 @@ The copied EP launcher is:
 ./simulation/expert_parallel/run_ep.sh
 ```
 
-It generates a small DP=2, TP=1, PP=1, EP=2 workload under `simulation/reconfig_backend/examples/`. This is a smoke test for the EP path, not the full 256/512-GPU Figure 14 sweep. The additional EP directories include their simulator configuration and topology metadata. Raw Chakra `.et` files and Torchtitan profiler traces are present locally for convenience but are excluded by the repository ignore rules.
+It reconstructs the published 256/512-GPU Figure 14 sweep as CPU-only simulated NPUs. By default it covers EP+TP+DP, EP+DP, all paper EP degrees, and 0/0.5/1/10/50/100-ms reconfiguration delays. Use `CLUSTER_SIZES`, `PLACEMENTS`, `EP_SIZES_*`, `EP_LAYERS`, and `LATENCIES_MS` to make a smoke run. Raw Chakra `.et` files and simulator logs are regenerated and excluded by the repository ignore rules; the original paper raw EP traces are not included.
 
 ## Paper sweep commands
 
@@ -75,10 +75,10 @@ cd ../fig13
 ./run_bw_exps.sh
 ./plot_fig13.sh
 
-cd ../fig14
+cd ../fig15
 ./run_H200_exps.sh
 ./run_GB200_exps.sh
-./plot_fig14.sh
+./plot_fig15.sh
 ```
 
-The sweep scripts generate traces under `simulation/reconfig_backend/examples/`, write per-run `results_for_sheet_import.txt`, and render `fig12.pdf`, `fig13.pdf`, or `fig14.pdf` beside the script. The `fig14` directory/output is the implementation for paper Figure 15; paper Figure 14 is the EP experiment above. Narrow the sweep with the documented environment variables before running a full experiment.
+The sweep scripts generate traces under `simulation/reconfig_backend/examples/` and render `fig12.pdf`, `fig13.pdf`, or `fig15.pdf` beside the script. Figures 12 and 13 use the analytical backend for EPS/fixed-topology baselines and keep latency and bandwidth results in separate purpose-specific files so that rerunning one sweep does not overwrite the other. The `fig15` directory/output is the implementation for paper Figure 15; paper Figure 14 is the EP experiment above. Narrow the sweep with the documented environment variables before running a full experiment.

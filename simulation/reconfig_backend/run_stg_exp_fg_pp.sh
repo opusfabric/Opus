@@ -16,7 +16,7 @@ TEMPLATE_DIR="${EXAMPLE_DIR}/stg-template"
 
 : "${MIXED_PRECISION:=0}"
 
-SCALE_UP_BW=450
+: "${SCALE_UP_BW:=450}"
 
 if [ -z "${SCALE_OUT_SWEEPS:-}" ]; then
     SCALE_OUT_SWEEPS=(12.5 25 50 100 200)
@@ -28,18 +28,18 @@ echo "SWEEPING over SCALE_OUT_BW values: ${SCALE_OUT_SWEEPS[*]}"
 
 SCALE_OUT_BW=200
 
-WS=0
-NS=96
+: "${WS:=0}"
+: "${NS:=96}"
 
-SEQ_LEN=4096
+: "${SEQ_LEN:=4096}"
 
 # Weak Scaling Batch Size
 # BATCH=$((DP / 2 * 64))
 
 # Strong Scaling Batch Size
-BATCH=256
+: "${BATCH:=256}"
 
-MB=-1
+: "${MB:=-1}"
 
 NPU_COUNT=$((DP * TP * PP * EP))
 EP_SUFFIX=""

@@ -14,9 +14,9 @@ if [ ! -d "${DP_1}" ] || [ ! -d "${DP_2}" ]; then
 fi
 
 
-python ${PLOT_SCRIPT} --latency '10 ms' --bw1 "50" --bw2 "100" --output ${SCRIPT_DIR}/fig14.pdf ${DP_1} ${DP_2}
+python ${PLOT_SCRIPT} --latency '10 ms' --bw1 "50" --bw2 "100" --output ${SCRIPT_DIR}/fig15.pdf ${DP_1} ${DP_2}
 
-if [ ! -f "${SCRIPT_DIR}/fig14.pdf" ]; then
-    echo "Error: Expected output file not found at ${SCRIPT_DIR}/fig14.pdf"
+if [ ! -f "${SCRIPT_DIR}/fig15.pdf" ]; then
+    echo "Error: Expected output file not found at ${SCRIPT_DIR}/fig15.pdf"
     exit 1
 fi

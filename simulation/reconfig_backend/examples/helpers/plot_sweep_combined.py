@@ -69,6 +69,19 @@ def latency_str_to_seconds(s):
     return value
 
 
+def find_result_file(folder_path, preferred_name):
+    """Use the purpose-specific result file, with a legacy fallback."""
+    preferred_path = os.path.join(folder_path, preferred_name)
+    if os.path.isfile(preferred_path):
+        return preferred_path
+
+    legacy_path = os.path.join(folder_path, "results_for_sheet_import.txt")
+    if os.path.isfile(legacy_path):
+        return legacy_path
+
+    return None
+
+
 def find_bandwidth_variants(base_folder):
     """Find all bandwidth variants of a base folder."""
     base_dir = os.path.dirname(base_folder)
@@ -85,8 +98,8 @@ def find_bandwidth_variants(base_folder):
 
     base_100gb = os.path.join(base_dir, true_base)
     if os.path.isdir(base_100gb):
-        results_file = os.path.join(base_100gb, "results_for_sheet_import.txt")
-        if os.path.isfile(results_file):
+        results_file = find_result_file(base_100gb, "bandwidth_results_for_sheet_import.txt")
+        if results_file is not None:
             variants[100.0] = base_100gb
 
     if os.path.isdir(base_dir):
@@ -96,8 +109,8 @@ def find_bandwidth_variants(base_folder):
                 if match:
                     bw = float(match.group(1))
                     folder_path = os.path.join(base_dir, entry)
-                    results_file = os.path.join(folder_path, "results_for_sheet_import.txt")
-                    if os.path.isfile(results_file):
+                    results_file = find_result_file(folder_path, "bandwidth_results_for_sheet_import.txt")
+                    if results_file is not None:
                         variants[bw] = folder_path
 
     return variants
@@ -133,7 +146,14 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 3))
 
     # ── Left plot: Reconfiguration Latency ────────────────────────────────
-    results_path = os.path.join(folder_path, "results_for_sheet_import.txt")
+    results_path = find_result_file(
+        folder_path, "latency_results_for_sheet_import.txt"
+    )
+    if results_path is None:
+        raise FileNotFoundError(
+            "No latency results found in "
+            f"{folder_path}; run run_latency_exps.sh first"
+        )
     eps, ideal, reconfig_rt, reconfig_pp = parse_results(results_path)
 
     latencies_str = sorted(reconfig_rt.keys(), key=latency_str_to_seconds)
@@ -189,17 +209,22 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
 
     if variants:
         bandwidths_gb = sorted(variants.keys())
-        bandwidths = [bw * 8 for bw in bandwidths_gb]
 
         raw_data = []
+        plotted_bandwidths_gb = []
         for bw_gb in bandwidths_gb:
             folder = variants[bw_gb]
-            res_path = os.path.join(folder, "results_for_sheet_import.txt")
+            res_path = find_result_file(
+                folder, "bandwidth_results_for_sheet_import.txt"
+            )
+            if res_path is None:
+                continue
             anal, base, rec_rt, rec_pp = parse_results(res_path)
 
-            if bw_latency_str not in rec_rt:
+            if bw_latency_str not in rec_rt or bw_latency_str not in rec_pp:
                 continue
 
+            plotted_bandwidths_gb.append(bw_gb)
             raw_data.append({
                 "analytical": anal,
                 "baseline": base,
@@ -215,7 +240,7 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
             has_ideal = all(d["baseline"] is not None for d in raw_data)
             ideal_values = [d["baseline"] / 1e9 for d in raw_data] if has_ideal else []
 
-            x_indices_bw = list(range(len(bandwidths)))
+            x_indices_bw = list(range(len(plotted_bandwidths_gb)))
 
             ax2.plot(
                 x_indices_bw, opus_values,
@@ -246,7 +271,7 @@ def plot_combined(folder_path, bw_latency_str="10 ms", output_path=None):
             ax2.set_xlabel("Scale-Out Bandwidth (Gbps)")
             ax2.set_ylabel("Step Latency (s)")
             ax2.set_xticks(x_indices_bw)
-            ax2.set_xticklabels([f"{int(bw)}" for bw in bandwidths])
+            ax2.set_xticklabels([f"{int(bw * 8)}" for bw in plotted_bandwidths_gb])
             ax2.grid(True, alpha=0.3)
 
     # ── Shared legend on top ──────────────────────────────────────────────

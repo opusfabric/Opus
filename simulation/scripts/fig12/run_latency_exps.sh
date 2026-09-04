@@ -1,5 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-OPUS_ROOT="$(realpath ${SCRIPT_DIR:?}/../../..)"
+OPUS_ROOT="$(realpath "${SCRIPT_DIR}/../../..")"
 
 RECONFIG_BACKEND="${OPUS_ROOT}/simulation/reconfig_backend"
 
@@ -9,9 +11,10 @@ TP=8
 PP=4
 DP=4
 MIXED_PRECISION=1
+PYTHON="${PYTHON:-python3}"
 SCALE_OUT_SWEEPS="50"
 
-cd ${RECONFIG_BACKEND}
+cd "${RECONFIG_BACKEND}"
 
 OUT_DIR=${RECONFIG_BACKEND}/examples/llama_dp${DP}_pp${PP}_tp${TP}_batch_256_mb-1_96stack_seq4096_${SCALE_OUT_SWEEPS}BW
 if [ -d "${OUT_DIR}" ] && [ -f "${OUT_DIR}/workload.0.et" ]; then
@@ -27,16 +30,17 @@ if [ ! -d "${OUT_DIR}" ]; then
     exit 1
 fi
 
-cd ${OUT_DIR}
+cd "${OUT_DIR}"
 echo "Using Run Helper to run all experiments in ${OUT_DIR}"
 
 RUN_HELPER=${RECONFIG_BACKEND}/examples/helpers/run_helper.py
 
-python ${RUN_HELPER} . --reconfig-times 0,0.01,0.05,0.1,0.25,0.5,0.75,1
+"${PYTHON}" "${RUN_HELPER}" . --reconfig-times 0,0.01,0.05,0.1,0.25,0.5,0.75,1 \
+    --output latency_results_for_sheet_import.txt
 
-if [ ! -f "results_for_sheet_import.txt" ]; then
+if [ ! -f "latency_results_for_sheet_import.txt" ]; then
     echo "Error: Expected output file not found in ${OUT_DIR}"
     exit 1
 fi
 
-echo "Generated results file in ${OUT_DIR}/results_for_sheet_import.txt"
+echo "Generated latency results file in ${OUT_DIR}/latency_results_for_sheet_import.txt"

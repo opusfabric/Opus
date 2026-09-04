@@ -1,14 +1,20 @@
 # Opus artifact
 
-Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, archived emulation inputs and outputs, and the reconfigurable software simulator.
+Opus is a photonic-rail control plane for distributed ML communication. This artifact contains the source used for the paper, the reconfigurable network software simulator, and experiment scripts.
 
-This README is the artifact-evaluation guide. There are three sections:
+There are four sections:
 
-1. Small experiments on two GPUs for testing the shim (2 NVIDIA GPUs required)
+1. Small experiments on two GPUs for testing the shim
+- Requirement: 2 NVIDIA GPUs and an NVIDIA driver compatible with CUDA 12.8. The common container provides CUDA 12.8, cuDNN 9, and PyTorch nightly `2.10.0.dev20251209` (`cu128`). No particular NVIDIA GPU model is required.
 
-2. GPU-cluster emulation with the whole control plane (16 GPUs required, Slurm environment)
+2. GPU-cluster emulation with the whole control plane
+- Requirement: 16 NVIDIA GPUs (4 nodes × 4 GPUs), a Slurm environment, RDMA-capable networking, and a driver compatible with CUDA 12.8. The Perlmutter launcher uses Shifter and its site-specific image. Use the equivalent CUDA 12.8-compatible image on another cluster.
 
 3. Software simulation (CPU)
+- Requirement: CPU only. Allow at least 8 GB RAM for the smoke test. 32 GB is recommended for normal sweeps, and 64 GB is recommended for the largest EP or strong-scaling trace-generation runs. No GPU is needed.
+
+4. Paper figure replication
+- Requirement: figure-dependent. Figures 4(a-c) need Python and the original traces but no GPU; Figures 4(d), 5, and 12–15 use the CPU simulator (use the Section 3 memory guidance); Figures 10–11 need the original Slingshot/NCCL GPU environment; Figure 9 needs the Polatis OCS testbed.
 
 ## Repository layout
 
@@ -145,7 +151,11 @@ while the current group's NCCL operation just finished. The controller and
 rail workers perform a real CONFIG_REQ/CONFIG_ACK transaction. The physical
 switch operation is emulated by the 50 ms rail-worker delay. If the provisioned reconfiguration finishes before the next group starts, that group does not pay the delay on its critical path.
 
-### Setup
+### Cluster setup (Perlmutter/Shifter)
+
+The commands below are the complete Perlmutter path: they use the common CUDA 12.8 image through Shifter, build the controller, and prepare the tokenizer.
+
+On a Docker-based Slurm cluster, build and push the same image from `environment/emulation-env/Dockerfile`, then replace each `shifter --image=... --module=gpu` invocation in the launcher with `docker run --rm --gpus all --network host --ipc host --device=/dev/infiniband --hostname "$SLURMD_NODENAME" -v "$OPUS_ROOT:/Opus" -w /Opus ...`. Keep the same `SERVER_IPS`, controller address, and Slurm experiment commands below.
 
 Run from the shared Opus checkout. Replace `your_project_g` with an active
 Perlmutter GPU account.
@@ -440,6 +450,11 @@ Expected result:
 | 50 ms | 62.2416 | 62.3416 | 62.2905 |
 
 
+## 4. Paper figure replication
+
+The following subsections are ordered by paper figure number. Figures requiring the original hardware are explicitly marked overview-only; the software and emulation paths are the reproducible focus of this artifact.
+
+
 ### Paper Figure 12
 
 Figure 12 is the Llama/H200-style scale-out study: DP=4, PP=4, TP=8, with reconfiguration-latency and scale-out-bandwidth sweeps.
@@ -458,7 +473,7 @@ cd simulation/scripts/fig12
 ./plot_fig12.sh
 ```
 
-The scripts generate the workload and topology files, run the reconfigurable backend, and write `fig12.pdf`; the center run is under `simulation/reconfig_backend/examples/llama_dp4_pp4_tp8_batch_256_mb-1_96stack_seq4096_50BW`.
+The scripts generate the workload and topology files and write `fig12.pdf`; the center run is under `simulation/reconfig_backend/examples/llama_dp4_pp4_tp8_batch_256_mb-1_96stack_seq4096_50BW`. The bandwidth sweep invokes both backends: the analytical backend supplies the EPS and fixed-topology baseline columns, while the reconfigurable backend supplies the positive-delay Opus columns. The two sweeps intentionally write different files: the latency sweep writes `latency_results_for_sheet_import.txt` in the 50BW center directory, while the bandwidth sweep writes `bandwidth_results_for_sheet_import.txt` in each bandwidth directory. The plotter reads those files independently, so rerunning the bandwidth sweep no longer destroys the latency data. Run the latency sweep once, then the bandwidth sweep, and finally `./plot_fig12.sh`.
 
 ### Paper Figure 13
 
@@ -471,49 +486,79 @@ cd simulation/scripts/fig13
 ./plot_fig13.sh
 ```
 
-The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directory is `simulation/reconfig_backend/examples/gb200_stg_dp4_pp4_tp32_batch_256_mb-1_96stack_seq4096_100BW`.
+The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directory is `simulation/reconfig_backend/examples/gb200_stg_dp4_pp4_tp32_batch_256_mb-1_96stack_seq4096_100BW`. The latency and bandwidth sweeps use the analytical backend for EPS and the fixed-topology baseline; positive-delay points use the reconfigurable backend.
 
 ### Paper Figure 14
 
 Figure 14 is the expert-parallel (EP) scaling experiment: step latency versus EP degree for Opus and EPS. The left panel co-locates EP with TP/DP; the right spreads EP over DP only, so all EP AllToAll traffic crosses scale-out. The paper uses DeepSeek-V3-style MoE traces with 256 routed experts, top-8 gating, sequence length 4096, and global batch 256 on 256- and 512-GPU H200 configurations.
 
-The repository provides a smaller EP smoke test and supporting inputs, not the full paper sweep:
-
-- `simulation/expert_parallel/run_ep.sh` generates the small DP=2, TP=1, PP=1, EP=2 workload.
-- `simulation/reconfig_backend/examples/stg_dp2_pp2_tp2_ep2_batch_256_mb-1_96stack_seq4096_50BW` contains the 16-rank EP traces and simulator metadata.
-- `simulation/reconfig_backend/examples/stg_dp1_pp1_tp1_ep2_batch_256_mb-1_96stack_seq4096_50BW` and `stg_dp2_pp1_tp1_ep2_batch_256_mb-1_96stack_seq4096_50BW` contain smaller EP cases.
-
-Run the launcher from the repository root after installing the Python STG dependencies:
+Run the fixed-GPU software reconstruction from the repository root after building the reconfigurable backend and installing the Python plotting dependencies:
 
 ```bash
 ./simulation/expert_parallel/run_ep.sh
 ```
 
-Raw `workload*.et` and profiler traces are ignored; the EP launcher, configurations, schedules, and metadata remain tracked.
+By default this generates the 256/512-GPU, EP+TP+DP/EP+DP, and 0/0.5/1/10/50/100-ms cases, writes `fig14_ep_results.csv`, and renders `fig14_ep.pdf`. These are simulated NPUs, not 256 or 512 physical GPUs. The 0-ms row is EPS (no OCS delay); positive rows use the reconfigurable backend with the requested delay. The launcher reconstructs the published topology and sweep from generated Chakra traces; the original paper raw EP traces are not part of this checkout, so exact paper data equality is not claimed. Narrow the run while debugging, for example `CLUSTER_SIZES=256 PLACEMENTS=tpdp EP_SIZES_256_TPDP="1 2" EP_LAYERS=1 LATENCIES_MS="0 0.5" ./simulation/expert_parallel/run_ep.sh`.
+
+Raw `workload*.et` and simulator logs are ignored and regenerated under the example directories; the launcher and its fixed-GPU metadata generation remain tracked.
 
 ### Paper Figure 15
 
 Figure 15 is the DP scale-out, performance, cost, and power study: DGX H200 with 400 Gbps links and B200 with 800 Gbps links.
 
 ```bash
-cd simulation/scripts/fig14
+cd simulation/scripts/fig15
 ./run_H200_exps.sh
 ./run_GB200_exps.sh
-./plot_fig14.sh
+./plot_fig15.sh
 ```
 
-The output is `simulation/scripts/fig14/fig14.pdf`. The existing script directory keeps the name `fig14`, but this output corresponds to paper Figure 15; it is not a hardware measurement.
+The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to paper Figure 15; it is not a hardware measurement.
+
+### Paper Figure 4
+
+Figure 4 shows how communication reconfiguration affects computation windows. Panels (a-c) use trace analysis; panel (d) uses ASTRA-Sim for strong scaling. The original paper traces are not included, so panels (a-c) require those traces to be available locally.
+
+Scripts: [plot_transition_cdf.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/plot_transition_cdf.py), [trace_timing_gap.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/trace_timing_gap.py), [timing_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/timing_gap_deepseek_236b_256gpu.py), [comm_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/comm_gap_deepseek_236b_256gpu.py), and [ASTRA-Sim workload generator](https://github.com/opusfabric/Opus/blob/main/simulation/reconfig_backend/run_stg_exp_fg_pp.sh).
+
+Run the trace analysis after placing the original `rank*_trace.json` files in `evaluation/deepseek-236b-256/`:
+
+```bash
+cd evaluation/deepseek-236b-256
+python3 trace_timing_gap.py > trace_timing_gap.txt
+python3 timing_gap_deepseek_236b_256gpu.py > timing_gap_model.txt
+python3 comm_gap_deepseek_236b_256gpu.py > comm_gap_model.txt
+python3 plot_transition_cdf.py
+```
+
+The plotting script writes `transition_cdf_combined.png` and `transition_cdf_per_pair.png`; the other commands write text reports. For the ASTRA-Sim strong-scaling inputs, run the following inside the Section 3 Docker container after building the simulator:
+
+```bash
+for dp in 16 32 64 128; do
+  DP="${dp}" TP=32 PP=4 EP=1 BATCH=15360 NS=96 SEQ_LEN=4096 \
+  SCALE_OUT_SWEEPS=50 MIXED_PRECISION=0 \
+  ./simulation/reconfig_backend/run_stg_exp_fg_pp.sh
+
+  case_dir="simulation/reconfig_backend/examples/stg_dp${dp}_pp4_tp32_batch_15360_mb-1_96stack_seq4096_50BW"
+  python3 simulation/reconfig_backend/examples/helpers/run_helper.py "${case_dir}" \
+    --reconfig-times 0 --output figure4d_results.txt
+done
+```
+
+The four result directories contain ASTRA-Sim outputs for 2048, 4096, 8192, and 16384 simulated NPUs. The paper-specific frontier traces and final plotting script are not included.
+
+### Paper Figure 5
+
+Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Util = Tcompute / (Tcompute + Tnon_overlap_comm + Tstall)`, with `Tstall = sum_i max(0, Treconfig - Twindow_i)`. It evaluates OCS reconfiguration latencies of 0, 1, 5, 10, 50, 100, 250, 500, 750, and 1000 ms for the four frontier scales. Use the rounded median windows 187, 94, 47, and 24 ms as a sanity check for 2048, 4096, 8192, and 16384 GPUs. The paper conclusion is that sub-10-ms OCS reconfiguration preserves high utilization, while latency comparable to or above the work window produces visible stalls. This is a derived software calculation and does not require a physical OCS.
+
 
 ### Other paper figures and archived artifacts
 
-We list the figures that require identical hardware environments to replicate here.
+These entries are ordered by figure number. Links point to files or directories that are present in this checkout. The archived notebooks and CSVs are useful for checking communication patterns and trends; a fresh raw emulation requires the original Slingshot/NCCL environment.
 
-| Paper material | Artifact pointer | Reproduction status |
+| Paper figure/material | Artifact pointer | Reproduction status |
 | --- | --- | --- |
-| Emulation latency and provisioning results, including the configurations behind Figures 10 and 11 | `evaluation/llama-3-3d-16-latency`, `evaluation/llama-3-3d-64-latency`, `evaluation/deepseek_v3_16b-2d-16-latency`, `evaluation/deepseek_v3_16b-3d-16-latency` | Archived CSVs, communication patterns, and plotting notebooks. Requires Slingshot/NCCL to regenerate raw runs |
-| 128-GPU Llama emulation inputs | `evaluation/llama-3-70b-128` | Communication-pattern notebooks and rank logs are present. Full training rerun requires the original GPU/model environment |
-| Hardware prototype and OCS link recovery | Paper Section 5.1 and the hardware/testbed environment files | Overview only. A Polatis OCS and compatible firmware are needed |
-| Energy/cost topology plots | `evaluation/energy-analysis/topology/plot.ipynb` and the committed PDFs | Notebook plus archived rendered PDFs |
-| Motivation and frontier/window studies, Figures 4–6 and 16 | simulator helpers, archived outputs, and paper captions | Archived values |
+| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only; reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages |
+| Figures 10 and 11: emulation latency, provisioning, and control-plane overhead | [Llama 3D, 16-GPU archive](evaluation/llama-3-3d-16-latency/), [Llama 3D, 64-GPU archive](evaluation/llama-3-3d-64-latency/), [DeepSeek 2D archive](evaluation/deepseek_v3_16b-2d-16-latency/), and [DeepSeek 3D archive](evaluation/deepseek_v3_16b-3d-16-latency/) | CSVs, communication patterns, notebooks, and rendered plots are archived; raw rerun requires Slingshot/NCCL |
 
-For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful as a reference for checking that a fresh plot has the same axes and trend.
+For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful for checking that a fresh plot has the same axes and trend.

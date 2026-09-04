@@ -50,4 +50,4 @@ Inside the container:
 ./simulation/scripts/run_example.sh
 ```
 
-For Slurm, replace Docker with the site-approved runtime such as Shifter, Enroot, Apptainer, or Charliecloud. Expose the GPUs and RDMA devices for emulation; the CPU simulator can run without GPU passthrough.
+For Slurm, follow Section 2 of the root README for either Docker or the site-approved runtime such as Shifter, Enroot, Apptainer, or Charliecloud. Expose the GPUs and RDMA devices for emulation; the CPU simulator can run without GPU passthrough.
