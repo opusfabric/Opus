@@ -2,7 +2,11 @@
 #include "reconfigurable/TopologyManager.h"
 #include <cassert>
 #include <algorithm>
+#include <functional>
 #include <iostream>
+#include <queue>
+#include <random>
+#include <vector>
 
 using namespace NetworkAnalytical;
 using namespace NetworkAnalyticalReconfigurable;
@@ -21,6 +25,7 @@ TopologyManager::TopologyManager(int npus_count, int devices_count, EventQueue* 
     assert(devices_count >= npus_count);
 
     reconfiguring = false;
+    draining = false;
 
     // Initialize the topology
     topology = std::make_shared<Topology>(npus_count, devices_count);
@@ -71,7 +76,8 @@ bool TopologyManager::is_reconfiguring() const noexcept {
 }
 
 void TopologyManager::increment_callback() noexcept {
-    if(!reconfiguring){
+    if (!reconfiguring ||
+        (routing_algorithm == RoutingAlgorithm::OPUS && !draining)) {
         Link::num_drained_links = 0;
         return;
     }
@@ -86,38 +92,71 @@ void TopologyManager::increment_callback() noexcept {
     }
 
     Link::num_drained_links = 0;
-    reconfiguring = false;
+    if (routing_algorithm == RoutingAlgorithm::OPUS) {
+        draining = false;
+    } else {
+        reconfiguring = false;
+    }
 
     // All links have been drained, increment the topology iteration
     std::cout << "Drained Network, reconfiguring to TOPO ITERATION #" << topology_iteration << std::endl;
-    for(auto row:bandwidths){
-        for(auto bw: row){
-            std::cout << bw << " ";
-        }
-        std::cout << std::endl;
-    }
-
 
     for (int i = 0; i < devices_count; ++i) {
         auto device = topology->get_device(i);
         // std::vector<Route> routes;
         // Create a route for each device
         std::vector<Bandwidth> bw_device = bandwidths[i];
-        std::cout << "BW Vector for device " << i << std::endl;
-        for (auto bw: bw_device){
-            std::cout << bw << " ";
+        // Device::reconfigure takes one Route per destination.  The chunk's
+        // actual route is chosen at send time by TopologyManager::route(), so
+        // we just pass the first ECMP candidate here (currently unused inside
+        // Device, but kept for potential rerouting support).
+        std::vector<Route> single_routes(devices_count);
+        for (int j = 0; j < devices_count; ++j) {
+            if (!ecmp_routes[i][j].empty())
+                single_routes[j] = ecmp_routes[i][j][0];
         }
-        std::cout << std::endl;
-
-        device->reconfigure(bandwidths[i], precomputed_routes[i], latencies[i], reconfig_time);
+        device->reconfigure(bandwidths[i], single_routes, latencies[i], reconfig_time);
     }
+
+    if (routing_algorithm == RoutingAlgorithm::OPUS) {
+        if (reconfig_time == 0) {
+            finish_reconfiguration();
+        } else {
+            event_queue->schedule_event(
+                event_queue->get_current_time() + reconfig_time + 2,
+                TopologyManager::finish_reconfiguration, this);
+        }
+    }
+}
+
+void TopologyManager::finish_reconfiguration(void* arg) noexcept {
+    assert(arg != nullptr);
+    static_cast<TopologyManager*>(arg)->finish_reconfiguration();
+}
+
+void TopologyManager::finish_reconfiguration() noexcept {
+    reconfiguring = false;
+    draining = false;
+    Link::num_drained_links = 0;
 }
 
 bool TopologyManager::reconfigure(std::vector<std::vector<Bandwidth>> bandwidths,
                                std::vector<std::vector<Latency>> latencies, Latency reconfig_time, int topo_id, int skip_inflight) noexcept {
     
     if (topo_id == cur_topo_id) {
-        std::cout << "\033[1;31mTM: Already in the requested topology and reconfiguring, ignoring reconfiguration request to topo_id " << topo_id << "\033[0m" << std::endl;
+        if (routing_algorithm == RoutingAlgorithm::OPUS &&
+            is_reconfiguring() && skip_inflight == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    if (routing_algorithm == RoutingAlgorithm::OPUS &&
+        cur_topo_id != -1 && !is_reconfiguring() &&
+        bandwidths == this->bandwidths &&
+        latencies == this->latencies) {
+        this->cur_topo_id = topo_id;
+        this->reconfig_time = reconfig_time;
         return true;
     }
 
@@ -135,13 +174,6 @@ bool TopologyManager::reconfigure(std::vector<std::vector<Bandwidth>> bandwidths
 
     printf("\n\033[1;31mTM: !!! TIME: %ld Reconfig to topo_id: %d, Devices count: %d, NPUs count: %d, inflight_coll %d\033[0m\n", event_queue->get_current_time(), topo_id, devices_count, npus_count, inflight_coll);
     printf("\033[1;31mTM: bandwidths size: %zu, latencies size: %zu\033[0m\n\n", bandwidths.size(), latencies.size());
-    for(auto row:bandwidths){
-        for(auto bw: row){
-            std::cout << bw << " ";
-        }
-        std::cout << std::endl;
-    }
-
     assert(bandwidths.size() == devices_count);
     assert(latencies.size() == devices_count);
     assert(!reconfiguring);
@@ -163,6 +195,7 @@ bool TopologyManager::reconfigure(std::vector<std::vector<Bandwidth>> bandwidths
     // printf("TM: Reconfiguring topology with %d devices and %d NPUs and reconfig time %f.\n", devices_count, npus_count, reconfig_time);
 
     reconfiguring = true;
+    draining = routing_algorithm == RoutingAlgorithm::OPUS;
     this->cur_topo_id = topo_id;
     topology_iteration++;
     drain_network();
@@ -183,42 +216,35 @@ void TopologyManager::set_reconfig_latency(Latency latency) noexcept {
     this->reconfig_time = latency;
 }
 
-void TopologyManager::precomputeRoutes() noexcept {
-    // TODO: add other routing algorithms 
-    // Adjacency list
-    std::vector<std::vector<int>> adj(devices_count);
-    for (int i = 0; i < devices_count; ++i) {
-        for (int j = 0; j < devices_count; ++j) {
-            if (i != j && bandwidths[i][j] > 0) adj[i].push_back(j);
-        }
-    }
+void TopologyManager::set_routing_algorithm(RoutingAlgorithm algo) noexcept {
+    routing_algorithm = algo;
+}
 
-    for (auto& v : adj) {
-        sort(v.begin(), v.end());
-        v.erase(unique(v.begin(), v.end()), v.end());
-    }
+// ---------------------------------------------------------------------------
+// BFS routing: shortest hop count, single path per (src, dst).
+// ---------------------------------------------------------------------------
+static void bfs_routes(
+        int N,
+        const std::vector<std::vector<Bandwidth>>& bw,
+        const std::shared_ptr<Topology>& topo,
+        std::vector<std::vector<std::vector<Route>>>& out) {
 
+    out.assign(N, std::vector<std::vector<Route>>(N));
 
-    precomputed_routes = std::vector<std::vector<Route>>(devices_count, std::vector<Route>(devices_count));
-
-    // BFS
     const int INF = 1e9;
-    std::vector<int> dist(devices_count), parent(devices_count);
+    std::vector<int> dist(N), parent(N);
     std::queue<int> q;
 
-    for (int s = 0; s < devices_count; ++s) {
-        // BFS init
+    for (int s = 0; s < N; ++s) {
         fill(dist.begin(), dist.end(), INF);
         fill(parent.begin(), parent.end(), -1);
-        while (!q.empty()) q.pop();
         dist[s] = 0;
         q.push(s);
 
-        // BFS
         while (!q.empty()) {
             int u = q.front(); q.pop();
-            for (int v : adj[u]) {
-                if (dist[v] == INF) {
+            for (int v = 0; v < N; ++v) {
+                if (v != u && bw[u][v] > 0 && dist[v] == INF) {
                     dist[v] = dist[u] + 1;
                     parent[v] = u;
                     q.push(v);
@@ -226,19 +252,135 @@ void TopologyManager::precomputeRoutes() noexcept {
             }
         }
 
-        // Reconstruct a path s -> t for all t
-        for (int t = 0; t < devices_count; ++t) {
+        for (int t = 0; t < N; ++t) {
             if (s == t) {
-                precomputed_routes[s][t] = {topology->get_device(s)};
+                out[s][t] = {{topo->get_device(s)}};
             } else if (parent[t] == -1) {
-                precomputed_routes[s][t] = {}; // Unreachable, stub route
+                out[s][t] = {};
             } else {
                 Route path;
-                for (int cur = t; cur != -1; cur = parent[cur]) path.push_back(topology->get_device(cur));
-                reverse(path.begin(), path.end());
-                precomputed_routes[s][t] = move(path);
+                for (int cur = t; cur != -1; cur = parent[cur])
+                    path.push_back(topo->get_device(cur));
+                std::reverse(path.begin(), path.end());
+                out[s][t] = {std::move(path)};
             }
         }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// OPUS routing: hierarchical Dijkstra + ECMP.
+//
+// Edge weights:
+//   intra-node edge (BW >= intra_threshold): cost 1
+//   inter-node edge (0 < BW < intra_threshold): cost N+1
+//
+// The threshold is set to half of the maximum non-zero BW, so that the
+// high-speed intra-node fabric is always preferred for lateral moves while
+// the algorithm minimises the number of lower-speed scale-out hops.
+//
+// All paths achieving the same minimum Dijkstra cost are enumerated via
+// predecessor-based DFS.  route() picks one uniformly at random (ECMP).
+// ---------------------------------------------------------------------------
+static void opus_routes(
+        int N,
+        const std::vector<std::vector<Bandwidth>>& bw,
+        const std::shared_ptr<Topology>& topo,
+        std::vector<std::vector<std::vector<Route>>>& out) {
+
+    // Intra/inter threshold: half the peak BW
+    float max_bw = 0.0f;
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            if (bw[i][j] > max_bw) max_bw = bw[i][j];
+    const float intra_threshold = max_bw * 0.5f;
+
+    const int INTRA_W = 1;
+    const int INTER_W = N + 1;   // one fewer scale-out hop always wins
+    const int INF     = 1e9;
+
+    out.assign(N, std::vector<std::vector<Route>>(N));
+
+    using PQ = std::priority_queue<std::pair<int,int>,
+                                   std::vector<std::pair<int,int>>,
+                                   std::greater<std::pair<int,int>>>;
+
+    std::vector<int>              dist(N);
+    std::vector<std::vector<int>> preds(N);
+
+    for (int s = 0; s < N; ++s) {
+        fill(dist.begin(), dist.end(), INF);
+        for (auto& p : preds) p.clear();
+        dist[s] = 0;
+
+        PQ pq;
+        pq.push({0, s});
+
+        while (!pq.empty()) {
+            auto [d, u] = pq.top(); pq.pop();
+            if (d > dist[u]) continue;
+            for (int v = 0; v < N; ++v) {
+                if (v == u || bw[u][v] <= 0) continue;
+                int w  = (bw[u][v] >= intra_threshold) ? INTRA_W : INTER_W;
+                int nd = dist[u] + w;
+                if (nd < dist[v]) {
+                    dist[v] = nd;
+                    preds[v] = {u};
+                    pq.push({nd, v});
+                } else if (nd == dist[v]) {
+                    preds[v].push_back(u);
+                }
+            }
+        }
+
+        // Enumerate a bounded set of shortest paths via predecessor DFS
+        // (acyclic: dist strictly decreases toward s). Highly symmetric
+        // scale-out topologies can have exponentially many equal-cost paths;
+        // keeping a small ECMP candidate set preserves route diversity without
+        // making precompute dominate the simulation.
+        constexpr std::size_t kMaxEcmpRoutes = 1;
+        std::vector<int> path_ids;
+        path_ids.reserve(8);
+
+        std::function<void(int, std::vector<Route>&)> dfs =
+            [&](int cur, std::vector<Route>& paths) {
+                if (paths.size() >= kMaxEcmpRoutes) return;
+                path_ids.push_back(cur);
+                if (cur == s) {
+                    Route r;
+                    for (int i = (int)path_ids.size() - 1; i >= 0; --i)
+                        r.push_back(topo->get_device(path_ids[i]));
+                    paths.push_back(std::move(r));
+                } else {
+                    for (int pred : preds[cur]) {
+                        dfs(pred, paths);
+                        if (paths.size() >= kMaxEcmpRoutes) break;
+                    }
+                }
+                path_ids.pop_back();
+            };
+
+        for (int t = 0; t < N; ++t) {
+            if (s == t) {
+                out[s][t] = {{topo->get_device(s)}};
+            } else if (dist[t] == INF) {
+                out[s][t] = {};
+            } else {
+                std::vector<Route> paths;
+                dfs(t, paths);
+                out[s][t] = std::move(paths);
+            }
+        }
+    }
+}
+
+void TopologyManager::precomputeRoutes() noexcept {
+    if (routing_algorithm == RoutingAlgorithm::OPUS) {
+        std::cout << "[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)" << std::endl;
+        opus_routes(devices_count, bandwidths, topology, ecmp_routes);
+    } else {
+        std::cout << "[TopologyManager] routing=bfs (shortest-hop BFS)" << std::endl;
+        bfs_routes(devices_count, bandwidths, topology, ecmp_routes);
     }
 }
 
@@ -266,17 +408,35 @@ void TopologyManager::send(std::unique_ptr<Chunk> chunk) noexcept {
 }
 
 Route TopologyManager::route(DeviceId src, DeviceId dest) const noexcept {
-    // Ensure src and dest are valid
     assert(src >= 0 && src < npus_count);
     assert(dest >= 0 && dest < npus_count);
 
-    // Without any host forwarding.
-    Route route;
-    route.push_back(topology->get_device(src));
+    if (routing_algorithm != RoutingAlgorithm::OPUS) {
+        Route direct;
+        direct.push_back(topology->get_device(src));
+        direct.push_back(topology->get_device(dest));
+        return direct;
+    }
 
-    // Create a route that includes the src and dest devices
-    route.push_back(topology->get_device(dest));
-    return route;
+    if (!ecmp_routes.empty() &&
+        src  < (int)ecmp_routes.size() &&
+        dest < (int)ecmp_routes[src].size() &&
+        !ecmp_routes[src][dest].empty()) {
+
+        const auto& candidates = ecmp_routes[src][dest];
+        if (candidates.size() == 1) return candidates[0];
+
+        // ECMP: pick uniformly at random among equal-cost paths.
+        static thread_local std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<std::size_t> pick(0, candidates.size() - 1);
+        return candidates[pick(rng)];
+    }
+
+    // Fallback before first reconfiguration: direct 2-hop route.
+    Route r;
+    r.push_back(topology->get_device(src));
+    r.push_back(topology->get_device(dest));
+    return r;
 }
 
 void TopologyManager::report_link_stats(std::ofstream& file) noexcept {

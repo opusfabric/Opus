@@ -24,7 +24,7 @@ COMM_GROUP="${EXAMPLE_DIR:?}/comm_group.json"
 CIRCUIT_SCHEDULES="${EXAMPLE_DIR:?}/schedules.txt"
 
 # start
-echo "[ASTRA-sim] Compiling ASTRA-sim with the Analytical Network Backend..."
+echo "[ASTRA-sim] Compiling ASTRA-sim with the Reconfigurable Network Backend..."
 echo ""
 
 # Compile
@@ -32,7 +32,7 @@ echo ""
 
 echo ""
 echo "[ASTRA-sim] Compilation finished."
-echo "[ASTRA-sim] Running ASTRA-sim Example with Analytical Network Backend..."
+echo "[ASTRA-sim] Running ASTRA-sim Example with Reconfigurable Network Backend..."
 echo ""
 
 # run ASTRA-sim

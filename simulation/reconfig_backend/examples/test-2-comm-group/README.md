@@ -20,6 +20,6 @@ https://github.com/mlcommons/chakra/wiki/Running-Simulation-with-Chakra
 ```
 docker run --rm --gpus all  -it -v "$(pwd)":/app/astra-sim -w /app/astra-sim astra-env bash
 
-cd examples/test
-./run_network_analytical.sh
+cd simulation/reconfig_backend/examples/test-2-comm-group
+./run_network_reconfigurable.sh
 ```

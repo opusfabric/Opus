@@ -29,7 +29,7 @@ class Ring : public Algorithm {
     bool iteratable();
     virtual int get_non_zero_latency_packets();
     void insert_packet(Callable* sender);
-    bool ready();
+    virtual bool ready();
     void exit();
 
     RingTopology::Direction dimension;

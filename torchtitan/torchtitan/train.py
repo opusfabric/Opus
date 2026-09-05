@@ -603,6 +603,10 @@ class Trainer(torch.distributed.checkpoint.stateful.Stateful):
             data_iterator = self.batch_generator(self.dataloader)
             while self.should_continue_training():
                 self.step += 1
+                if job_config.training.enable_opus_backend:
+                    import opus
+
+                    opus.set_iteration(self.step)
                 self.gc_handler.run(self.step)
                 try:
                     self.train_step(data_iterator)

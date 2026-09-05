@@ -7,6 +7,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
+#include <ifaddrs.h>
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -21,6 +23,9 @@
 #include <ATen/cuda/CUDAEvent.h>
 // #include <nvtx3/nvtx3.hpp> 
 #include <netinet/tcp.h>
+#include <fstream>
+#include <set>
+#include <tuple>
 #include "util.hpp"
 
 
@@ -143,6 +148,79 @@ static void getHostName(char* hostname, int maxlen) {
   }
 }
 
+static std::string trim_host_token(std::string value) {
+  const auto first = value.find_first_not_of(" \t\r\n");
+  if (first == std::string::npos) return {};
+  const auto last = value.find_last_not_of(" \t\r\n");
+  return value.substr(first, last - first + 1);
+}
+
+static std::string short_host_name(const std::string& value) {
+  const std::string token = trim_host_token(value);
+  const auto dot = token.find(46);
+  // Do not truncate dotted IPv4 addresses.
+  if (dot == std::string::npos ||
+      token.find_first_not_of("0123456789.") == std::string::npos) {
+    return token;
+  }
+  return token.substr(0, dot);
+}
+
+static bool resolve_ipv4(const std::string& name, in_addr& address) {
+  addrinfo hints{};
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+  addrinfo* result = nullptr;
+  if (getaddrinfo(name.c_str(), nullptr, &hints, &result) != 0 || result == nullptr) {
+    return false;
+  }
+
+  const auto* resolved = reinterpret_cast<const sockaddr_in*>(result->ai_addr);
+  address = resolved->sin_addr;
+  freeaddrinfo(result);
+  return true;
+}
+
+static bool token_matches_local_interface(const std::string& token) {
+  in_addr token_address{};
+  if (!resolve_ipv4(token, token_address)) return false;
+
+  ifaddrs* interfaces = nullptr;
+  if (getifaddrs(&interfaces) != 0) return false;
+  bool matches = false;
+  for (const ifaddrs* current = interfaces; current != nullptr; current = current->ifa_next) {
+    if (current->ifa_addr == nullptr || current->ifa_addr->sa_family != AF_INET) continue;
+    const auto* address = reinterpret_cast<const sockaddr_in*>(current->ifa_addr);
+    if (token_address.s_addr == address->sin_addr.s_addr) {
+      matches = true;
+      break;
+    }
+  }
+  freeifaddrs(interfaces);
+  return matches;
+}
+
+static bool host_token_matches(const std::string& token,
+                               const std::vector<std::string>& local_names) {
+  for (const auto& local_name : local_names) {
+    if (token == local_name || short_host_name(token) == short_host_name(local_name)) {
+      return true;
+    }
+  }
+
+  in_addr token_address{};
+  if (!resolve_ipv4(token, token_address)) return false;
+  for (const auto& local_name : local_names) {
+    in_addr local_address{};
+    if (resolve_ipv4(local_name, local_address) &&
+        token_address.s_addr == local_address.s_addr) {
+      return true;
+    }
+  }
+  if (token_matches_local_interface(token)) return true;
+  return false;
+}
+
 void setSocketReuse(int sockfd) {
     int opt = 1;
     if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
@@ -231,6 +309,133 @@ int createClientSocket(const char *server_ip, int port) {
 
 namespace c10d {
 
+namespace {
+std::atomic<int> opus_iteration{0};
+std::mutex profile_mutex;
+long long profile_sequence = 0;
+std::set<int> profile_iterations;
+bool profile_iterations_initialized = false;
+
+struct ScheduleEntry {
+  int iteration, trigger_backend, trigger_counter, target_backend, target_counter;
+};
+std::mutex schedule_mutex;
+std::mutex scheduled_request_mutex;
+std::vector<ScheduleEntry> replay_schedule;
+std::string loaded_schedule_file;
+
+void initialize_profile_iterations() {
+  std::lock_guard<std::mutex> lock(profile_mutex);
+  if (profile_iterations_initialized) return;
+  const char* value = std::getenv("OPUS_PROFILE_ITERATIONS");
+  std::string iteration_list(value ? value : "1:2:3");
+  std::replace(iteration_list.begin(), iteration_list.end(), ':', ',');
+  std::istringstream input(iteration_list);
+  std::string token;
+  while (std::getline(input, token, ',')) profile_iterations.insert(std::stoi(token));
+  profile_iterations_initialized = true;
+}
+
+void load_replay_schedule(const std::string& file) {
+  std::lock_guard<std::mutex> lock(schedule_mutex);
+  if (loaded_schedule_file == file) return;
+  std::ifstream input(file);
+  if (!input) throw std::runtime_error("Failed to open Opus schedule: " + file);
+  replay_schedule.clear();
+  std::string line;
+  while (std::getline(input, line)) {
+    if (line.empty() || line[0] == '#') continue;
+    std::replace(line.begin(), line.end(), ',', ' ');
+    std::istringstream row(line);
+    ScheduleEntry entry;
+    if (!(row >> entry.iteration >> entry.trigger_backend >> entry.trigger_counter
+              >> entry.target_backend >> entry.target_counter))
+      throw std::runtime_error("Invalid Opus schedule row: " + line);
+    replay_schedule.push_back(entry);
+  }
+  loaded_schedule_file = file;
+}
+} // namespace
+
+void BackendOpus::setIteration(int iteration) {
+  opus_iteration.store(iteration, std::memory_order_release);
+}
+
+void BackendOpus::record_profile_event(const std::string& coll_type, int counter) {
+  initialize_profile_iterations();
+  const int iteration = opus_iteration.load(std::memory_order_acquire);
+  if (!profile_iterations.count(iteration)) return;
+  const char* directory = std::getenv("OPUS_PROFILE_DIR");
+  if (!directory) throw std::runtime_error("OPUS_PROFILE_DIR is required in profile mode");
+  std::lock_guard<std::mutex> lock(profile_mutex);
+  std::ostringstream path;
+  path << directory << "/events_" << nodeRank_ << "_rank" << localRank_ << ".csv";
+  std::ofstream output(path.str(), std::ios::app);
+  int controller_backend = backendId_;
+  int controller_counter = counter;
+  if (is_pp_backend_) controller_backend += PP_BACKEND_INTERVAL * (counter / PP_INTERVAL);
+  else controller_counter += pp_stage_ * PP_INTERVAL;
+  output << iteration << ',' << profile_sequence++ << ',' << backendId_ << ','
+         << counter << ',' << (is_pp_backend_ ? "PP" : "DP") << ',' << coll_type << ','
+         << controller_backend << ',' << controller_counter << '\n';
+}
+
+bool BackendOpus::scheduled_transition(int iteration, int backend, int counter,
+                                       int& target_backend, int& target_counter) {
+  const char* base = std::getenv("OPUS_SCHEDULE_PATH");
+  if (!base) return false;
+  std::ostringstream path;
+  path << base << "_" << nodeRank_ << "_rank" << localRank_ << ".csv";
+  load_replay_schedule(path.str());
+  std::lock_guard<std::mutex> lock(schedule_mutex);
+  for (const auto& entry : replay_schedule) {
+    if (entry.iteration == iteration && entry.trigger_backend == backend &&
+        entry.trigger_counter == counter) {
+      target_backend = entry.target_backend;
+      target_counter = entry.target_counter;
+      return true;
+    }
+  }
+  return false;
+}
+
+void BackendOpus::send_scheduled_transition(int target_backend, int target_counter) {
+  // All BackendOpus instances in a process share the persistent controller
+  // socket, so a request and its acknowledgement must be one serialized unit.
+  std::lock_guard<std::mutex> request_lock(scheduled_request_mutex);
+  const int communicator_backend = target_backend % PP_BACKEND_INTERVAL;
+  if (communicator_backend < 0 ||
+      communicator_backend >= static_cast<int>(backendId_hexId_map.size()) ||
+      backendId_hexId_map[communicator_backend].empty())
+    throw std::runtime_error("Scheduled target backend is not initialized: " + std::to_string(target_backend));
+  const std::string& target_hex = backendId_hexId_map[communicator_backend];
+  std::string msg = "CONFIG_REQ;" + target_hex + "," + std::to_string(target_backend) +
+                    "," + std::to_string(target_counter) + "\n";
+  net::send(ctrlSock_, msg.data(), msg.size(), 0);
+  customPrint("SCHEDULE CONFIG_REQ target backend: " + std::to_string(target_backend) +
+              ", Idx: " + std::to_string(target_counter), rank_, backendId_);
+  char buf[512];
+  std::string accum;
+  auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(10);
+  while (std::chrono::steady_clock::now() < deadline) {
+    ssize_t n = net::recv(ctrlSock_, buf, sizeof(buf), 0);
+    if (n > 0) accum.append(buf, n);
+    else if (n == 0) return;
+    else if (errno == EAGAIN || errno == EWOULDBLOCK) continue;
+    else return;
+    size_t pos;
+    while ((pos = accum.find('\n')) != std::string::npos) {
+      std::string line = accum.substr(0, pos);
+      accum.erase(0, pos + 1);
+      if (line == "CONFIG_ACK;" + target_hex) {
+        customPrint("SCHEDULE CONFIG_ACK", rank_, backendId_);
+        return;
+      }
+    }
+  }
+  throw std::runtime_error("Scheduled CONFIG_ACK timeout");
+}
+
 
 bool WorkOpus::isCompleted() {
   cudaError_t status = cudaEventQuery(event_);
@@ -278,6 +483,18 @@ int getOrInitCtlSock() {
   if (!persistentCtlSockInitialized) {
     struct sockaddr_in controller_addr;
     int port = 1234;
+    if (const char* port_env = std::getenv("OPUS_CONTROLLER_PORT")) {
+      try {
+        port = std::stoi(port_env);
+      } catch (const std::exception&) {
+        printf("[CTL Init] Invalid OPUS_CONTROLLER_PORT; using 1234\n");
+        port = 1234;
+      }
+    }
+    if (port < 1 || port > 65535) {
+      printf("[CTL Init] OPUS_CONTROLLER_PORT must be between 1 and 65535\n");
+      return -1;
+    }
 
     persistentCtlSock = socket(AF_INET, SOCK_STREAM, 0);
     if (persistentCtlSock < 0) {
@@ -854,6 +1071,44 @@ void BackendOpus::pre_coll(std::string coll_type, int input_size, int output_siz
   
 
   customPrint(counterStream.str().c_str(), rank_, backendId_);
+
+  int issued_counter = collectiveCounter_main_;
+  if (src_rank > rank_ || dst_rank > rank_) {
+    issued_counter = up_cnt_main_ + get_pp_base(src_rank, dst_rank, rank_) * PP_INTERVAL;
+  } else if (src_rank != -1 || dst_rank != -1) {
+    issued_counter = down_cnt_main_ + get_pp_base(src_rank, dst_rank, rank_) * PP_INTERVAL;
+  }
+  const bool schedulable = network_type != 0 && domain_ == 0 &&
+                           !(is_pp_backend_ && coll_type == "allreduce");
+  if (mode == 3 && schedulable) record_profile_event(coll_type, issued_counter);
+
+  int target_backend = -1;
+  int target_counter = -1;
+  const bool has_schedule = std::getenv("OPUS_SCHEDULE_PATH") != nullptr;
+  if (mode == 1 && has_schedule) {
+    std::unique_lock<std::mutex> lock(topo_mutex_);
+    topo_cv_.wait(lock, [] { return topo_ready; });
+  }
+  if (schedulable && (mode == 0 || mode == 1) && has_schedule &&
+      scheduled_transition(opus_iteration.load(), backendId_, issued_counter,
+                           target_backend, target_counter)) {
+    if (mode == 0) {
+      send_scheduled_transition(target_backend, target_counter);
+    } else {
+      {
+        std::lock_guard<std::mutex> lock(topo_mutex_);
+        topo_ready = false;
+      }
+      {
+        std::lock_guard<std::mutex> lock(preMutex_);
+        preQueue_.push([this, target_backend, target_counter]() {
+          send_scheduled_transition(target_backend, target_counter);
+          signalTopoReady();
+        });
+      }
+      preCV_.notify_one();
+    }
+  }
   
   if (is_pp_backend_) {
     if (src_rank > rank_ || dst_rank > rank_) {
@@ -897,7 +1152,9 @@ void BackendOpus::pre_coll(std::string coll_type, int input_size, int output_siz
     int src_rank;
     int dst_rank;
   };
-  if (mode == 1) {
+  if (mode == 3 || has_schedule) {
+    return;
+  } else if (mode == 1) {
     // provisioning mode
     if (use_cuda_stream_ == 1 || use_cuda_stream_ == 3) {
       CallbackData* data = new CallbackData{this, src_rank, dst_rank};
@@ -1117,38 +1374,51 @@ BackendOpus::BackendOpus(int rank, int size, c10::intrusive_ptr<Options> options
 
   // TODO dynamically select server IP using controller
   const char* server_ips_env = std::getenv("SERVER_IPS");
-  const char* hostname_env = std::getenv("HOSTNAME");
-  if (!hostname_env) {
-    throw std::runtime_error("Environment variable HOSTNAME not set");
+  if (server_ips_env == nullptr || *server_ips_env == 0) {
+    throw std::runtime_error("SERVER_IPS must contain a comma-separated host or IPv4 address list");
   }
 
-  std::string hostname(hostname_env);
+  std::vector<std::string> configured_server_ips;
   std::istringstream server_ips_stream(server_ips_env);
   std::string ip;
-  nodeRank_ = -1;
-  int index = 0;
-
   while (std::getline(server_ips_stream, ip, ',')) {
-    if (hostname == ip) {
-      nodeRank_ = index;
-      break;
-    }
-    ++index;
+    ip = trim_host_token(ip);
+    if (!ip.empty()) configured_server_ips.push_back(ip);
+  }
+  if (configured_server_ips.empty()) {
+    throw std::runtime_error("SERVER_IPS must contain at least one host or IPv4 address");
   }
 
+  std::vector<std::string> local_names;
+  char local_hostname[256] = {};
+  if (gethostname(local_hostname, sizeof(local_hostname) - 1) == 0 &&
+      local_hostname[0] != 0) {
+    local_names.emplace_back(local_hostname);
+  }
+  const char* hostname_env = std::getenv("HOSTNAME");
+  if (hostname_env != nullptr && *hostname_env != 0) {
+    local_names.emplace_back(hostname_env);
+  }
+
+  nodeRank_ = -1;
+  for (size_t index = 0; index < configured_server_ips.size(); ++index) {
+    if (host_token_matches(configured_server_ips[index], local_names)) {
+      nodeRank_ = static_cast<int>(index);
+      break;
+    }
+  }
+  // A one-entry list is unambiguously a single-node run. This also supports
+  // Docker, where HOSTNAME is normally a container ID rather than an address.
+  if (nodeRank_ == -1 && configured_server_ips.size() == 1) {
+    nodeRank_ = 0;
+  }
   if (nodeRank_ == -1) {
-    throw std::runtime_error("Hostname not found in SERVER_IPS");
+    throw std::runtime_error(
+        "Local hostname/address was not found in SERVER_IPS; use matching node hostnames or IPv4 addresses");
   }
   customPrint("Node rank: " + std::to_string(nodeRank_), rank_, backendId_);
 
-  if (server_ips_env != nullptr) {
-    SERVER_IPS.clear();
-    std::istringstream iss(server_ips_env);
-    std::string ip;
-    while (std::getline(iss, ip, ',')) {
-      SERVER_IPS.push_back(ip);
-    }
-  }
+  SERVER_IPS = configured_server_ips;
 
   std::string server_ip = SERVER_IPS[0];
   int port = 34567;
@@ -1254,8 +1524,10 @@ BackendOpus::BackendOpus(int rank, int size, c10::intrusive_ptr<Options> options
       mode = 1;
     } else if (mode_str == "no-ctl") {
       mode = 2;
+    } else if (mode_str == "profile") {
+      mode = 3;
     } else {
-      throw std::runtime_error("Invalid MODE environment variable value. Expected 'baseline' or 'provision'.");
+      throw std::runtime_error("Invalid MODE value; expected baseline, provision, no-ctl, or profile");
     }
   }
 
@@ -1273,7 +1545,7 @@ BackendOpus::BackendOpus(int rank, int size, c10::intrusive_ptr<Options> options
     }
   }
 
-  if (mode != 2) {
+  if (mode != 2 && mode != 3 && !std::getenv("OPUS_SCHEDULE_PATH")) {
     populate_comm_stages();
   }
 
@@ -1875,6 +2147,7 @@ c10::intrusive_ptr<Backend> BackendOpus::createBackendOpus(
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("createBackendOpus", &BackendOpus::createBackendOpus);
+  m.def("set_iteration", &BackendOpus::setIteration);
 }
 
 } // namespace c10d

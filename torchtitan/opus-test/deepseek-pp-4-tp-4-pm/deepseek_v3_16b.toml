@@ -19,9 +19,9 @@ enable_wandb = false
 
 [model]
 name = "deepseek_v3"
-flavor = "debugmodel" # test
-# test folder with tokenizer.json, for debug purpose only
-hf_assets_path = "./tests/assets/tokenizer"
+flavor = "16B_A100"
+# The experiment initializes weights locally; only a compatible tokenizer is needed.
+hf_assets_path = "./tests/assets/llama-tokenizer"
 # converters = ["float8"]
 
 [optimizer]

@@ -1,0 +1,56 @@
+source,source_label,ep_size,latency_label,stat,eps_ms,opus_diverge_ms,eps_speedup_vs_opus_diverge,eps_slowdown_vs_opus_diverge
+original,EP + TP + DP,1,500us,max,76927.654,76942.654,1.0002,0.9998
+original,EP + TP + DP,2,500us,max,38706.277,38721.277,1.0004,0.9996
+original,EP + TP + DP,4,500us,max,19584.531,19599.531,1.0008,0.9992
+original,EP + TP + DP,8,500us,max,10024.012,10039.012,1.0015,0.9985
+original,EP + TP + DP,16,500us,max,4932.420,4947.420,1.0030,0.9970
+original,EP + TP + DP,32,500us,max,3064.511,3189.636,1.0408,0.9608
+original,EP + TP + DP,64,500us,max,1883.943,2022.034,1.0733,0.9317
+original,EP + TP + DP,1,1ms,max,76927.654,76957.654,1.0004,0.9996
+original,EP + TP + DP,2,1ms,max,38706.277,38736.277,1.0008,0.9992
+original,EP + TP + DP,4,1ms,max,19584.531,19614.531,1.0015,0.9985
+original,EP + TP + DP,8,1ms,max,10024.012,10054.012,1.0030,0.9970
+original,EP + TP + DP,16,1ms,max,4932.420,4962.420,1.0061,0.9940
+original,EP + TP + DP,32,1ms,max,3064.511,3204.636,1.0457,0.9563
+original,EP + TP + DP,64,1ms,max,1883.943,2037.034,1.0813,0.9248
+original,EP + TP + DP,1,10ms,max,76927.654,77227.654,1.0039,0.9961
+original,EP + TP + DP,2,10ms,max,38706.277,39006.277,1.0078,0.9923
+original,EP + TP + DP,4,10ms,max,19584.531,19884.531,1.0153,0.9849
+original,EP + TP + DP,8,10ms,max,10024.012,10324.012,1.0299,0.9709
+original,EP + TP + DP,16,10ms,max,4932.420,5232.420,1.0608,0.9427
+original,EP + TP + DP,32,10ms,max,3064.511,3474.636,1.1338,0.8820
+original,EP + TP + DP,64,10ms,max,1883.943,2307.034,1.2246,0.8166
+original,EP + TP + DP,1,50ms,max,76927.654,78427.654,1.0195,0.9809
+original,EP + TP + DP,2,50ms,max,38706.277,40206.277,1.0388,0.9627
+original,EP + TP + DP,4,50ms,max,19584.531,21084.531,1.0766,0.9289
+original,EP + TP + DP,8,50ms,max,10024.012,11524.012,1.1496,0.8698
+original,EP + TP + DP,16,50ms,max,4932.420,6432.420,1.3041,0.7668
+original,EP + TP + DP,32,50ms,max,3064.511,4674.636,1.5254,0.6556
+original,EP + TP + DP,64,50ms,max,1883.943,3507.034,1.8615,0.5372
+original,EP + TP + DP,1,100ms,max,76927.654,79927.654,1.0390,0.9625
+original,EP + TP + DP,2,100ms,max,38706.277,41706.277,1.0775,0.9281
+original,EP + TP + DP,4,100ms,max,19584.531,22584.531,1.1532,0.8672
+original,EP + TP + DP,8,100ms,max,10024.012,13024.012,1.2993,0.7697
+original,EP + TP + DP,16,100ms,max,4932.420,7932.420,1.6082,0.6218
+original,EP + TP + DP,32,100ms,max,3064.511,6174.636,2.0149,0.4963
+original,EP + TP + DP,64,100ms,max,1883.943,5007.034,2.6577,0.3763
+scaleout,EP + DP,1,500us,max,76927.654,76942.654,1.0002,0.9998
+scaleout,EP + DP,2,500us,max,38931.740,38946.740,1.0004,0.9996
+scaleout,EP + DP,4,500us,max,19816.455,20763.574,1.0478,0.9544
+scaleout,EP + DP,8,500us,max,10172.945,10766.312,1.0583,0.9449
+scaleout,EP + DP,1,1ms,max,76927.654,76957.654,1.0004,0.9996
+scaleout,EP + DP,2,1ms,max,38931.740,38961.740,1.0008,0.9992
+scaleout,EP + DP,4,1ms,max,19816.455,20778.574,1.0486,0.9537
+scaleout,EP + DP,8,1ms,max,10172.945,10781.312,1.0598,0.9436
+scaleout,EP + DP,1,10ms,max,76927.654,77227.654,1.0039,0.9961
+scaleout,EP + DP,2,10ms,max,38931.740,39231.740,1.0077,0.9924
+scaleout,EP + DP,4,10ms,max,19816.455,21048.574,1.0622,0.9415
+scaleout,EP + DP,8,10ms,max,10172.945,11051.312,1.0863,0.9205
+scaleout,EP + DP,1,50ms,max,76927.654,78427.654,1.0195,0.9809
+scaleout,EP + DP,2,50ms,max,38931.740,40431.740,1.0385,0.9629
+scaleout,EP + DP,4,50ms,max,19816.455,22248.574,1.1227,0.8907
+scaleout,EP + DP,8,50ms,max,10172.945,12251.312,1.2043,0.8304
+scaleout,EP + DP,1,100ms,max,76927.654,79927.654,1.0390,0.9625
+scaleout,EP + DP,2,100ms,max,38931.740,41931.740,1.0771,0.9285
+scaleout,EP + DP,4,100ms,max,19816.455,23748.574,1.1984,0.8344
+scaleout,EP + DP,8,100ms,max,10172.945,13751.312,1.3518,0.7398

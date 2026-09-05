@@ -24,6 +24,7 @@ LICENSE file in the root directory of this source tree.
 #include "astra-sim/system/WorkloadLayerHandlerData.hh"
 #include "astra-sim/system/astraccl/custom_collectives/CustomAlgorithm.hh"
 #include "astra-sim/system/astraccl/native_collectives/collective_algorithm/AllToAll.hh"
+#include "astra-sim/system/astraccl/native_collectives/collective_algorithm/AllToAllv.hh"
 #include "astra-sim/system/astraccl/native_collectives/collective_algorithm/DoubleBinaryTreeAllReduce.hh"
 #include "astra-sim/system/astraccl/native_collectives/collective_algorithm/HalvingDoubling.hh"
 #include "astra-sim/system/astraccl/native_collectives/collective_algorithm/Ring.hh"
@@ -733,19 +734,21 @@ DataSet* Sys::generate_all_reduce(uint64_t size,
 DataSet* Sys::generate_all_to_all(uint64_t size,
                                   vector<bool> involved_dimensions,
                                   CommunicatorGroup* communicator_group,
-                                  int explicit_priority) {
+                                  int explicit_priority,
+                                  AllToAllVLoadMapPtr all2allv_loads) {
     if (communicator_group == nullptr) {
         return generate_collective(size, logical_topologies["AllToAll"],
                                    all_to_all_implementation_per_dimension,
                                    involved_dimensions, ComType::All_to_All,
-                                   explicit_priority, communicator_group);
+                                   explicit_priority, communicator_group,
+                                   all2allv_loads);
     } else {
         CollectivePlan* plan =
             communicator_group->get_collective_plan(ComType::All_to_All);
         return generate_collective(
             size, plan->topology, plan->implementation_per_dimension,
             plan->dimensions_involved, ComType::All_to_All, explicit_priority,
-            communicator_group);
+            communicator_group, all2allv_loads);
     }
 }
 
@@ -794,12 +797,14 @@ DataSet* Sys::generate_collective(
     vector<bool> dimensions_involved,
     ComType collective_type,
     int explicit_priority,
-    CommunicatorGroup* communicator_group) {
+    CommunicatorGroup* communicator_group,
+    AllToAllVLoadMapPtr all2allv_loads) {
     // TODO(jinsun): For custom collective, we do not need the chunk_size here (since the chunk size is already determined)
     // Therefore, we also do not need the 'preferred-dataset-splits' value from the system JSON input. 
     // However, this variable is intertwined deeply in this function so that we cannot remove it for now.
     // Therefore, we have to keep that value in the JSON input. TODO: Refactor and remove. 
     uint64_t chunk_size = determine_chunk_size(size, collective_type);
+    uint64_t all2allv_total_size = size;
     uint64_t recommended_chunk_size = chunk_size;
     int streams = ceil(((double)size) / chunk_size);
     uint64_t remain_size;
@@ -877,7 +882,8 @@ DataSet* Sys::generate_collective(
                                                               collective_type),
                     remain_size, queue.first, queue.second,
                     InjectionPolicy::Normal,
-                    implementation_per_dimension[dim_mapper[dim]]);
+                    implementation_per_dimension[dim_mapper[dim]],
+                    all2allv_loads, all2allv_total_size, remain_size);
                 vect.push_back(phase);
                 remain_size = phase.final_data_size;
             }
@@ -1060,7 +1066,10 @@ CollectivePhase Sys::generate_collective_phase(
     int queue_id,
     RingTopology::Direction direction,
     InjectionPolicy injection_policy,
-    CollectiveImpl* collective_impl) {
+    CollectiveImpl* collective_impl,
+    AllToAllVLoadMapPtr all2allv_loads,
+    uint64_t all2allv_total_size,
+    uint64_t all2allv_chunk_size) {
     if (collective_impl->type == CollectiveImplType::Ring ||
         collective_impl->type == CollectiveImplType::OneRing) {
         CollectivePhase vn(this, queue_id,
@@ -1070,6 +1079,18 @@ CollectivePhase Sys::generate_collective_phase(
         return vn;
     } else if (collective_impl->type == CollectiveImplType::Direct ||
                collective_impl->type == CollectiveImplType::OneDirect) {
+        if (collective_type == ComType::All_to_All && all2allv_loads != nullptr) {
+            CollectivePhase vn(
+                this, queue_id,
+                new AllToAllv(collective_type,
+                              ((DirectCollectiveImpl*)collective_impl)
+                                  ->direct_collective_window,
+                              id, (RingTopology*)topology, data_size,
+                              direction, InjectionPolicy::Normal,
+                              all2allv_loads, all2allv_total_size,
+                              all2allv_chunk_size));
+            return vn;
+        }
         CollectivePhase vn(this, queue_id,
                            new AllToAll(collective_type,
                                         ((DirectCollectiveImpl*)collective_impl)

@@ -20,8 +20,8 @@ enable_wandb = false
 [model]
 name = "llama3"
 flavor = "8B"
-# test folder with tokenizer.json, for debug purpose only
-hf_assets_path = "./tests/assets/tokenizer"
+# Small public Llama-compatible tokenizer downloaded by the artifact setup.
+hf_assets_path = "./tests/assets/llama-tokenizer"
 # converters = ["float8"]
 
 [optimizer]

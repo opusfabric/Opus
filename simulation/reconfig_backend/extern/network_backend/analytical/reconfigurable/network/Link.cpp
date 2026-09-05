@@ -28,7 +28,7 @@ void Link::set_event_queue(std::shared_ptr<EventQueue> event_queue_ptr) noexcept
     Link::event_queue = std::move(event_queue_ptr);
 }
 
-int Link::get_current_time() noexcept {
+EventTime Link::get_current_time() noexcept {
     assert(event_queue != nullptr);
 
     // return current time of the event queue
@@ -127,19 +127,22 @@ unsigned long Link::schedule_chunk_transmission(std::unique_ptr<Chunk> chunk) no
 }
 
 unsigned long Link::reconfigure(Bandwidth bandwidth, Latency latency, Latency reconfig_time) noexcept{
+    const auto current_time = Link::event_queue->get_current_time();
+
+    if (reconfig_time == 0) {
+        if (bandwidth != this->bandwidth || latency != this->latency) {
+            this->bandwidth = bandwidth;
+            this->latency = latency;
+            this->bandwidth_Bpns = bw_GBps_to_Bpns(bandwidth);
+        }
+        return current_time;
+    }
+
     if (bandwidth == this->bandwidth && latency == this->latency) {
-        // std::cout << "No reconfiguration needed" << std::endl;
-        // if(busy) {
-        //     std::cout << "Link is busy during no-op reconfiguration" << std::endl;
-        //     std::cout << "Current time: " << Link::event_queue->get_current_time() << " ns" << std::endl;
-        //     std::cout << "Chunk end time: " << pending_chunk_end_time << " ns" << std::endl;
-        // }
-        set_busy();
-        return Link::event_queue->get_current_time() + 1;
+        return current_time;
     }
 
     // assert(!busy);
-    const auto current_time = Link::event_queue->get_current_time();
     set_busy();
 
     //printf("Reconfiguring link from bandwidth %.2f GB/s to %.2f GB/s and latency %.2f ns to %.2f ns at time %lu ns\n",

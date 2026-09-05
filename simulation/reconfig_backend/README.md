@@ -22,7 +22,7 @@ We encourage community contributions to ASTRA-sim via PRs.
 
 ## Astra-sim++ Setup
 ```
-git submodule update --init --recursive
+# Sources are vendored in this artifact; no submodule checkout is required.
 
 docker build -t astra-sim:latest -f Dockerfile .
 

@@ -41,12 +41,12 @@ TOPOLOGY_COLORS = color_palette("Set2", 3)
 # ══════════════════════════════════════════════════════════════════════════════
 
 def parse_results(filepath):
-    """Parse results_for_sheet_import.txt."""
+    """Parse the EPS and reconfigurable-backend results file."""
     with open(filepath, "r") as f:
         lines = f.readlines()
 
-    analytical = None
-    baseline = None
+    eps = None
+    ideal = None
     reconfig_realtime = {}
     reconfig_preplanned = {}
     section = None
@@ -56,21 +56,21 @@ def parse_results(filepath):
         line = line.strip()
         if not line:
             continue
-        if line == "Analytical":
-            section = "analytical"
+        if line in ("EPS", "Analytical"):
+            section = "eps"
             continue
-        elif line == "Baseline":
-            section = "baseline"
+        if line == "Baseline":
+            section = "ideal"
             continue
-        elif line == "Reconfigurable":
+        if line == "Reconfigurable":
             section = "reconfigurable"
             continue
 
-        parts = line.split("\t")
-        if section == "analytical":
-            analytical = int(parts[1])
-        elif section == "baseline":
-            baseline = int(parts[1])
+        parts = line.split("	")
+        if section == "eps":
+            eps = int(parts[1])
+        elif section == "ideal":
+            ideal = int(parts[1])
         elif section == "reconfigurable":
             latency_str = parts[0]
             value = int(parts[2])
@@ -82,7 +82,7 @@ def parse_results(filepath):
                 reconfig_preplanned[latency_str] = value
             reconfig_count[latency_str] += 1
 
-    return analytical, baseline, reconfig_realtime, reconfig_preplanned
+    return eps, ideal, reconfig_realtime, reconfig_preplanned
 
 
 def find_dp_variants(base_folder, target_bw=None):
@@ -308,7 +308,7 @@ def plot_combined(dp_folder_1, dp_folder_2, latency_str="10 ms",
                         "dp": dp,
                         "num_gpu": dp * pp * tp,
                         "analytical": analytical / 1e9,
-                        "baseline": baseline / 1e9,
+                        "baseline": None if baseline is None else baseline / 1e9,
                         "opus": reconfig_rt[latency_str] / 1e9,
                         "provision": reconfig_pp[latency_str] / 1e9,
                     })
@@ -338,10 +338,11 @@ def plot_combined(dp_folder_1, dp_folder_2, latency_str="10 ms",
                          color=PERF_COLORS["eps"], marker=PERF_MARKERS["eps"],
                          linestyle=PERF_LINESTYLES["eps"], label="EPS", markersize=6, linewidth=1.5,
                          markerfacecolor="none", markeredgecolor=PERF_COLORS["eps"], markeredgewidth=1.5)
-            ax_perf.plot(x_idx, [d["baseline"] for d in raw_data],
-                         color=PERF_COLORS["ideal"], marker=PERF_MARKERS["ideal"],
-                         linestyle=PERF_LINESTYLES["ideal"], label="Ideal", markersize=6, linewidth=1.5,
-                         markerfacecolor="none", markeredgecolor=PERF_COLORS["ideal"], markeredgewidth=1.5)
+            if all(d["baseline"] is not None for d in raw_data):
+                ax_perf.plot(x_idx, [d["baseline"] for d in raw_data],
+                             color=PERF_COLORS["ideal"], marker=PERF_MARKERS["ideal"],
+                             linestyle=PERF_LINESTYLES["ideal"], label="Ideal", markersize=6, linewidth=1.5,
+                             markerfacecolor="none", markeredgecolor=PERF_COLORS["ideal"], markeredgewidth=1.5)
 
         ax_perf.set_xticks(x_positions + bar_width)
         ax_perf.set_ylabel("Latency (s)")

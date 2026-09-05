@@ -1,8 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 OPUS_ROOT="$(realpath ${SCRIPT_DIR:?}/../../..)"
 
-ANALYTICAL_BACKEND="${OPUS_ROOT}/simulation/analytical_backend"
 RECONFIG_BACKEND="${OPUS_ROOT}/simulation/reconfig_backend"
+PYTHON="${PYTHON:-python3}"
 
 PLOT_SCRIPT="${RECONFIG_BACKEND}/examples/helpers/plot_sweep_combined.py"
 
@@ -14,7 +16,7 @@ if [ ! -d "${CENTER_RUN_DIR}" ]; then
 fi
 
 
-python ${PLOT_SCRIPT} ${CENTER_RUN_DIR} --output ${SCRIPT_DIR}/fig13.pdf
+"${PYTHON}" "${PLOT_SCRIPT}" "${CENTER_RUN_DIR}" --output "${SCRIPT_DIR}/fig13.pdf"
 
 if [ ! -f "${SCRIPT_DIR}/fig13.pdf" ]; then
     echo "Error: Expected output file not found at ${SCRIPT_DIR}/fig13.pdf"

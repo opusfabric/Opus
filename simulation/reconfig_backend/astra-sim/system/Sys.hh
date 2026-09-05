@@ -8,6 +8,8 @@ LICENSE file in the root directory of this source tree.
 
 #include <chrono>
 
+#include "astra-sim/system/AllToAllVLoad.hh"
+
 #include "astra-sim/common/AstraNetworkAPI.hh"
 #include "astra-sim/network_frontend/analytical/include/reconfigurable/ReconfigurableNetworkApi.hh"
 #include "astra-sim/common/AstraRemoteMemoryAPI.hh"
@@ -130,7 +132,8 @@ class Sys : public Callable {
     DataSet* generate_all_to_all(uint64_t size,
                                  std::vector<bool> involved_dimensions,
                                  CommunicatorGroup* communicator_group,
-                                 int explicit_priority);
+                                 int explicit_priority,
+                                 AllToAllVLoadMapPtr all2allv_loads = nullptr);
     DataSet* generate_all_gather(uint64_t size,
                                  std::vector<bool> involved_dimensions,
                                  CommunicatorGroup* communicator_group,
@@ -146,14 +149,18 @@ class Sys : public Callable {
         std::vector<bool> dimensions_involved,
         ComType collective_type,
         int explicit_priority,
-        CommunicatorGroup* communicator_group);
+        CommunicatorGroup* communicator_group,
+        AllToAllVLoadMapPtr all2allv_loads = nullptr);
     CollectivePhase generate_collective_phase(ComType collective_type,
                                               BasicLogicalTopology* topology,
                                               uint64_t data_size,
                                               int queue_id,
                                               RingTopology::Direction direction,
                                               InjectionPolicy injection_policy,
-                                              CollectiveImpl* collective_impl);
+                                              CollectiveImpl* collective_impl,
+                                              AllToAllVLoadMapPtr all2allv_loads = nullptr,
+                                              uint64_t all2allv_total_size = 0,
+                                              uint64_t all2allv_chunk_size = 0);
     int break_dimension(int model_parallel_npu_group);
     //---------------------------------------------------------------------------
 

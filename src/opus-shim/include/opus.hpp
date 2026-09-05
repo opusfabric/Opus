@@ -105,6 +105,10 @@ private:
 
     void checkin();
     void populate_comm_stages();
+    void record_profile_event(const std::string& coll_type, int counter);
+    bool scheduled_transition(int iteration, int backend, int counter,
+                              int& target_backend, int& target_counter);
+    void send_scheduled_transition(int target_backend, int target_counter);
     void pre_coll(std::string coll_type = "", int input_size = 0, int output_size = 0, int src_rank = -1, int dst_rank = -1);
 
     bool is_in_comm_stage();
@@ -126,6 +130,8 @@ private:
     };
 
 public:
+
+    static void setIteration(int iteration);
 
     BackendOpus(int rank, int size, c10::intrusive_ptr<Options> options = nullptr);
     ~BackendOpus();

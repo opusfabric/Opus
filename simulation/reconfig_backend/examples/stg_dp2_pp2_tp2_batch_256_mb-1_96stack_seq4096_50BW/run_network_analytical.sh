@@ -29,7 +29,9 @@ echo "[ASTRA-sim] Compiling ASTRA-sim with the Analytical Network Backend..."
 echo ""
 
 # Compile
-"${PROJECT_DIR:?}"/build/astra_analytical/build.sh
+if [[ "${OPUS_SKIP_LEGACY_BUILD:-0}" != "1" ]]; then
+    "${PROJECT_DIR:?}"/build/astra_analytical/build.sh
+fi
 
 echo ""
 echo "[ASTRA-sim] Compilation finished."
@@ -51,7 +53,7 @@ export ASAN_OPTIONS=detect_container_overflow=0
 echo ""
 echo "[ASTRA-sim] Finished the execution."
 
-python ../helpers/topo_gen_baseline.py 2 2 2 50 450 > "${BASELINE_TP_GEN:?}"
+python3 ../helpers/topo_gen_baseline.py 2 2 2 50 450 > "${BASELINE_TP_GEN:?}"
 
 "${ASTRA_SIM:?}" \
     --workload-configuration="${WORKLOAD}" \

@@ -1,0 +1,1161 @@
+Routing algorithm: opus
+[1;31mTM: !!! TIME: 0 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #1
+[1;31mTM: !!! TIME: 0 Reconfig to topo_id: 1111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #2
+[1;31mTM: !!! TIME: 6916556 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #3
+[1;31mTM: !!! TIME: 48343720 Reconfig to topo_id: 1111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #4
+[1;31mTM: !!! TIME: 61836109 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #5
+[1;31mTM: !!! TIME: 103263924 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #6
+[1;31mTM: !!! TIME: 105455415 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #7
+[1;31mTM: !!! TIME: 112032889 Reconfig to topo_id: 1111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #8
+[1;31mTM: !!! TIME: 118948794 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #9
+[1;31mTM: !!! TIME: 159117376 Reconfig to topo_id: 3311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #10
+[1;31mTM: !!! TIME: 160376609 Reconfig to topo_id: 1311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #11
+[1;31mTM: !!! TIME: 173868998 Reconfig to topo_id: 3311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #12
+[1;31mTM: !!! TIME: 208380257 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #13
+[1;31mTM: !!! TIME: 215296813 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #14
+[1;31mTM: !!! TIME: 216392554 Reconfig to topo_id: 111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #15
+[1;31mTM: !!! TIME: 222970028 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #16
+[1;31mTM: !!! TIME: 222970028 Reconfig to topo_id: 111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #17
+[1;31mTM: !!! TIME: 230981675 Reconfig to topo_id: 1311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #18
+[1;31mTM: !!! TIME: 272409490 Reconfig to topo_id: 1001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #19
+[1;31mTM: !!! TIME: 280422787 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #20
+[1;31mTM: !!! TIME: 321849951 Reconfig to topo_id: 1111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #21
+[1;31mTM: !!! TIME: 335342340 Reconfig to topo_id: 3111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #22
+[1;31mTM: !!! TIME: 375510922 Reconfig to topo_id: 3331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #23
+[1;31mTM: !!! TIME: 376770155 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #24
+[1;31mTM: !!! TIME: 377865896 Reconfig to topo_id: 331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #25
+[1;31mTM: !!! TIME: 419295041 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #26
+[1;31mTM: !!! TIME: 419295041 Reconfig to topo_id: 331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #27
+[1;31mTM: !!! TIME: 459396184 Reconfig to topo_id: 1331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #28
+[1;31mTM: !!! TIME: 460933283 Reconfig to topo_id: 1111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #29
+[1;31mTM: !!! TIME: 474425672 Reconfig to topo_id: 1311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #30
+[1;31mTM: !!! TIME: 514594254 Reconfig to topo_id: 3331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #31
+[1;31mTM: !!! TIME: 515852836 Reconfig to topo_id: 3001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #32
+[1;31mTM: !!! TIME: 516948577 Reconfig to topo_id: 3031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #33
+[1;31mTM: !!! TIME: 558376732 Reconfig to topo_id: 3000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #34
+[1;31mTM: !!! TIME: 599642055 Reconfig to topo_id: 3130, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #35
+[1;31mTM: !!! TIME: 600900637 Reconfig to topo_id: 1130, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #36
+[1;31mTM: !!! TIME: 614393026 Reconfig to topo_id: 3330, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #37
+[1;31mTM: !!! TIME: 655820841 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #38
+[1;31mTM: !!! TIME: 656916582 Reconfig to topo_id: 330, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #39
+[1;31mTM: !!! TIME: 698344737 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #40
+[1;31mTM: !!! TIME: 699440478 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #41
+[1;31mTM: !!! TIME: 740868633 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #42
+[1;31mTM: !!! TIME: 741964383 Reconfig to topo_id: 300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #43
+[1;31mTM: !!! TIME: 784487288 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #44
+[1;31mTM: !!! TIME: 785582038 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #45
+[1;31mTM: !!! TIME: 827009202 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #46
+[1;31mTM: !!! TIME: 828104952 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #47
+[1;31mTM: !!! TIME: 869369275 Reconfig to topo_id: 130, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #48
+[1;31mTM: !!! TIME: 870627857 Reconfig to topo_id: 100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #49
+[1;31mTM: !!! TIME: 878639512 Reconfig to topo_id: 311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #50
+[1;31mTM: !!! TIME: 920067327 Reconfig to topo_id: 111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #51
+[1;31mTM: !!! TIME: 933559716 Reconfig to topo_id: 311, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #52
+[1;31mTM: !!! TIME: 973728298 Reconfig to topo_id: 333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #53
+[1;31mTM: !!! TIME: 974987531 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #54
+[1;31mTM: !!! TIME: 976083272 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #55
+[1;31mTM: !!! TIME: 1017512417 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #56
+[1;31mTM: !!! TIME: 1017512417 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #57
+[1;31mTM: !!! TIME: 1057613560 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #58
+[1;31mTM: !!! TIME: 1059150659 Reconfig to topo_id: 111, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #59
+[1;31mTM: !!! TIME: 1072643048 Reconfig to topo_id: 131, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #60
+[1;31mTM: !!! TIME: 1112811630 Reconfig to topo_id: 333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #61
+[1;31mTM: !!! TIME: 1114070212 Reconfig to topo_id: 300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #62
+[1;31mTM: !!! TIME: 1115165953 Reconfig to topo_id: 303, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #63
+[1;31mTM: !!! TIME: 1196763680 Reconfig to topo_id: 333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #64
+[1;31mTM: !!! TIME: 1198022262 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #65
+[1;31mTM: !!! TIME: 1211514651 Reconfig to topo_id: 330, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #66
+[1;31mTM: !!! TIME: 1246025910 Reconfig to topo_id: 300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #67
+[1;31mTM: !!! TIME: 1247120660 Reconfig to topo_id: 303, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #68
+[1;31mTM: !!! TIME: 1252942466 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #69
+[1;31mTM: !!! TIME: 1254038216 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #70
+[1;31mTM: !!! TIME: 1255133967 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #71
+[1;31mTM: !!! TIME: 1261710450 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #72
+[1;31mTM: !!! TIME: 1301879032 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #73
+[1;31mTM: !!! TIME: 1303137614 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #74
+[1;31mTM: !!! TIME: 1304234355 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #75
+[1;31mTM: !!! TIME: 1311906579 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #76
+[1;31mTM: !!! TIME: 1318822484 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #77
+[1;31mTM: !!! TIME: 1358991066 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #78
+[1;31mTM: !!! TIME: 1360249648 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #79
+[1;31mTM: !!! TIME: 1366826132 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #80
+[1;31mTM: !!! TIME: 1408253296 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #81
+[1;31mTM: !!! TIME: 1421745685 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #82
+[1;31mTM: !!! TIME: 1461914267 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #83
+[1;31mTM: !!! TIME: 1463172849 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #84
+[1;31mTM: !!! TIME: 1464268590 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #85
+[1;31mTM: !!! TIME: 1505697735 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #86
+[1;31mTM: !!! TIME: 1545866317 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #87
+[1;31mTM: !!! TIME: 1547124899 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #88
+[1;31mTM: !!! TIME: 1548219649 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #89
+[1;31mTM: !!! TIME: 1549479221 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #90
+[1;31mTM: !!! TIME: 1549479221 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #91
+[1;31mTM: !!! TIME: 1590743545 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #92
+[1;31mTM: !!! TIME: 1592002127 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #93
+[1;31mTM: !!! TIME: 1593097868 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #94
+[1;31mTM: !!! TIME: 1594358431 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #95
+[1;31mTM: !!! TIME: 1594358431 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #96
+[1;31mTM: !!! TIME: 1596712755 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #97
+[1;31mTM: !!! TIME: 1610205144 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #98
+[1;31mTM: !!! TIME: 1650373726 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #99
+[1;31mTM: !!! TIME: 1651632308 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #100
+[1;31mTM: !!! TIME: 1698377374 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #101
+[1;31mTM: !!! TIME: 1699635956 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #102
+[1;31mTM: !!! TIME: 1713128345 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #103
+[1;31mTM: !!! TIME: 1747639604 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #104
+[1;31mTM: !!! TIME: 1754556160 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #105
+[1;31mTM: !!! TIME: 1755652901 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #106
+[1;31mTM: !!! TIME: 1763664547 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #107
+[1;31mTM: !!! TIME: 1805092362 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #108
+[1;31mTM: !!! TIME: 1818584751 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #109
+[1;31mTM: !!! TIME: 1860012566 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #110
+[1;31mTM: !!! TIME: 1873504955 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #111
+[1;31mTM: !!! TIME: 1996175164 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #112
+[1;31mTM: !!! TIME: 2828396515 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #113
+[1;31mTM: !!! TIME: 2990479133 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #114
+[1;31mTM: !!! TIME: 3822699833 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #115
+[1;31mTM: !!! TIME: 3824890333 Reconfig to topo_id: 3, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #116
+[1;31mTM: !!! TIME: 3903969906 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #117
+[1;31mTM: !!! TIME: 3987041341 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #118
+[1;31mTM: !!! TIME: 3987886561 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #119
+[1;31mTM: !!! TIME: 4819262041 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #120
+[1;31mTM: !!! TIME: 4900101614 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #121
+[1;31mTM: !!! TIME: 5731477094 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #122
+[1;31mTM: !!! TIME: 5909482347 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #123
+[1;31mTM: !!! TIME: 6644537367 Reconfig to topo_id: 13, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #124
+[1;31mTM: !!! TIME: 6902604372 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #125
+[1;31mTM: !!! TIME: 7637659392 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #126
+[1;31mTM: !!! TIME: 7638755142 Reconfig to topo_id: 11, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #127
+[1;31mTM: !!! TIME: 8373810162 Reconfig to topo_id: 1, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #128
+[1;31mTM: !!! TIME: 9109960932 Reconfig to topo_id: 303, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #129
+[1;31mTM: !!! TIME: 9272049347 Reconfig to topo_id: 301, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #130
+[1;31mTM: !!! TIME: 9272894567 Reconfig to topo_id: 101, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #131
+[1;31mTM: !!! TIME: 10104270047 Reconfig to topo_id: 100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #132
+[1;31mTM: !!! TIME: 10106211017 Reconfig to topo_id: 101, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #133
+[1;31mTM: !!! TIME: 10202531477 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #134
+[1;31mTM: !!! TIME: 10937586497 Reconfig to topo_id: 333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #135
+[1;31mTM: !!! TIME: 11018426070 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #136
+[1;31mTM: !!! TIME: 11114746530 Reconfig to topo_id: 131, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #137
+[1;31mTM: !!! TIME: 11849801550 Reconfig to topo_id: 331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #138
+[1;31mTM: !!! TIME: 11930641123 Reconfig to topo_id: 131, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #139
+[1;31mTM: !!! TIME: 12665696143 Reconfig to topo_id: 331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #140
+[1;31mTM: !!! TIME: 12843701396 Reconfig to topo_id: 131, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #141
+[1;31mTM: !!! TIME: 13578756416 Reconfig to topo_id: 100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #142
+[1;31mTM: !!! TIME: 13580698377 Reconfig to topo_id: 101, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #143
+[1;31mTM: !!! TIME: 13677018837 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #144
+[1;31mTM: !!! TIME: 14412073857 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #145
+[1;31mTM: !!! TIME: 14413169607 Reconfig to topo_id: 133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #146
+[1;31mTM: !!! TIME: 15244545087 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #147
+[1;31mTM: !!! TIME: 15324719419 Reconfig to topo_id: 3031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #148
+[1;31mTM: !!! TIME: 15326547809 Reconfig to topo_id: 3033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #149
+[1;31mTM: !!! TIME: 15405626391 Reconfig to topo_id: 3031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #150
+[1;31mTM: !!! TIME: 15407790854 Reconfig to topo_id: 1031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #151
+[1;31mTM: !!! TIME: 16240011554 Reconfig to topo_id: 3031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #152
+[1;31mTM: !!! TIME: 17055906147 Reconfig to topo_id: 1000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #153
+[1;31mTM: !!! TIME: 17154168568 Reconfig to topo_id: 1033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #154
+[1;31mTM: !!! TIME: 18624280588 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #155
+[1;31mTM: !!! TIME: 19456501288 Reconfig to topo_id: 1033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #156
+[1;31mTM: !!! TIME: 19618583906 Reconfig to topo_id: 1013, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #157
+[1;31mTM: !!! TIME: 19619429126 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #158
+[1;31mTM: !!! TIME: 20450804606 Reconfig to topo_id: 1001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #159
+[1;31mTM: !!! TIME: 20451900356 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #160
+[1;31mTM: !!! TIME: 21283275836 Reconfig to topo_id: 1001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #161
+[1;31mTM: !!! TIME: 21381537266 Reconfig to topo_id: 1301, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #162
+[1;31mTM: !!! TIME: 22116592286 Reconfig to topo_id: 1300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #163
+[1;31mTM: !!! TIME: 22196766618 Reconfig to topo_id: 1333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #164
+[1;31mTM: !!! TIME: 22198931081 Reconfig to topo_id: 1133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #165
+[1;31mTM: !!! TIME: 23031151781 Reconfig to topo_id: 1333, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #166
+[1;31mTM: !!! TIME: 23191069936 Reconfig to topo_id: 1331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #167
+[1;31mTM: !!! TIME: 23193234399 Reconfig to topo_id: 1133, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #168
+[1;31mTM: !!! TIME: 24025455099 Reconfig to topo_id: 33, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #169
+[1;31mTM: !!! TIME: 24026551840 Reconfig to topo_id: 31, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #170
+[1;31mTM: !!! TIME: 24761580160 Reconfig to topo_id: 3000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #171
+[1;31mTM: !!! TIME: 24841754493 Reconfig to topo_id: 3033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #172
+[1;31mTM: !!! TIME: 24843918956 Reconfig to topo_id: 1033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #173
+[1;31mTM: !!! TIME: 25676139656 Reconfig to topo_id: 3033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #174
+[1;31mTM: !!! TIME: 25838221623 Reconfig to topo_id: 3013, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #175
+[1;31mTM: !!! TIME: 25839066843 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #176
+[1;31mTM: !!! TIME: 26670442323 Reconfig to topo_id: 1031, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #177
+[1;31mTM: !!! TIME: 26928509328 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #178
+[1;31mTM: !!! TIME: 28495786038 Reconfig to topo_id: 1033, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #179
+[1;31mTM: !!! TIME: 28657868005 Reconfig to topo_id: 1013, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #180
+[1;31mTM: !!! TIME: 28658713876 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #181
+[1;31mTM: !!! TIME: 29490089356 Reconfig to topo_id: 1001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #182
+[1;31mTM: !!! TIME: 29491185106 Reconfig to topo_id: 1011, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #183
+[1;31mTM: !!! TIME: 30322560586 Reconfig to topo_id: 1001, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #184
+[1;31mTM: !!! TIME: 30420822016 Reconfig to topo_id: 1301, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #185
+[1;31mTM: !!! TIME: 31155877036 Reconfig to topo_id: 1300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #186
+[2026-06-06 19:22:39.944] [workload] [info] sys[207] finished, 31156971786 cycles, exposed communication 30216347778 cycles.
+[2026-06-06 19:22:39.950] [statistics] [info] sys[207], Wall time: 31156971786
+[2026-06-06 19:22:39.973] [workload] [info] sys[199] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.973] [statistics] [info] sys[199], Wall time: 31158067536
+[2026-06-06 19:22:39.973] [workload] [info] sys[215] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.973] [statistics] [info] sys[215], Wall time: 31158067536
+[2026-06-06 19:22:39.973] [workload] [info] sys[223] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.973] [statistics] [info] sys[223], Wall time: 31158067536
+[2026-06-06 19:22:39.973] [workload] [info] sys[231] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.973] [statistics] [info] sys[231], Wall time: 31158067536
+[2026-06-06 19:22:39.973] [workload] [info] sys[239] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.974] [statistics] [info] sys[239], Wall time: 31158067536
+[2026-06-06 19:22:39.974] [workload] [info] sys[247] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.974] [statistics] [info] sys[247], Wall time: 31158067536
+[2026-06-06 19:22:39.974] [workload] [info] sys[255] finished, 31158067536 cycles, exposed communication 30217443528 cycles.
+[2026-06-06 19:22:39.974] [statistics] [info] sys[255], Wall time: 31158067536
+[1;31mTM: !!! TIME: 31236051368 Reconfig to topo_id: 1331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #187
+[1;31mTM: !!! TIME: 31238215831 Reconfig to topo_id: 1131, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #188
+[1;31mTM: !!! TIME: 32070436531 Reconfig to topo_id: 1331, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #189
+[1;31mTM: !!! TIME: 32886331124 Reconfig to topo_id: 1100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #190
+[2026-06-06 19:22:40.528] [workload] [info] sys[206] finished, 32887426865 cycles, exposed communication 31946802857 cycles.
+[2026-06-06 19:22:40.535] [statistics] [info] sys[206], Wall time: 32887426865
+[2026-06-06 19:22:40.556] [workload] [info] sys[192] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.556] [statistics] [info] sys[192], Wall time: 32888522615
+[2026-06-06 19:22:40.556] [workload] [info] sys[193] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[193], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[194] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[194], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[195] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[195], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[196] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[196], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[197] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[197], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[198] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[198], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[200] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[200], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[201] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[201], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[202] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[202], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[203] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[203], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[204] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[204], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[205] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[205], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[208] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[208], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[209] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[209], Wall time: 32888522615
+[2026-06-06 19:22:40.557] [workload] [info] sys[210] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.557] [statistics] [info] sys[210], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[211] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[211], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[212] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[212], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[213] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[213], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[214] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[214], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[216] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[216], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[217] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[217], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[218] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.558] [statistics] [info] sys[218], Wall time: 32888522615
+[2026-06-06 19:22:40.558] [workload] [info] sys[219] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[219], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[220] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[220], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[221] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[221], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[222] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[222], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[224] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[224], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[225] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[225], Wall time: 32888522615
+[2026-06-06 19:22:40.559] [workload] [info] sys[226] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.559] [statistics] [info] sys[226], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[227] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[227], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[228] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[228], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[229] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[229], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[230] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[230], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[232] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[232], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[233] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[233], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[234] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[234], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[235] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[235], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[236] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[236], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[237] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[237], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[238] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[238], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[240] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[240], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[241] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[241], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[242] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.560] [statistics] [info] sys[242], Wall time: 32888522615
+[2026-06-06 19:22:40.560] [workload] [info] sys[243] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[243], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[244] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[244], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[245] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[245], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[246] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[246], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[248] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[248], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[249] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[249], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[250] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[250], Wall time: 32888522615
+[2026-06-06 19:22:40.561] [workload] [info] sys[251] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.561] [statistics] [info] sys[251], Wall time: 32888522615
+[2026-06-06 19:22:40.562] [workload] [info] sys[252] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.562] [statistics] [info] sys[252], Wall time: 32888522615
+[2026-06-06 19:22:40.562] [workload] [info] sys[253] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.562] [statistics] [info] sys[253], Wall time: 32888522615
+[2026-06-06 19:22:40.562] [workload] [info] sys[254] finished, 32888522615 cycles, exposed communication 31947898607 cycles.
+[2026-06-06 19:22:40.562] [statistics] [info] sys[254], Wall time: 32888522615
+[1;31mTM: !!! TIME: 32984593545 Reconfig to topo_id: 1130, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #191
+[1;31mTM: !!! TIME: 33719648565 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #192
+[1;31mTM: !!! TIME: 33720745306 Reconfig to topo_id: 130, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #193
+[1;31mTM: !!! TIME: 34455800326 Reconfig to topo_id: 30, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #194
+[1;31mTM: !!! TIME: 34535974658 Reconfig to topo_id: 3030, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #195
+[1;31mTM: !!! TIME: 34538138470 Reconfig to topo_id: 3010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #196
+[1;31mTM: !!! TIME: 35370359821 Reconfig to topo_id: 3030, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #197
+[1;31mTM: !!! TIME: 35532442439 Reconfig to topo_id: 1030, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #198
+[1;31mTM: !!! TIME: 35533287659 Reconfig to topo_id: 1010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #199
+[1;31mTM: !!! TIME: 36364663139 Reconfig to topo_id: 3010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #200
+[1;31mTM: !!! TIME: 36445502712 Reconfig to topo_id: 1010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #201
+[1;31mTM: !!! TIME: 37276878192 Reconfig to topo_id: 3010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #202
+[1;31mTM: !!! TIME: 37454883445 Reconfig to topo_id: 1010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #203
+[1;31mTM: !!! TIME: 38189938465 Reconfig to topo_id: 1000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #204
+[2026-06-06 19:22:43.634] [workload] [info] sys[143] finished, 38191033215 cycles, exposed communication 37250409207 cycles.
+[2026-06-06 19:22:43.640] [statistics] [info] sys[143], Wall time: 38191033215
+[1;31mTM: !!! TIME: 38191879435 Reconfig to topo_id: 1010, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+[2026-06-06 19:22:43.767] [workload] [info] sys[135] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.767] [statistics] [info] sys[135], Wall time: 38192128965
+[2026-06-06 19:22:43.767] [workload] [info] sys[151] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.767] [statistics] [info] sys[151], Wall time: 38192128965
+[2026-06-06 19:22:43.767] [workload] [info] sys[159] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.767] [statistics] [info] sys[159], Wall time: 38192128965
+[2026-06-06 19:22:43.767] [workload] [info] sys[167] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.767] [statistics] [info] sys[167], Wall time: 38192128965
+[2026-06-06 19:22:43.768] [workload] [info] sys[175] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.768] [statistics] [info] sys[175], Wall time: 38192128965
+[2026-06-06 19:22:43.768] [workload] [info] sys[183] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.768] [statistics] [info] sys[183], Wall time: 38192128965
+[2026-06-06 19:22:43.768] [workload] [info] sys[191] finished, 38192128965 cycles, exposed communication 37251504957 cycles.
+[2026-06-06 19:22:43.768] [statistics] [info] sys[191], Wall time: 38192128965
+Drained Network, reconfiguring to TOPO ITERATION #205
+[1;31mTM: !!! TIME: 38288199895 Reconfig to topo_id: 1310, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #206
+[1;31mTM: !!! TIME: 39854632375 Reconfig to topo_id: 1000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #207
+[2026-06-06 19:22:44.313] [workload] [info] sys[128] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.319] [statistics] [info] sys[128], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[129] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[129], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[130] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[130], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[131] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[131], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[132] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[132], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[133] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[133], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[134] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[134], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[136] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[136], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[137] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[137], Wall time: 39855727126
+[2026-06-06 19:22:44.323] [workload] [info] sys[138] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.323] [statistics] [info] sys[138], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[139] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[139], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[140] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[140], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[141] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[141], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[142] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[142], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[144] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[144], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[145] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[145], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[146] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[146], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[147] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[147], Wall time: 39855727126
+[1;31mTM: !!! TIME: 39855727126 Reconfig to topo_id: 1300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[2026-06-06 19:22:44.324] [workload] [info] sys[148] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[148], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[149] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+[2026-06-06 19:22:44.324] [statistics] [info] sys[149], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[150] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[150], Wall time: 39855727126
+[2026-06-06 19:22:44.324] [workload] [info] sys[152] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.324] [statistics] [info] sys[152], Wall time: 39855727126
+[2026-06-06 19:22:44.423] [workload] [info] sys[153] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.423] [statistics] [info] sys[153], Wall time: 39855727126
+[2026-06-06 19:22:44.423] [workload] [info] sys[154] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.423] [statistics] [info] sys[154], Wall time: 39855727126
+[2026-06-06 19:22:44.424] [workload] [info] sys[155] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.424] [statistics] [info] sys[155], Wall time: 39855727126
+[2026-06-06 19:22:44.424] [workload] [info] sys[156] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.424] [statistics] [info] sys[156], Wall time: 39855727126
+[2026-06-06 19:22:44.424] [workload] [info] sys[157] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.424] [statistics] [info] sys[157], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[158] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[158], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[160] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[160], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[161] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[161], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[162] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[162], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[163] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[163], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[164] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[164], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[165] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[165], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[166] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[166], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[168] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[168], Wall time: 39855727126
+[2026-06-06 19:22:44.425] [workload] [info] sys[169] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.425] [statistics] [info] sys[169], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[170] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[170], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[171] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[171], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[172] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[172], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[173] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[173], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[174] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[174], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[176] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[176], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[177] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[177], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[178] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[178], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[179] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[179], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[180] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[180], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[181] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[181], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[182] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[182], Wall time: 39855727126
+[2026-06-06 19:22:44.426] [workload] [info] sys[184] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.426] [statistics] [info] sys[184], Wall time: 39855727126
+[2026-06-06 19:22:44.427] [workload] [info] sys[185] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.427] [statistics] [info] sys[185], Wall time: 39855727126
+[2026-06-06 19:22:44.427] [workload] [info] sys[186] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.427] [statistics] [info] sys[186], Wall time: 39855727126
+[2026-06-06 19:22:44.427] [workload] [info] sys[187] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.427] [statistics] [info] sys[187], Wall time: 39855727126
+[2026-06-06 19:22:44.427] [workload] [info] sys[188] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.428] [statistics] [info] sys[188], Wall time: 39855727126
+[2026-06-06 19:22:44.428] [workload] [info] sys[189] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.428] [statistics] [info] sys[189], Wall time: 39855727126
+[2026-06-06 19:22:44.428] [workload] [info] sys[190] finished, 39855727126 cycles, exposed communication 38915103118 cycles.
+[2026-06-06 19:22:44.428] [statistics] [info] sys[190], Wall time: 39855727126
+Drained Network, reconfiguring to TOPO ITERATION #208
+[1;31mTM: !!! TIME: 39936970511 Reconfig to topo_id: 1100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #209
+[1;31mTM: !!! TIME: 40769191862 Reconfig to topo_id: 1300, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #210
+[1;31mTM: !!! TIME: 40931274480 Reconfig to topo_id: 1100, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #211
+[1;31mTM: !!! TIME: 41763495180 Reconfig to topo_id: 0, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #212
+[2026-06-06 19:22:45.370] [workload] [info] sys[68] finished, 41764590921 cycles, exposed communication 40823966913 cycles.
+[2026-06-06 19:22:45.379] [statistics] [info] sys[68], Wall time: 41764590921
+[2026-06-06 19:22:45.391] [workload] [info] sys[64] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[64], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[65] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[65], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[66] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[66], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[67] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[67], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[69] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[69], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[70] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[70], Wall time: 41765686671
+[2026-06-06 19:22:45.391] [workload] [info] sys[71] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.391] [statistics] [info] sys[71], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[72] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[72], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[73] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[73], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[74] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[74], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[75] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[75], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[76] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[76], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[77] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[77], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[78] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[78], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[79] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[79], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[80] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[80], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[81] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[81], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[82] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[82], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[83] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[83], Wall time: 41765686671
+[2026-06-06 19:22:45.392] [workload] [info] sys[84] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.392] [statistics] [info] sys[84], Wall time: 41765686671
+[2026-06-06 19:22:45.393] [workload] [info] sys[85] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.393] [statistics] [info] sys[85], Wall time: 41765686671
+[2026-06-06 19:22:45.393] [workload] [info] sys[86] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.393] [statistics] [info] sys[86], Wall time: 41765686671
+[2026-06-06 19:22:45.393] [workload] [info] sys[87] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[1;31mTM: !!! TIME: 41765686671 Reconfig to topo_id: 3000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[2026-06-06 19:22:45.393] [statistics] [info] sys[87], Wall time: 41765686671
+[2026-06-06 19:22:45.393] [workload] [info] sys[88] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+[2026-06-06 19:22:45.393] [statistics] [info] sys[88], Wall time: 41765686671
+[2026-06-06 19:22:45.456] [workload] [info] sys[89] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.456] [statistics] [info] sys[89], Wall time: 41765686671
+[2026-06-06 19:22:45.456] [workload] [info] sys[90] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.456] [statistics] [info] sys[90], Wall time: 41765686671
+[2026-06-06 19:22:45.457] [workload] [info] sys[91] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.457] [statistics] [info] sys[91], Wall time: 41765686671
+[2026-06-06 19:22:45.457] [workload] [info] sys[92] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.457] [statistics] [info] sys[92], Wall time: 41765686671
+[2026-06-06 19:22:45.457] [workload] [info] sys[93] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.457] [statistics] [info] sys[93], Wall time: 41765686671
+[2026-06-06 19:22:45.457] [workload] [info] sys[94] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.457] [statistics] [info] sys[94], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[95] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[95], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[96] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[96], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[97] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[97], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[98] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[98], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[99] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[99], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[100] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[100], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[101] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[101], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[102] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[102], Wall time: 41765686671
+[2026-06-06 19:22:45.458] [workload] [info] sys[103] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.458] [statistics] [info] sys[103], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[104] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[104], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[105] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[105], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[106] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[106], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[107] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[107], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[108] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[108], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[109] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[109], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[110] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[110], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[111] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[111], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[112] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[112], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[113] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[113], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[114] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[114], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[115] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[115], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[116] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[116], Wall time: 41765686671
+[2026-06-06 19:22:45.459] [workload] [info] sys[117] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.459] [statistics] [info] sys[117], Wall time: 41765686671
+[2026-06-06 19:22:45.460] [workload] [info] sys[118] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.460] [statistics] [info] sys[118], Wall time: 41765686671
+[2026-06-06 19:22:45.460] [workload] [info] sys[119] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.460] [statistics] [info] sys[119], Wall time: 41765686671
+RANK: 57 is the leader for comm group [2026-06-06 19:22:45.460] [workload] [info] sys[120] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.460] [statistics] [info] sys[120], Wall time: 41765686671
+[2026-06-06 19:22:45.460] [workload] [info] sys[121] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.460] [statistics] [info] sys[121], Wall time: 41765686671
+[2026-06-06 19:22:45.460] [workload] [info] sys[122] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.460] [statistics] [info] sys[122], Wall time: 41765686671
+[2026-06-06 19:22:45.461] [workload] [info] sys[123] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.461] [statistics] [info] sys[123], Wall time: 41765686671
+[2026-06-06 19:22:45.461] [workload] [info] sys[124] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.461] [statistics] [info] sys[124], Wall time: 41765686671
+[2026-06-06 19:22:45.461] [workload] [info] sys[125] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.461] [statistics] [info] sys[125], Wall time: 41765686671
+[2026-06-06 19:22:45.461] [workload] [info] sys[126] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.461] [statistics] [info] sys[126], Wall time: 41765686671
+[2026-06-06 19:22:45.462] [workload] [info] sys[127] finished, 41765686671 cycles, exposed communication 40825062663 cycles.
+[2026-06-06 19:22:45.462] [statistics] [info] sys[127], Wall time: 41765686671
+Drained Network, reconfiguring to TOPO ITERATION #213
+[1;31mTM: !!! TIME: 41846930707 Reconfig to topo_id: 1000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #214
+[1;31mTM: !!! TIME: 42679151407 Reconfig to topo_id: 3000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #215
+[1;31mTM: !!! TIME: 42841234025 Reconfig to topo_id: 1000, Devices count: 256, NPUs count: 256, inflight_coll 0[0m
+[TopologyManager] routing=opus (hierarchical Dijkstra + ECMP)
+Drained Network, reconfiguring to TOPO ITERATION #216
+[2026-06-06 19:22:46.294] [workload] [info] sys[13] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[13], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[21] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[21], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[29] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[29], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[37] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[37], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[45] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[45], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[53] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[53], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[61] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[61], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[5] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[5], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[14] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[14], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[22] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[22], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[30] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[30], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[38] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[38], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[46] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[46], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[54] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[54], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[62] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[62], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[6] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[6], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[15] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[15], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[23] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[23], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[31] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[31], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[39] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[39], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[47] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[47], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[55] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[55], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[63] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[63], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[7] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[7], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[8] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[8], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[16] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[16], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[24] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[24], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[32] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[32], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[40] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[40], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[48] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[48], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[56] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[56], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[0] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[0], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[9] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[9], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[17] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.295] [statistics] [info] sys[17], Wall time: 43673454725
+[2026-06-06 19:22:46.295] [workload] [info] sys[25] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[25], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[33] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[33], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[41] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[41], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[49] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[49], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[57] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[57], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[1] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[1], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[10] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[10], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[18] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[18], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[26] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[26], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[34] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[34], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[42] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[42], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[50] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[50], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[58] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[58], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[2] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[2], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[11] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[11], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[19] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[19], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[27] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[27], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[35] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[35], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[43] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[43], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[51] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[51], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[59] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[59], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[3] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[3], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[12] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[12], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[20] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[20], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[28] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[28], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[36] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[36], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[44] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[44], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[52] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[52], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[60] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[60], Wall time: 43673454725
+[2026-06-06 19:22:46.296] [workload] [info] sys[4] finished, 43673454725 cycles, exposed communication 42732830717 cycles.
+[2026-06-06 19:22:46.296] [statistics] [info] sys[4], Wall time: 43673454725

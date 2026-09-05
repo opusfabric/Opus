@@ -20,6 +20,11 @@ RUN mkdir -p /tmp/hf/datasets /tmp/hf/transformers
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
+        cmake \
+        graphviz \
+        libprotobuf-dev \
+        protobuf-compiler \
+        python3-dev \
         git \
         curl \
         wget \
@@ -34,26 +39,36 @@ RUN apt-get update && \
         perftest \
     && rm -rf /var/lib/apt/lists/*
 
-# Install CUDA toolkit (already in image, but just in case)
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb && \
-    dpkg -i cuda-keyring_1.1-1_all.deb && \
-    apt-get update && \
-    apt-get install -y cuda-toolkit-12-8 && \
-    rm -rf /var/lib/apt/lists/* cuda-keyring_1.1-1_all.deb
+# The PyTorch CUDA devel base image already supplies nvcc and the CUDA toolkit.
+# Do not reinstall CUDA through apt: mixing repository revisions can break the image build.
+RUN nvcc --version
 
 # Copy project code
 COPY . /Opus
 
-# Upgrade pip
-RUN python -m pip install --upgrade pip
+# Keep the common image usable for both the GPU shim and CPU simulation.
+RUN python -m pip install --upgrade pip setuptools wheel
 
 # -------------------------------
-# Install Python dependencies
+# Install Python dependencies for the shim, simulator, and plotting helpers
 # -------------------------------
-RUN cd /Opus/torchtitan && \
-    pip install -r requirements.txt && \
-    cd /Opus/scale-out/pypolatis-controller/PyPolatis-0.4.5 && \
-    python setup.py install
+RUN python -m pip install \
+        numpy \
+        sympy \
+        graphviz \
+        pandas \
+        matplotlib \
+        seaborn \
+        tqdm \
+        pyyaml \
+        protobuf==5.28.2 && \
+    cd /Opus/torchtitan && \
+    python -m pip install -r requirements.txt
+
+# The emulation controller does not require the hardware-only PyPolatis
+# package. Build the small TCP controller here so the container can run the
+# software emulation without depending on the caller's working directory.
+RUN make -C /Opus/src/opus-controller
 
 # Default command
 CMD ["/bin/bash"]

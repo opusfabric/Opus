@@ -9,9 +9,10 @@ import sys
 import os
 import argparse
 import threading
+from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, wait
 
-IP_ADDRESS = '10.253.51.12'
+IP_ADDRESS = os.environ.get('POLATIS_IP_ADDRESS', '10.253.51.12')
 USERNAME = 'admin'
 USERTYPE = 'admin'
 PASSWORD = 'root'
@@ -67,7 +68,10 @@ if not emulation_mode:
     print(f'S/W: {pi.softwareVersion()}')
 
 # Load configurations from a YAML file
-config_file_path = './config/config.yaml'
+config_file_path = os.environ.get(
+    'OPUS_CONFIG_FILE',
+    str(Path(__file__).resolve().parent / 'config' / 'config.yaml'),
+)
 with open(config_file_path, 'r') as file:
     configs = yaml.safe_load(file)["cross-connects"]
 
@@ -178,7 +182,12 @@ def handle_client_request(conn, addr):
         conn.close()
 
 # Set up IPC socket (only once, outside the loop)
-IPC_SOCKET_PATH = f"/tmp/opus_controller_ipc_{rail}"
+ipc_dir = os.environ.get('OPUS_IPC_DIR', '/tmp')
+ipc_prefix = os.environ.get('OPUS_IPC_PREFIX', 'opus_controller_ipc')
+os.makedirs(ipc_dir, exist_ok=True)
+IPC_SOCKET_PATH = os.path.join(ipc_dir, f"{ipc_prefix}_{rail}")
+if len(IPC_SOCKET_PATH) >= 108:
+    raise RuntimeError(f'IPC socket path is too long: {IPC_SOCKET_PATH}')
 if os.path.exists(IPC_SOCKET_PATH):
     os.remove(IPC_SOCKET_PATH)
 
