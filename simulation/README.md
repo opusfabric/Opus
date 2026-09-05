@@ -9,6 +9,7 @@ The common image at [`environment/emulation-env/Dockerfile`](../environment/emul
 ```bash
 docker build --network=host -f environment/emulation-env/Dockerfile -t opus-emulation:artifact .
 docker run --rm -it --network host \
+  --ulimit nofile=65536:65536 \
   -v "$PWD:/Opus" -w /Opus opus-emulation:artifact bash
 ```
 
@@ -19,7 +20,7 @@ Inside the container:
 ./simulation/scripts/run_example.sh
 ```
 
-The simulator is CPU-only, so GPU passthrough is not needed. Allow at least 8 GB RAM for `run_example.sh`; 32 GB is recommended for normal sweeps, and 64 GB for the largest EP or strong-scaling trace-generation runs.
+The simulator is CPU-only, so GPU passthrough is not needed. Keep the `nofile` setting because ASTRA-Sim opens one workload trace per simulated GPU. Allow at least 8 GB RAM for `run_example.sh`; 32 GB is recommended for normal sweeps, and 64 GB for the largest EP or strong-scaling trace-generation runs.
 
 ## Host fallback dependencies
 

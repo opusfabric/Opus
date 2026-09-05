@@ -20,6 +20,18 @@ using namespace NetworkAnalytical;
 namespace NetworkAnalyticalReconfigurable {
 
 /**
+ * Selects the routing algorithm used by TopologyManager::precomputeRoutes().
+ *
+ *   BFS  — original shortest-hop BFS; single path per (src, dst).
+ *   OPUS — hierarchical Dijkstra with ECMP:
+ *            · intra-node edges cost 1, inter-node edges cost N+1
+ *            · minimises scale-out (inter-node) hop count first
+ *            · enumerates all equal-cost paths; route() picks one
+ *              uniformly at random for ECMP load-balancing.
+ */
+enum class RoutingAlgorithm { BFS, OPUS };
+
+/**
  * Topology abstracts a network topology.
  */
 class TopologyManager {
@@ -28,6 +40,9 @@ class TopologyManager {
      * Constructor.
      */
     TopologyManager(int npus_count, int devices_count, EventQueue* event_queue, std::map<int, std::vector<std::vector<Bandwidth>>> circuit_schedules) noexcept;
+
+    /** Select routing algorithm (must be called before first reconfigure). */
+    void set_routing_algorithm(RoutingAlgorithm algo) noexcept;
 
     std::shared_ptr<Device> get_device(const DeviceId deviceId) noexcept;
 
@@ -48,6 +63,10 @@ class TopologyManager {
     void drain_network() noexcept;
 
     void increment_callback() noexcept;
+
+    void finish_reconfiguration() noexcept;
+
+    static void finish_reconfiguration(void* arg) noexcept;
 
     void set_cur_topo_id(int topo_id) noexcept {
         cur_topo_id = topo_id;
@@ -115,6 +134,8 @@ class TopologyManager {
 
     bool reconfiguring;
 
+    bool draining;
+
     Latency reconfig_time;
 
     /// holds the entire topology
@@ -126,9 +147,13 @@ class TopologyManager {
     /// latency matrix
     std::vector<std::vector<Latency>> latencies;
 
-    std::vector<std::vector<Route>> precomputed_routes;
+    // ecmp_routes[src][dst] = list of equal-cost (hierarchical Dijkstra) paths.
+    // route() picks one at random for ECMP load-balancing.
+    std::vector<std::vector<std::vector<Route>>> ecmp_routes;
 
     std::map<int, std::vector<std::vector<Bandwidth>>> circuit_schedules;
+
+    RoutingAlgorithm routing_algorithm = RoutingAlgorithm::BFS;
 };
 
 }  // namespace NetworkAnalyticalReconfigurable

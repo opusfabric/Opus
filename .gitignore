@@ -58,6 +58,17 @@ torchtitan/tests/assets/llama-tokenizer/
 simulation/reconfig_backend/examples/fig14_*/
 simulation/expert_parallel/fig14_ep_results.csv
 simulation/expert_parallel/fig14_ep.pdf
+simulation/expert_parallel/runs/
+simulation/expert_parallel/results/
+simulation/expert_parallel/plots/
+simulation/expert_parallel/configs/*/runs/
+simulation/expert_parallel/configs/*/results/
+simulation/expert_parallel/configs/*/plots/
+
+# Paper EP experiment configurations are source inputs, not generated output.
+!simulation/reconfig_backend/examples/large_scale_ep_*/config.json
+!simulation/expert_parallel/configs/mixed/config.json
+!simulation/expert_parallel/configs/scaleout/config.json
 link_stats_report.txt
 rank_comm_groups.yaml
 runs/

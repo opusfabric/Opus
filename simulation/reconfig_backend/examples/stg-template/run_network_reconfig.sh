@@ -14,7 +14,7 @@ PROJECT_DIR="${SCRIPT_DIR:?}/../.."
 EXAMPLE_DIR="${SCRIPT_DIR:?}"
 
 # paths
-ASTRA_SIM="${PROJECT_DIR:?}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable"
+ASTRA_SIM="${ASTRA_SIM:-${PROJECT_DIR:?}/build/astra_analytical/build/bin/AstraSim_Analytical_Reconfigurable}"
 WORKLOAD="${EXAMPLE_DIR:?}/workload"
 SYSTEM="${EXAMPLE_DIR:?}/system.json"
 NETWORK="${EXAMPLE_DIR:?}/network.yml"
@@ -22,7 +22,8 @@ REMOTE_MEMORY="${EXAMPLE_DIR:?}/remote_memory.json"
 COMM_GROUP="${EXAMPLE_DIR:?}/workload.json"
 CIRCUIT_SCHEDULES="${EXAMPLE_DIR:?}/schedules.txt"
 
-TRACE_PARSER_PATH="${PROJECT_DIR:?}/examples/helpers/trace_parser.py"
+TRACE_PARSER_PATH="${TRACE_PARSER_PATH:-${PROJECT_DIR:?}/examples/helpers/trace_parser.py}"
+PYTHON="${PYTHON:-python3}"
 
 # start
 echo "[ASTRA-sim] Compiling ASTRA-sim with the Reconfigurable Network Backend..."
@@ -49,7 +50,7 @@ export ASAN_OPTIONS=detect_container_overflow=0:detect_leaks=0
     --comm-group-configuration="${COMM_GROUP:?}" \
     --circuit-schedules="${CIRCUIT_SCHEDULES:?}" > debug_no_provision.txt
 
-python3 ${TRACE_PARSER_PATH:?} debug_no_provision.txt
+"${PYTHON:?}" "${TRACE_PARSER_PATH:?}" debug_no_provision.txt
 
 if [[ "${OPUS_SKIP_PROVISION:-0}" != "1" ]]; then
     PROVISION_CONFIG="${EXAMPLE_DIR:?}/rank_comm_groups.yaml"

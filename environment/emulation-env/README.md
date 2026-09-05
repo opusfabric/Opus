@@ -36,10 +36,11 @@ Then follow Section 1 of the root README.md to start the local controller and ru
 
 ## CPU software simulation
 
-The simulator does not need GPUs:
+The simulator does not need GPUs. Keep the `nofile` setting because ASTRA-Sim opens one workload trace per simulated GPU:
 
 ```bash
 docker run --rm -it --network host \
+  --ulimit nofile=65536:65536 \
   -v "$(pwd):/Opus" -w /Opus opus-emulation:artifact bash
 ```
 

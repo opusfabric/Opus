@@ -71,7 +71,7 @@ class Link {
      */
     unsigned long reconfigure(Bandwidth bandwidth, Latency latency, Latency reconfig_time) noexcept;
 
-    static int get_current_time() noexcept;
+    static EventTime get_current_time() noexcept;
 
     [[nodiscard]] ChunkSize get_total_transmitted_size() const noexcept {
         return total_transmitted_size;

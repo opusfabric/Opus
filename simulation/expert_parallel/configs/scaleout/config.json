@@ -1,0 +1,23 @@
+{
+    "name": "fig14_ep_scaleout_smoke",
+    "description": "Small CPU smoke test for the scale-out-only EP mapping and diverged-rail Opus routing.",
+    "total_gpus": 64,
+    "gpus_per_node": 8,
+    "scale_up_GBps": 450.0,
+    "scale_out_Gbps": 400.0,
+    "scale_out_GBps": 50.0,
+    "latency_ns": 1000,
+    "pp": 2,
+    "microbatches": 1,
+    "global_batch_size": 64,
+    "layers_per_stage": 1,
+    "ep_sizes": [1, 2, 4],
+    "reconfig_latencies_ns": [500000],
+    "plot_latencies_ns": [500000],
+    "ep_comm_pattern": "all_to_allv",
+    "moe_routing": "topk_context",
+    "all2allv_payload_scale": "comm_size",
+    "all2allv_collective_envelope": "max_rank_load",
+    "opus_run_mode": "real",
+    "sweep_variants": ["opus_diverge"]
+}

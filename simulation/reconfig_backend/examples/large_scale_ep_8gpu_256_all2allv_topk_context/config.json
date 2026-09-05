@@ -1,0 +1,42 @@
+{
+    "name": "large_scale_ep_8gpu_256_all2allv_topk_context",
+    "description": "256-GPU original EP sweep using all2allv MoE dispatch/combine with top-k context routing.",
+    "total_gpus": 256,
+    "gpus_per_node": 8,
+    "scale_up_GBps": 450.0,
+    "scale_out_Gbps": 400.0,
+    "scale_out_GBps": 50.0,
+    "latency_ns": 1000,
+    "pp": 4,
+    "microbatches": 4,
+    "global_batch_size": 256,
+    "layers_per_stage": 2,
+    "ep_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+    ],
+    "reconfig_latencies_ns": [
+        500000,
+        1000000,
+        10000000,
+        50000000,
+        100000000
+    ],
+    "plot_latencies_ns": [
+        500000,
+        1000000,
+        10000000,
+        50000000,
+        100000000
+    ],
+    "ep_comm_pattern": "all_to_allv",
+    "moe_routing": "topk_context",
+    "all2allv_payload_scale": "comm_size",
+    "all2allv_collective_envelope": "max_rank_load",
+    "sweep_variants": ["opus_diverge"]
+}

@@ -7,4 +7,4 @@ bandwidth:
 latency:
 - 936.25
 reconfig_time:
-- 10000000.0
+- 0.0

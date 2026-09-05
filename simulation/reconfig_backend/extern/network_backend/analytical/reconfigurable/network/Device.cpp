@@ -199,6 +199,12 @@ void Device::reconfigure(std::vector<Bandwidth> bandwidth, std::vector<Route> ro
         // reconfigure the link
         //printf("Device %d: Reconfiguring link to %d, pending chunk size: %ld, new bandwidth: %f\n", device_id, id, pending_chunks[id].size(), bandwidth[id]);
         auto free_time = link->reconfigure(bandwidth[id], latency[id], reconfig_time);
+        if (free_time == Link::get_current_time()) {
+            if (!pending_chunks[id].empty() && link->get_bandwidth() != Bandwidth(0)) {
+                link_become_free(id);
+            }
+            continue;
+        }
         // create a callback argument for the link free event
 
         LinkFreeCallbackArg* args = new LinkFreeCallbackArg{shared_from_this(), id};

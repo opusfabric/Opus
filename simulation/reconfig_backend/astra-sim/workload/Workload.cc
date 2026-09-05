@@ -14,6 +14,8 @@ LICENSE file in the root directory of this source tree.
 #include "astra-sim/workload/Scheduler.hh"
 #include <json/json.hpp>
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,6 +27,36 @@ using json = nlohmann::json;
 
 typedef ChakraProtoMsg::NodeType ChakraNodeType;
 typedef ChakraProtoMsg::CollectiveCommType ChakraCollectiveCommType;
+
+namespace {
+bool is_contiguous_comm_group(const CommunicatorGroup* comm_group) {
+    if (comm_group == nullptr || comm_group->involved_NPUs.empty()) {
+        return false;
+    }
+
+    std::vector<int> ranks = comm_group->involved_NPUs;
+    std::sort(ranks.begin(), ranks.end());
+    ranks.erase(std::unique(ranks.begin(), ranks.end()), ranks.end());
+    if (ranks.size() != comm_group->involved_NPUs.size()) {
+        return false;
+    }
+
+    return ranks.back() - ranks.front() + 1 == static_cast<int>(ranks.size());
+}
+
+bool is_topology_agnostic_tp_group(
+    const CommunicatorGroup* comm_group,
+    const std::vector<int>& compatible_topos,
+    int num_topologies,
+    bool explicit_reconfig) {
+    if (explicit_reconfig ||
+        compatible_topos.size() != static_cast<size_t>(num_topologies)) {
+        return false;
+    }
+    return !AstraSim::Scheduler::decimal_topology_ids ||
+           is_contiguous_comm_group(comm_group);
+}
+}  // namespace
 
 std::map<int, int> Workload::group_vote_count = std::map<int, int>();
 std::map<int, int> Workload::group_finish_count = std::map<int, int>();
@@ -69,16 +101,20 @@ void Workload::vote(int comm_group_id) {
 
     if (group_node_vote_count[comm_group_id][this->sys->id] >
         group_node_finish_count[comm_group_id][this->sys->id]) {
-        std::cout << "RANK: " << this->sys->id << " has already voted for comm group "
-                 << comm_group_id << " in this round." << std::endl;
+        if (sys->trace_enabled) {
+            std::cout << "RANK: " << this->sys->id << " has already voted for comm group "
+                     << comm_group_id << " in this round." << std::endl;
+        }
     }
     else{
         group_node_vote_count[comm_group_id][this->sys->id] += 1;
     }
-    std::cout << "RANK: " << this->sys->id << " Vote for comm group "
-              << comm_group_id << ", current node vote count: "
-              << group_node_vote_count[comm_group_id][this->sys->id]
-              << std::endl;
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " Vote for comm group "
+                  << comm_group_id << ", current node vote count: "
+                  << group_node_vote_count[comm_group_id][this->sys->id]
+                  << std::endl;
+    }
 }
 
 void Workload::finish(int comm_group_id) {
@@ -97,51 +133,67 @@ void Workload::finish(int comm_group_id) {
     }
 
     group_node_finish_count[comm_group_id][this->sys->id] += 1;
-    std::cout << "RANK: " << this->sys->id << " Finish for comm group "
-              << comm_group_id << ", current node finish count: "
-              << group_node_finish_count[comm_group_id][this->sys->id]
-              << std::endl;
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " Finish for comm group "
+                  << comm_group_id << ", current node finish count: "
+                  << group_node_finish_count[comm_group_id][this->sys->id]
+                  << std::endl;
+    }
 }
 
 bool Workload::check_vote(int comm_group_id) {
     int required_votes = comm_groups[comm_group_id]->involved_NPUs.size();
     int current_votes = 0;
     if (group_node_vote_count[comm_group_id][this->sys->id] - finish_rounds[comm_group_id] > 1) {
-        std::cout << "RANK: " << this->sys->id << " is ahead, previous comm has not finished yet." << std::endl;
+        if (sys->trace_enabled) {
+            std::cout << "RANK: " << this->sys->id << " is ahead, previous comm has not finished yet." << std::endl;
+        }
         return false;
     }
 
 
-    std::cout << "RANK: " << this->sys->id << " checking votes for comm group " << comm_group_id << ": ";
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " checking votes for comm group " << comm_group_id << ": ";
+    }
     if (group_node_vote_count.find(comm_group_id) !=
         group_node_vote_count.end()) {
         for (const auto& pair : group_node_vote_count[comm_group_id]) {
             if (pair.second > finish_rounds[comm_group_id]) {
                 current_votes += 1;
-                std::cout << pair.first << " ";
+                if (sys->trace_enabled) {
+                    std::cout << pair.first << " ";
+                }
             }
         }
     }
 
-    std::cout << " -- (" << current_votes << "/" << required_votes << ") [" << finish_rounds[comm_group_id] << "]\n";
+    if (sys->trace_enabled) {
+        std::cout << " -- (" << current_votes << "/" << required_votes << ") [" << finish_rounds[comm_group_id] << "]\n";
+    }
     return current_votes >= required_votes;
 }
 
 bool Workload::check_finish(int comm_group_id) {
     int required_finishes = comm_groups[comm_group_id]->involved_NPUs.size();
     int current_finishes = 0;
-    std::cout << "RANK: " << this->sys->id << " checking finishes for comm group " << comm_group_id << ": ";
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " checking finishes for comm group " << comm_group_id << ": ";
+    }
     if (group_node_finish_count.find(comm_group_id) !=
         group_node_finish_count.end()) {
         for (const auto& pair : group_node_finish_count[comm_group_id]) {
             if (pair.second > finish_rounds[comm_group_id]) {
                 current_finishes += 1;
-                std::cout << pair.first << " ";
+                if (sys->trace_enabled) {
+                    std::cout << pair.first << " ";
+                }
             }
         }
     }
 
-    std::cout << " -- (" << current_finishes << "/" << required_finishes << ") [" << finish_rounds[comm_group_id] << "]\n";
+    if (sys->trace_enabled) {
+        std::cout << " -- (" << current_finishes << "/" << required_finishes << ") [" << finish_rounds[comm_group_id] << "]\n";
+    }
     return current_finishes >= required_finishes;
 }
 
@@ -176,6 +228,14 @@ Workload::Workload(Sys* sys, string et_filename, string comm_group_filename, str
     this->local_mem_usage_tracker =
         std::make_unique<LocalMemUsageTracker>(sys->id);
     this->sys = sys;
+    size_t group_dir_end = comm_group_filename.find_last_of("/\\");
+    if (group_dir_end == std::string::npos) {
+        this->all2allv_load_filename = "all2allv_loads.json";
+    } else {
+        this->all2allv_load_filename =
+            comm_group_filename.substr(0, group_dir_end + 1) +
+            "all2allv_loads.json";
+    }
     initialize_comm_groups(comm_group_filename);
     this->stats = new Statistics(this);
     this->is_finished = false;
@@ -302,6 +362,73 @@ void Workload::issue_dep_free_nodes() {
     }
 }
 
+bool Workload::issue_reconfig(shared_ptr<Chakra::FeederV3::ETFeederNode> node) {
+    if (node->type() == ChakraNodeType::COMP_NODE && node->has_attr("reconfig_dim")) {
+        int dim = node->get_attr<int>("reconfig_dim");
+        int skip_inflight = node->get_attr<int>("reconfig_skip_inflight", 0);
+        bool can_config = this->scheduler->pre_reconfig(-1, dim, skip_inflight);
+        if (!can_config) {
+            if (this->sys->trace_enabled) {
+                std::cout << "Workload: " << this->sys->id
+                          << " stage-local reconfig to dim " << dim
+                          << " blocked before node " << node->id()
+                          << " (" << node->name() << ")" << std::endl;
+            }
+            timespec_t delta = {NS, 100000.0};
+            this->sys->comm_NI->sim_schedule(delta, &Sys::handleEvent,
+                new BasicEventHandlerData(this->sys->id, EventType::CallEvents));
+            return false;
+        }
+
+        if (this->sys->trace_enabled) {
+            std::cout << "Workload: " << this->sys->id
+                      << " stage-local reconfig to dim " << dim
+                      << " before node " << node->id()
+                      << " (" << node->name() << ")" << std::endl;
+        }
+        return true;
+    }
+
+    if (!node->has_attr("reconfig_topo_id")) {
+        return true;
+    }
+
+    int topo_id = node->get_attr<int>("reconfig_topo_id");
+    int skip_inflight = node->get_attr<int>("reconfig_skip_inflight", 0);
+    bool can_config = this->sys->comm_NI->sim_reconfig(topo_id, skip_inflight);
+    if (!can_config) {
+        if (this->sys->trace_enabled) {
+            std::cout << "Workload: " << this->sys->id
+                      << " explicit reconfig to topo_id " << topo_id
+                      << " blocked before node " << node->id()
+                      << " (" << node->name() << ")" << std::endl;
+        }
+        timespec_t delta = {NS, 100000.0};
+        this->sys->comm_NI->sim_schedule(delta, &Sys::handleEvent,
+            new BasicEventHandlerData(this->sys->id, EventType::CallEvents));
+        return false;
+    }
+
+    // Keep the scheduler's per-stage digit state coherent with the explicit
+    // jump, or later dim-based requests would evaluate against stale digits.
+    {
+        auto& stage_state = AstraSim::Scheduler::stage_dp_or_pp;
+        int value = topo_id;
+        for (int i = (int)stage_state.size() - 1; i >= 0; i--) {
+            stage_state[i] = value % 10;
+            value /= 10;
+        }
+    }
+
+    if (this->sys->trace_enabled) {
+        std::cout << "Workload: " << this->sys->id
+                  << " explicit reconfig to topo_id " << topo_id
+                  << " before node " << node->id()
+                  << " (" << node->name() << ")" << std::endl;
+    }
+    return true;
+}
+
 bool Workload::issue(shared_ptr<Chakra::FeederV3::ETFeederNode> node) {
     bool success = true;
     auto logger = LoggerFactory::get_logger("workload");
@@ -317,6 +444,10 @@ bool Workload::issue(shared_ptr<Chakra::FeederV3::ETFeederNode> node) {
                       "node->name={}, node->type={}",
                       sys->id, Sys::boostedTick(), node->id(), node->name(),
                       static_cast<uint64_t>(node->type()));
+    }
+
+    if (!issue_reconfig(node)) {
+        return false;
     }
 
     this->et_feeder->getDependancyResolver().take_node(node->id());
@@ -528,11 +659,13 @@ bool Workload::issue_coll_comm(
 
     int group_size = comm_group->involved_NPUs.size();
     
-    std::cout << "Involved npus: ";
-    for (auto d : comm_group->involved_NPUs) {
-        std::cout << d << " ";
+    if (sys->trace_enabled) {
+        std::cout << "Involved npus: ";
+        for (auto d : comm_group->involved_NPUs) {
+            std::cout << d << " ";
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
 
     // std::cout << std::endl;
 
@@ -540,32 +673,112 @@ bool Workload::issue_coll_comm(
     // Lazy reconfiguration
 
     int comm_id = comm_group->get_id();
-
-
+    bool explicit_reconfig = node->has_attr("reconfig_topo_id");
+    bool explicit_dim_reconfig = node->has_attr("reconfig_dim");
+    bool skip_scheduler_reconfig =
+        node->get_attr<int>("skip_scheduler_reconfig", 0) != 0;
+    const auto comm_type =
+        static_cast<ChakraCollectiveCommType>(node->comm_type<uint64_t>());
+    bool topology_agnostic_tp =
+        is_topology_agnostic_tp_group(
+            comm_group, comm_to_topo[comm_id], num_bw_matrix,
+            explicit_reconfig || explicit_dim_reconfig);
     // BEGIN RECONFIGURATION LOGIC
     #ifndef CONGESTION_AWARE
 
-    if (comm_to_topo[comm_id].size() == num_bw_matrix) {
-        std::cout << "TP COMM pattern detected!" << std::endl;
+    if (topology_agnostic_tp || skip_scheduler_reconfig) {
+        if (sys->trace_enabled && topology_agnostic_tp) {
+            std::cout << "TP COMM pattern detected!" << std::endl;
+        }
     } else {
         vote(comm_id);
+        // Decimal EP scheduling needs explicit wakeups for ranks whose
+        // dependency queues have no other pending event.
+        if (AstraSim::Scheduler::decimal_topology_ids) {
+            for (int npu_id : comm_group->involved_NPUs) {
+                if (npu_id == this->sys->id) continue;
+                timespec_t delta = {NS, 0.0};
+                Sys::all_sys[npu_id]->comm_NI->sim_schedule(
+                    delta, &Sys::handleEvent,
+                    new BasicEventHandlerData(npu_id, EventType::CallEvents));
+            }
+        }
         int passed_vote = check_vote(comm_id);
         if (passed_vote) {
             if (vote_rounds[comm_id] == finish_rounds[comm_id]){
-                if(comm_to_topo[comm_id].size() == num_bw_matrix) {
-                    std::cout << "TP COMM pattern detected!" << std::endl;
+                if(topology_agnostic_tp) {
+                    if (sys->trace_enabled) {
+                        std::cout << "TP COMM pattern detected!" << std::endl;
+                    }
                 } else {
-                    bool reconfig_success = this->scheduler->pre_reconfig(comm_group->get_id(), -1, 0);
-                    if (!reconfig_success) return false;
+                    // Decimal-digit topo_id scheme:
+                    //   dim = EP digit when this PP stage is compatible only with
+                    //   EP topologies, not DP topologies. Topology IDs are decimal
+                    //   states, so inspect the digit for this rank's stage instead
+                    //   of treating digit 3 as a full topology ID.
+                    //   dim = -1 -> 1 (DP) for all other collectives.
+                    int dim = -1;  // default: DP (digit 1)
+                    if (node->has_attr("reconfig_dim")) {
+                        dim = node->get_attr<int>("reconfig_dim");
+                    } else if (AstraSim::Scheduler::ep_topo_id != 0) {
+                        const auto& topos = comm_to_topo[comm_id];
+                        int stage = this->sys->id / AstraSim::Scheduler::num_npu_per_pp;
+                        int pp_stages = AstraSim::Scheduler::pp_stages;
+                        auto has_stage_digit = [stage, pp_stages, &topos](int digit) {
+                            for (int topo_id : topos) {
+                                int value = topo_id;
+                                for (int i = 0; i < pp_stages - 1 - stage; i++) {
+                                    value /= 10;
+                                }
+                                if (value % 10 == digit) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        };
+
+                        bool has_ep = has_stage_digit(AstraSim::Scheduler::ep_topo_id);
+                        bool has_dp = has_stage_digit(1);
+                        if (has_ep && !has_dp) {
+                            dim = AstraSim::Scheduler::ep_topo_id;
+                        }
+                    }
+                    if (!explicit_reconfig) {
+                        bool reconfig_success = this->scheduler->pre_reconfig(comm_group->get_id(), dim, 0);
+                        if (!reconfig_success) {
+                            if (AstraSim::Scheduler::decimal_topology_ids) {
+                                timespec_t delta = {NS, 100000.0};
+                                this->sys->comm_NI->sim_schedule(
+                                    delta, &Sys::handleEvent,
+                                    new BasicEventHandlerData(
+                                        this->sys->id, EventType::CallEvents));
+                            }
+                            return false;
+                        }
+                    }
                 }
 
                 group_leader_npu_id[comm_group->get_id()] = this->sys->id;
                 std::cout << "RANK: " << this->sys->id << " is the leader for comm group " << comm_group->get_id() << " in round " << vote_rounds[comm_id] << std::endl;
                 sys->increment_inflight_coll(this->sys->id, "COLL COMM " + std::to_string(node->id()) + " COMM GROUP " + std::to_string(comm_group->get_id()));
                 vote_rounds[comm_group->get_id()] += 1;
+
+                if (AstraSim::Scheduler::decimal_topology_ids) {
+                    for (int npu_id : comm_group->involved_NPUs) {
+                        if (npu_id == this->sys->id) continue;
+                        Sys::all_sys[npu_id]->workload->issue_dep_free_nodes();
+                        timespec_t delta = {NS, 0.0};
+                        auto* ehd = new BasicEventHandlerData(
+                            npu_id, EventType::CallEvents);
+                        Sys::all_sys[npu_id]->comm_NI->sim_schedule(
+                            delta, &Sys::handleEvent, ehd);
+                    }
+                }
             }
         } else {
-            std::cout << "RANK: " << this->sys->id << " waiting for other nodes to vote for comm group " << comm_group->get_id() << std::endl;
+            if (sys->trace_enabled) {
+                std::cout << "RANK: " << this->sys->id << " waiting for other nodes to vote for comm group " << comm_group->get_id() << std::endl;
+            }
             return false;
         }
 
@@ -573,15 +786,14 @@ bool Workload::issue_coll_comm(
 
     #endif
 
-    std::cout << "\033[0;32mRANK: " << this->sys->id << " at time " << Sys::boostedTick() << " Issuing collective " << comm_group->to_string() << "\033[0m" << std::endl;
-    std::cout << " COLL COMM NODE: " << node->id() << " of comm group " << comm_group->get_id() << std::endl;
+    if (sys->trace_enabled) {
+        std::cout << "\033[0;32mRANK: " << this->sys->id << " at time " << Sys::boostedTick() << " Issuing collective " << comm_group->to_string() << "\033[0m" << std::endl;
+        std::cout << " COLL COMM NODE: " << node->id() << " of comm group " << comm_group->get_id() << std::endl;
+        std::cout << "\033[0;32mRANK: " << this->sys->id << " inflight collective count: " << sys->get_inflight_coll() << "\033[0m" << std::endl;
+    }
     
     previous_group_id = comm_id;
 
-    std::cout << "\033[0;32mRANK: " << this->sys->id << " inflight collective count: " << sys->get_inflight_coll() << "\033[0m" << std::endl;
-
-    const auto comm_type =
-        static_cast<ChakraCollectiveCommType>(node->comm_type<uint64_t>());
     const auto comm_size = node->comm_size<uint64_t>();
     // Record communication size for bandwidth calculation
     stats->get_operator_statistics(node->id()).comm_size = comm_size;
@@ -597,10 +809,18 @@ bool Workload::issue_coll_comm(
         collective_comm_wrapper_map[fp->my_id] = fp;
         fp->comm_group_id = comm_group->get_id();
         fp->set_notifier(this, EventType::CollectiveCommunicationFinished);
-        std::cout << "Generated all-reduce DataSet, fp->my_id=" << fp->my_id << std::endl;
+        if (sys->trace_enabled) {
+            std::cout << "Generated all-reduce DataSet, fp->my_id=" << fp->my_id << std::endl;
+        }
     } else if (comm_type == ChakraCollectiveCommType::ALL_TO_ALL) {
+        AllToAllVLoadMapPtr all2allv_loads = nullptr;
+        if (node->has_attr("all2allv_load_key")) {
+            all2allv_loads = load_all2allv_loads(
+                node->get_attr<std::string>("all2allv_load_key"));
+        }
         DataSet* fp = sys->generate_all_to_all(comm_size, involved_dims,
-                                               comm_group, comm_priority);
+                                               comm_group, comm_priority,
+                                               all2allv_loads);
         fp->comm_group_id = comm_group->get_id();
         collective_comm_node_id_map[fp->my_id] = node->id();
         collective_comm_wrapper_map[fp->my_id] = fp;
@@ -668,16 +888,40 @@ bool Workload::issue_send_comm(
     // BEGIN RECONFIGURATION LOGIC
     #ifndef CONGESTION_AWARE
 
-    bool reconfig_success = this->scheduler->pre_reconfig(dst, 1);
-    if (!reconfig_success) return false;
+    // 0 = PP dim (asymmetric send across stages); -1 -> 1 = DP dim
+    // (same stage). all2allv EP sends can override this with reconfig_dim=3
+    // so point-to-point MoE dispatch/combine uses the EP topology.
+    int pp_prev = (static_cast<int>(dst) / AstraSim::Scheduler::num_npu_per_pp !=
+                   this->sys->id / AstraSim::Scheduler::num_npu_per_pp) ? 0 : -1;
+    bool skip_scheduler_reconfig = node->get_attr<int>("skip_scheduler_reconfig", 0) != 0;
+    if (node->has_attr("reconfig_dim")) {
+        pp_prev = node->get_attr<int>("reconfig_dim");
+    }
+    if (!skip_scheduler_reconfig) {
+        bool reconfig_success = this->scheduler->pre_reconfig(dst, pp_prev);
+        if (!reconfig_success) {
+            timespec_t delta = {NS, 100000.0};
+            this->sys->comm_NI->sim_schedule(delta, &Sys::handleEvent,
+                new BasicEventHandlerData(this->sys->id, EventType::CallEvents));
+            return false;
+        }
+    }
+
+    // The decimal EP scheduler needs point-to-point transfers to hold the
+    // reconfiguration gate. Legacy bitmask experiments retain their original
+    // nonblocking send behavior for paper-result compatibility.
+    if (AstraSim::Scheduler::decimal_topology_ids) {
+        sys->increment_inflight_coll(this->sys->id,
+                                     "SEND#" + std::to_string((int)node->id()));
+    }
 
     #endif
 
-    std::cout << "RANK: " << this->sys->id << " at time " << Sys::boostedTick() <<" Issuing SEND " << src << "-" << dst << std::endl;
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " at time " << Sys::boostedTick() <<" Issuing SEND " << src << "-" << dst << std::endl;
+        std::cout << "RANK: " << this->sys->id << " inflight collective count: " << sys->get_inflight_coll() << std::endl;
+    }
     previous_group_id = cur_comm_group_id;
-
-    //sys->increment_inflight_coll(this->sys->id, std::to_string((int)node->id()) + " " + std::to_string(this->sys->id) + " SEND TO " + std::to_string(dst));
-    std::cout << "RANK: " << this->sys->id << " inflight collective count: " << sys->get_inflight_coll() << std::endl;
 
 
     sim_request snd_req;
@@ -728,7 +972,9 @@ bool Workload::issue_recv_comm(
     // bool reconfig_success = this->scheduler->pre_reconfig(cur_comm_group_id, previous_group_id);
     // if (!reconfig_success) return false;
 
-    std::cout << "RANK: " << this->sys->id << " at time " << Sys::boostedTick() <<" Issuing RECV " << src << "-" << dst << std::endl;
+    if (sys->trace_enabled) {
+        std::cout << "RANK: " << this->sys->id << " at time " << Sys::boostedTick() <<" Issuing RECV " << src << "-" << dst << std::endl;
+    }
 
     // sys->increment_inflight_coll(this->sys->id, std::to_string((int)node->id()) + " " + std::to_string(this->sys->id) + " RECV FROM " + std::to_string(src));
 
@@ -772,34 +1018,61 @@ void Workload::call(EventType event, CallData* data) {
         TwoIntData* int_data = (TwoIntData*)data;
         uint64_t coll_comm_id = int_data->data;
         uint64_t comm_group_id = int_data->data2;
+        uint64_t node_id = collective_comm_node_id_map[coll_comm_id];
+        auto node = et_feeder->lookupNode(node_id);
+        bool explicit_reconfig = node->has_attr("reconfig_topo_id");
+        bool explicit_dim_reconfig = node->has_attr("reconfig_dim");
+        bool skip_scheduler_reconfig =
+            node->get_attr<int>("skip_scheduler_reconfig", 0) != 0;
+        bool topology_agnostic_tp =
+            is_topology_agnostic_tp_group(
+                comm_groups[comm_group_id], comm_to_topo[comm_group_id],
+                num_bw_matrix, explicit_reconfig || explicit_dim_reconfig);
         
         
-        printf("\033[0;32mRANK: %d at time %ld finish collective: %lu of comm group %lu, inflight collective %d\033[0m\n", this->sys->id, Sys::boostedTick(), coll_comm_id, comm_group_id, sys->get_inflight_coll());
+        if (sys->trace_enabled) {
+            printf("\033[0;32mRANK: %d at time %ld finish collective: %lu of comm group %lu, inflight collective %d\033[0m\n", this->sys->id, Sys::boostedTick(), coll_comm_id, comm_group_id, sys->get_inflight_coll());
+        }
 
         #ifndef CONGESTION_AWARE
 
-        if (comm_to_topo[comm_group_id].size() == num_bw_matrix) {
-            std::cout << "TP COMM pattern detected!" << std::endl;
+        if (topology_agnostic_tp || skip_scheduler_reconfig) {
+            if (sys->trace_enabled && topology_agnostic_tp) {
+                std::cout << "TP COMM pattern detected!" << std::endl;
+            }
         } else {
             finish(comm_group_id);
             if (check_finish(comm_group_id)) {
                 sys->decrement_inflight_coll(group_leader_npu_id[comm_group_id], -1);
-                std::cout << "REMOVED inflight collective count for leader NPU " << group_leader_npu_id[comm_group_id] << ", current inflight collective count: " << sys->get_inflight_coll() << std::endl;
+                if (sys->trace_enabled) {
+                    std::cout << "REMOVED inflight collective count for leader NPU " << group_leader_npu_id[comm_group_id] << ", current inflight collective count: " << sys->get_inflight_coll() << std::endl;
+                }
                 group_leader_npu_id.erase(comm_group_id);
                 finish_rounds[comm_group_id] += 1;
+                if (AstraSim::Scheduler::decimal_topology_ids) {
+                    for (int npu_id : comm_groups[comm_group_id]->involved_NPUs) {
+                        timespec_t delta = {NS, 0.0};
+                        Sys::all_sys[npu_id]->comm_NI->sim_schedule(
+                            delta, &Sys::handleEvent,
+                            new BasicEventHandlerData(
+                                npu_id, EventType::CallEvents));
+                    }
+                }
             }
         }
 
         #endif
 
         current_comm_group_idx++;
-        //TODO edit coll_comm_id to comm group
-
-        if (comm_to_topo[comm_group_id].size() == num_bw_matrix) {
-            scheduler->post_reconfig(-2);
-        } else {
-            scheduler->post_reconfig(-1);
+        // Legacy paper workloads use the provisioning look-ahead state machine.
+        if (!AstraSim::Scheduler::decimal_topology_ids) {
+            if (comm_to_topo[comm_group_id].size() == num_bw_matrix) {
+                scheduler->post_reconfig(-2);
+            } else {
+                scheduler->post_reconfig(-1);
+            }
         }
+        //TODO edit coll_comm_id to comm group
 
         // if (current_comm_group_idx < comm_group_list.size()) {
         //     int next_comm_group_id = comm_group_list[current_comm_group_idx];
@@ -819,9 +1092,6 @@ void Workload::call(EventType event, CallData* data) {
         // }
 
         hw_resource->tics_gpu_comms += int_data->execution_time;
-        uint64_t node_id = collective_comm_node_id_map[coll_comm_id];
-        shared_ptr<Chakra::FeederV3::ETFeederNode> node =
-            et_feeder->lookupNode(node_id);
 
         if (sys->trace_enabled) {
             LoggerFactory::get_logger("workload")
@@ -879,18 +1149,21 @@ void Workload::call(EventType event, CallData* data) {
             if (event == EventType::PacketSent ||
                 event == EventType::PacketReceived) {
 
-                printf("\033[0;32mRANK: %d at time %ld finish SEND/RECV\033[0m\n", this->sys->id, Sys::boostedTick());
+                if (sys->trace_enabled) {
+                    printf("\033[0;32mRANK: %d at time %ld finish SEND/RECV\033[0m\n", this->sys->id, Sys::boostedTick());
+                }
 
-                // if(event == EventType::PacketSent)
-                //     sys->decrement_inflight_coll(this->sys->id, node->id());
-                
-                if (event == EventType::PacketSent) {
+                #ifndef CONGESTION_AWARE
+                if (AstraSim::Scheduler::decimal_topology_ids) {
+                    if (event == EventType::PacketSent) {
+                        sys->decrement_inflight_coll(this->sys->id, node->id());
+                    }
+                } else if (event == EventType::PacketSent) {
                     scheduler->post_reconfig((long)wlhd->dst);
                 } else if (event == EventType::PacketReceived) {
                     scheduler->post_reconfig((long)wlhd->src);
                 }
-                
-                // scheduler->post_reconfig((long)data);
+                #endif
 
                 auto& op_stat = stats->get_operator_statistics(wlhd->node_id);
                 Tick execution_time =
@@ -954,12 +1227,60 @@ void Workload::report() {
     }
 }
 
+AllToAllVLoadMapPtr Workload::load_all2allv_loads(const std::string& key) {
+    static std::map<std::string, std::map<std::string, AllToAllVLoadMapPtr>> cache;
+
+    auto file_it = cache.find(this->all2allv_load_filename);
+    if (file_it == cache.end()) {
+        ifstream inFile;
+        inFile.open(this->all2allv_load_filename);
+        if (!inFile.is_open()) {
+            LoggerFactory::get_logger("workload")
+                ->critical("Rank {} cannot open all2allv load cache {}",
+                           sys->id, this->all2allv_load_filename);
+            exit(EXIT_FAILURE);
+        }
+
+        json j;
+        inFile >> j;
+        std::map<std::string, AllToAllVLoadMapPtr> file_cache;
+        for (json::iterator it = j.begin(); it != j.end(); ++it) {
+            auto loads = std::make_shared<AllToAllVLoadMap>();
+            for (const auto& entry : it.value().at("loads")) {
+                int src = entry.at("src").get<int>();
+                int dst = entry.at("dst").get<int>();
+                uint64_t bytes = entry.at("bytes").get<uint64_t>();
+                (*loads)[std::make_pair(src, dst)] = bytes;
+            }
+            file_cache[it.key()] = loads;
+        }
+        file_it = cache.emplace(this->all2allv_load_filename, file_cache).first;
+    }
+
+    auto key_it = file_it->second.find(key);
+    if (key_it == file_it->second.end()) {
+        LoggerFactory::get_logger("workload")
+            ->critical("Rank {} cannot find all2allv load key {} in {}",
+                       sys->id, key, this->all2allv_load_filename);
+        exit(EXIT_FAILURE);
+    }
+    return key_it->second;
+}
+
 CommunicatorGroup* Workload::extract_comm_group(
     std::shared_ptr<Chakra::ETFeederNode> node) {
     std::string comm_group_name = node->pg_name<std::string>("");
     if (comm_group_name == "") {
-        // No communicator group is specified for this communication ET node.
-        return nullptr;
+        const int default_comm_group_id = -1;
+        if (comm_groups.find(default_comm_group_id) == comm_groups.end()) {
+            std::vector<int> involved_NPUs;
+            for (int i = 0; i < sys->total_nodes; i++) {
+                involved_NPUs.push_back(i);
+            }
+            comm_groups[default_comm_group_id] =
+                new CommunicatorGroup(default_comm_group_id, involved_NPUs, sys);
+        }
+        return comm_groups[default_comm_group_id];
     }
     int comm_group_id = std::stoi(comm_group_name);
     if (comm_groups.find(comm_group_id) == comm_groups.end()) {
