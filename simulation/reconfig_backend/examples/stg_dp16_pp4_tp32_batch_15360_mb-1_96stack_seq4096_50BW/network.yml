@@ -1,0 +1,10 @@
+topology:
+- FullyConnected
+npus_count:
+- 2048
+bandwidth:
+- 25
+latency:
+- 936.25
+reconfig_time:
+- 0.0

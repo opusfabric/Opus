@@ -16,6 +16,8 @@ There are four sections:
 4. Paper figure replication
 - Requirement: figure-dependent. Figures 4(d), 5, and 12–15 use the CPU simulator. Figures 4(a-c) and 10–11 need the original Slingshot/NCCL GPU environment. Figure 9 needs the Polatis OCS testbed (we cannot provide access unfortunately).
 
+Runtime estimates below are wall-clock planning ranges from command start to result generation. They exclude Slurm queue time and one-time package or image downloads unless stated otherwise. CPU estimates assume 16–32 modern cores, local SSD storage, and the recommended RAM; GPU estimates assume the allocation described by the experiment. Cached workloads can make repeat runs substantially faster.
+
 ## Repository layout
 
 ```text
@@ -24,7 +26,7 @@ Opus/
 │   ├── emulation-env/       CUDA/PyTorch/RDMA image for software emulation
 │   └── testbed-env/         hardware/testbed image
 ├── evaluation/              archived communication patterns, CSVs, notebooks, PDFs
-├── nccl/                    vendored NCCL source used to build the Opus shim
+├── nccl/                    NCCL source used to build the Opus shim
 ├── scripts/                 portable Slurm and Perlmutter launchers
 ├── simulation/
 │   ├── reconfig_backend/    ASTRA-sim backend with reconfigurable topology support
@@ -42,6 +44,8 @@ This section validate the `cuda:opus` process-group extension on two connected G
 
 ### Build and enter the common Docker image
 
+**Estimated time:** 20–60 minutes for the first image build and under 1 minute to start a cached image. Network and package-cache speed can dominate the first build.
+
 Run these commands from the Opus repository root on a host with the NVIDIA Container Toolkit:
 
 ```bash
@@ -55,6 +59,8 @@ Run the Section 1 commands inside this container.
 
 ### Controller-only preflight (no GPU)
 
+**Estimated time:** under 1 minute.
+
 Run the self-contained smoke test before allocating GPUs:
 
 ```bash
@@ -64,6 +70,8 @@ python3 src/opus-controller/test_emulation.py
 It starts `config.py` in emulation mode, sends four topology values through the Unix socket, checks for `SUCCESS, CONFIG-ACK`, and cleans up. This tests the controller-side delay model.
 
 ### Build the controller and shim
+
+**Estimated time:** 15–45 minutes when NCCL must be built; 2–10 minutes with a compatible NCCL build already available.
 
 ```bash
 make -B -C src/opus-controller
@@ -80,6 +88,8 @@ python -m pip install --no-build-isolation -e src/opus-shim
 ```
 
 ### Run the two-GPU DP reconfiguration demo
+
+**Estimated time:** 1–3 minutes after the image, controller, and shim are built.
 
 The following is a single-host demonstration of the scale-out control path. Since both ranks are on one host, the controller would normally classify them as scale-up and bypass OCS provisioning. The environment variable OPUS_FORCE_DOMAIN=scale-out explicitly selects the scale-out branch for this local demonstration. Do not use that override on a real multi-node run. With multiple nodes, use the actual node addresses in SERVER_IPS and let the controller classify the group.
 
@@ -151,6 +161,8 @@ switch operation is emulated by the 50 ms rail-worker delay. If the provisioned 
 
 ### Cluster setup (Perlmutter/Shifter)
 
+**Estimated time:** 5–20 minutes with a cached Shifter image, including the controller build and tokenizer download. Allow 20–60 minutes if the image or Python assets must first be fetched at the site.
+
 The commands below are the complete Perlmutter path: they use the common CUDA 12.8 image through Shifter, build the controller, and prepare the tokenizer. The source image is [`ericd16/opus`](https://hub.docker.com/r/ericd16/opus).
 
 On a Docker-based Slurm cluster, build and push the same image from `environment/emulation-env/Dockerfile`, then replace each `shifter --image=... --module=gpu` invocation in the launcher with `docker run --rm --gpus all --network host --ipc host --device=/dev/infiniband --hostname "$SLURMD_NODENAME" -v "$OPUS_ROOT:/Opus" -w /Opus ...`. Keep the same `SERVER_IPS`, controller address, and Slurm experiment commands below.
@@ -189,6 +201,8 @@ pipeline_parallel_degree = 2
 ```
 
 ### Track a communication pattern
+
+**Estimated time:** 5–15 minutes of job runtime plus Slurm queue time; compiling the captured schedule normally takes under 1 minute.
 
 When the workload or parallelism changes, capture a fresh communication trace
 before updating the tracked pattern. The profile launcher writes raw per-rank
@@ -231,6 +245,8 @@ export COMM_PATTERN_PATH="${OPUS_ROOT}/torchtitan/opus-test/dp-2-pp-2-tp-4-pm-8b
 
 ### Experiment A: EPS baseline
 
+**Estimated time:** 5–15 minutes of allocated job time, plus Slurm queue time.
+
 This control run uses the same workload and on-demand path, but sets the
 emulated switch delay to zero.
 
@@ -255,6 +271,8 @@ EPS_JOB=$(sbatch --parsable \
 
 ### Experiment B: on-demand reconfiguration
 
+**Estimated time:** 5–15 minutes of allocated job time, plus Slurm queue time.
+
 The next communication stage requests its topology at the stage boundary and
 waits for the 10 ms emulated reconfiguration.
 
@@ -278,6 +296,8 @@ ONDEMAND_JOB=$(sbatch --parsable \
 
 
 ### Experiment C: topology provisioning
+
+**Estimated time:** 5–15 minutes of allocated job time, plus Slurm queue time.
 
 Provisioning uses the identical workload and delay, but requests the next
 topology early so the 10 ms delay can overlap with useful work.
@@ -359,6 +379,8 @@ Provisioning hides that delay and is 7.5% faster than B.
 
 ### Hardware prototype (original testbed)
 
+**Estimated time:** 5–15 minutes for one run after the switch, hosts, software, and credentials are configured. Testbed bring-up and access time are not included.
+
 We also evaluated Opus on a four-node, eight-GPU prototype connected through a
 Polatis optical circuit switch. This was a real hardware run, not the emulation
 used above: the controller launched one worker per optical rail, the worker
@@ -381,7 +403,7 @@ operation is visible in the controller/worker logs as switch product
 information, `Applying <configuration>`, `Connections set`, and
 `SUCCESS, CONFIG-ACK` messages. Re-running this command requires the original
 Polatis switch, its site-approved PyPolatis package, the listed testbed hosts,
-and compatible GPU/NIC firmware. We won't share those resources in this artifact as the testbed 
+and compatible GPU/NIC firmware. We are not planning to share those resources in this artifact as the testbed
 is being actively used.
 
 ## 3. Software simulation
@@ -427,6 +449,8 @@ Activate this `.venv` in every shell before running `build_backends.sh`, `run_ex
 
 ### Build the reconfigurable simulator
 
+**Estimated time:** 3–15 minutes for a clean build; an incremental no-op build normally takes under 1 minute.
+
 ```bash
 ./simulation/scripts/build_backends.sh
 ```
@@ -444,6 +468,8 @@ If CMake stops at `find_package(Protobuf)`, install `libprotobuf-dev` and
 `CMAKE_BUILD_PARALLEL_LEVEL` if memory is limited.
 
 ### Minimal simulation test
+
+**Estimated time:** 1–5 minutes after the simulator is built, or approximately 5–20 minutes including a clean build.
 
 ```bash
 ./simulation/scripts/run_example.sh
@@ -484,6 +510,8 @@ Expected result:
 ### Paper Figure 12
 Figure 12 is the Llama/H200-style scale-out study: DP=4, PP=4, TP=8, with reconfiguration-latency and scale-out-bandwidth sweeps.
 
+**Estimated time:** 15–45 minutes for the latency sweep, 30–90 minutes for the bandwidth sweep, and under 2 minutes to plot. Allow approximately 1–3 hours for a completely fresh recreation including workload generation and builds.
+
 From the previous simulation Docker environment:
 
 ```bash
@@ -508,6 +536,8 @@ The scripts generate the workload and topology files and write `fig12.pdf`. The 
 
 Figure 13 is the larger GB200/B200-style study: DP=4, PP=4, TP=32, with the GB200 trace generator and the same latency/bandwidth sweep pattern.
 
+**Estimated time:** 1–3 hours for the latency sweep, 2–6 hours for the bandwidth sweep, and under 2 minutes to plot. Allow approximately 3–9 hours for a fresh end-to-end recreation; the 512 simulated NPUs make trace generation sensitive to RAM and storage speed.
+
 ```bash
 cd simulation/scripts/fig13
 ./run_latency_exps.sh
@@ -520,6 +550,8 @@ The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directo
 ### Paper Figure 14
 
 Requirement: CPU only; 64 GB RAM is recommended for the complete 256/512-GPU sweeps.
+
+**Estimated time:** 5–20 minutes for the default smoke test, 2–6 hours for the 256-GPU recreation, 4–12 hours for the 512-GPU recreation, or 6–18 hours for `run_ep.sh all`. Plot-only recreation from archived results normally takes under 2 minutes.
 
 From the repository root, build the simulator and regenerate all Figure 14 results:
 
@@ -541,6 +573,8 @@ Results are written to the [256-GPU directory](simulation/reconfig_backend/examp
 
 Figure 15 is the DP scale-out, performance, cost, and power study: DGX H200 with 400 Gbps links and B200 with 800 Gbps links.
 
+**Estimated time:** 1–4 hours for the H200 sweep, 4–12 hours for the GB200 sweep, and under 2 minutes to plot. Running both fresh sweeps sequentially therefore takes approximately 5–16 hours.
+
 ```bash
 cd simulation/scripts/fig15
 ./run_H200_exps.sh
@@ -555,6 +589,8 @@ The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to p
 Figure 4 shows how communication reconfiguration affects computation windows.
 
 #### Panels (a-c): trace analysis
+
+**Estimated time:** 20–60 minutes of allocated GPU time for trace capture and 2–10 minutes for extraction and plotting, plus Slurm queue time. The tokenizer download normally takes 1–5 minutes.
 
 Requirement: a 256-GPU Slurm allocation with CUDA-enabled PyTorch/TorchTitan
 (the default launcher requests 32 nodes x 8 GPUs). The profiling run uses one experiment's configuration: DeepSeek-V2 236B, DP=8, PP=8, TP=4, EP=32, sequence
@@ -612,6 +648,8 @@ The rerun is complete when these outputs exist there:
 
 For the ASTRA-Sim strong-scaling inputs, run the following inside the Section 3 Docker container after building the simulator:
 
+**Estimated time for panel (d):** 6–24 hours for all four fresh strong-scaling cases on a 32-core, 64 GB host; rerunning only the simulator from cached traces is typically 1–6 hours.
+
 ```bash
 for dp in 16 32 64 128; do
   DP="${dp}" TP=32 PP=4 EP=1 BATCH=15360 NS=96 SEQ_LEN=4096 \
@@ -628,7 +666,11 @@ done
 
 Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Util = Tcompute / (Tcompute + Tnon_overlap_comm + Tstall)`, with `Tstall = sum_i max(0, Treconfig - Twindow_i)`. It evaluates OCS reconfiguration latencies of 0, 1, 5, 10, 50, 100, 250, 500, 750, and 1000 ms for the four frontier scales.
 
+**Estimated time:** under 5 minutes when the Figure 4(d) frontier-window outputs already exist. A fully fresh recreation inherits the approximately 6–24 hour Figure 4(d) input-generation time.
+
 ### Paper Figure 10/11
+
+**Estimated time:** 5–15 minutes of allocated time per 10-step job. The three-job comparison takes 15–45 minutes sequentially or about 5–15 minutes when jobs run concurrently, excluding queue time. A complete eight-delay baseline/provisioning sweep for one case is approximately 1.5–4 hours sequentially.
 
 Requirement: Slurm with CUDA-enabled PyTorch, NCCL/RDMA, and 16 NVIDIA GPUs
 (4 nodes × 4 GPUs) for the 16-GPU cases or 64 GPUs (16 nodes × 4 GPUs) for
@@ -716,4 +758,4 @@ above consume the corresponding latency summaries/CSV data.
 
 | Paper figure/material | Artifact pointer | Note |
 | --- | --- | --- |
-| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only. Reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages |
+| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only. Reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages; active measurement takes approximately 5–15 minutes after testbed setup and access. |
