@@ -16,8 +16,6 @@ There are four sections:
 4. Paper figure replication
 - Requirement: figure-dependent. Figures 4(d), 5, and 12–15 use the CPU simulator. Figures 4(a-c) and 10–11 need the original Slingshot/NCCL GPU environment. Figure 9 needs the Polatis OCS testbed (we cannot provide access unfortunately).
 
-Runtime estimates below are wall-clock planning ranges from command start to result generation. They exclude Slurm queue time and one-time package or image downloads unless stated otherwise. CPU estimates assume 16–32 modern cores, local SSD storage, and the recommended RAM; GPU estimates assume the allocation described by the experiment. Cached workloads can make repeat runs substantially faster.
-
 ## Repository layout
 
 ```text
@@ -326,7 +324,7 @@ PROVISION_JOB=$(sbatch --parsable \
 For all four jobs, the top-level job and worker step must finish with
 `COMPLETED 0:0` and every worker log must reach step 10. For the three Opus
 jobs, the controller log must also contain `CONFIG_REQ`, `ALL READY`, topology
-changes, and `CONFIG_ACK`; the native reference intentionally has no
+changes, and `CONFIG_ACK`. The native reference intentionally has no
 controller log.
 
 ```bash
@@ -758,4 +756,4 @@ above consume the corresponding latency summaries/CSV data.
 
 | Paper figure/material | Artifact pointer | Note |
 | --- | --- | --- |
-| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only. Reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages; active measurement takes approximately 5–15 minutes after testbed setup and access. |
+| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only. Reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages.|
