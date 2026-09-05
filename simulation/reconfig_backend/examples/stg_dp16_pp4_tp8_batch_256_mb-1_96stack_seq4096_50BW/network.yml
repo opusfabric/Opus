@@ -5,6 +5,6 @@ latency:
 npus_count:
 - 512
 reconfig_time:
-- 10000000.0
+- 0.0
 topology:
 - FullyConnected

@@ -541,7 +541,7 @@ The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to p
 
 ### Paper Figure 4
 
-Figure 4 shows how communication reconfiguration affects computation windows. Panels (a-c) use trace analysis; panel (d) uses ASTRA-Sim for strong scaling. The original paper traces are not included, so panels (a-c) require those traces to be available locally.
+Figure 4 shows how communication reconfiguration affects computation windows. Panels (a-c) use trace analysis, and panel (d) uses ASTRA-Sim for strong scaling. The original paper traces are not included, so panels (a-c) require those traces to be available locally.
 
 Scripts: [plot_transition_cdf.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/plot_transition_cdf.py), [trace_timing_gap.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/trace_timing_gap.py), [timing_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/timing_gap_deepseek_236b_256gpu.py), [comm_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/comm_gap_deepseek_236b_256gpu.py), and [ASTRA-Sim workload generator](https://github.com/opusfabric/Opus/blob/main/simulation/reconfig_backend/run_stg_exp_fg_pp.sh).
 
@@ -555,7 +555,9 @@ python3 comm_gap_deepseek_236b_256gpu.py > comm_gap_model.txt
 python3 plot_transition_cdf.py
 ```
 
-The plotting script writes `transition_cdf_combined.png` and `transition_cdf_per_pair.png`; the other commands write text reports. For the ASTRA-Sim strong-scaling inputs, run the following inside the Section 3 Docker container after building the simulator:
+The plotting script writes `transition_cdf_combined.png` and `transition_cdf_per_pair.png`.
+
+For the ASTRA-Sim strong-scaling inputs, run the following inside the Section 3 Docker container after building the simulator:
 
 ```bash
 for dp in 16 32 64 128; do
@@ -569,17 +571,15 @@ for dp in 16 32 64 128; do
 done
 ```
 
-The four result directories contain ASTRA-Sim outputs for 2048, 4096, 8192, and 16384 simulated NPUs. The paper-specific frontier traces and final plotting script are not included.
-
 ### Paper Figure 5
 
-Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Util = Tcompute / (Tcompute + Tnon_overlap_comm + Tstall)`, with `Tstall = sum_i max(0, Treconfig - Twindow_i)`. It evaluates OCS reconfiguration latencies of 0, 1, 5, 10, 50, 100, 250, 500, 750, and 1000 ms for the four frontier scales. Use the rounded median windows 187, 94, 47, and 24 ms as a sanity check for 2048, 4096, 8192, and 16384 GPUs. The paper conclusion is that sub-10-ms OCS reconfiguration preserves high utilization, while latency comparable to or above the work window produces visible stalls. This is a derived software calculation and does not require a physical OCS.
+Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Util = Tcompute / (Tcompute + Tnon_overlap_comm + Tstall)`, with `Tstall = sum_i max(0, Treconfig - Twindow_i)`. It evaluates OCS reconfiguration latencies of 0, 1, 5, 10, 50, 100, 250, 500, 750, and 1000 ms for the four frontier scales.
 
 ### Paper Figure 10/11
 
 Requirement: Slurm with CUDA-enabled PyTorch, NCCL/RDMA, and 16 NVIDIA GPUs
 (4 nodes × 4 GPUs) for the 16-GPU cases or 64 GPUs (16 nodes × 4 GPUs) for
-Llama-64. No physical OCS is required; raw reruns require a compatible
+Llama-64. No physical OCS is required. Reruns require a compatible
 Slingshot/NCCL cluster.
 
 Scripts:
@@ -594,6 +594,15 @@ Scripts:
 - [Llama 3D, 64-GPU plot notebook](evaluation/llama-3-3d-64-latency/provision.ipynb)
 - [DeepSeek 2D plot notebook](evaluation/deepseek_v3_16b-2d-16-latency/plot.ipynb)
 - [DeepSeek 3D plot notebook](evaluation/deepseek_v3_16b-3d-16-latency/plot.ipynb)
+
+The following archived directories contain the communication-pattern files
+used by the corresponding Figure 10/11 runs (`COMM_PATTERN_PATH`):
+
+- [Llama 3D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/llama-3-3d-16-latency/comm_pattern)
+- [Llama 3D, 64 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/llama-3-3d-64-latency/comm_pattern_no_ctl_issue)
+- [DeepSeek 2D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/deepseek_v3_16b-2d-16-latency/comm_pattern)
+- [DeepSeek 3D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/deepseek_v3_16b-3d-16-latency/comm_pattern)
+
 
 After the Section 2 setup, set the case-specific config, communication-pattern
 prefix, GPU allocation, delay, and output directory, then submit:
@@ -615,12 +624,7 @@ scripts/summarize_iteration_latency.py <run-id> --last 5
 
 ### Other paper figures and archived artifacts
 
-These entries are ordered by figure number. Links point to files or directories that are present in this checkout. The archived notebooks and CSVs are useful for checking communication patterns and trends; a fresh raw emulation requires the original Slingshot/NCCL environment.
 
-
-| Paper figure/material | Artifact pointer | Reproduction status |
+| Paper figure/material | Artifact pointer | Note |
 | --- | --- | --- |
-| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only; reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages |
-| Figures 10 and 11: emulation latency, provisioning, and control-plane overhead | [Llama 3D, 16-GPU archive](evaluation/llama-3-3d-16-latency/), [Llama 3D, 64-GPU archive](evaluation/llama-3-3d-64-latency/), [DeepSeek 2D archive](evaluation/deepseek_v3_16b-2d-16-latency/), and [DeepSeek 3D archive](evaluation/deepseek_v3_16b-3d-16-latency/) | CSVs, communication patterns, notebooks, and rendered plots are archived; raw rerun requires Slingshot/NCCL |
-
-For notebook outputs, open the notebook in Jupyter, confirm that its CSV paths point inside `evaluation/`, and run all cells. The committed PDFs are useful for checking that a fresh plot has the same axes and trend.
+| Figure 9: hardware testbed and link-recovery timeline | [testbed environment README](environment/testbed-env/README.md), [testbed Dockerfile](environment/testbed-env/Dockerfile), [hardware launch script](torchtitan/opus-test/dp-2-tp-2-pp-2-eval/test-6-7-8-9-8gpu.sh), and [Polatis worker](src/opus-controller/config.py) | Overview only. Reproducing the measurements requires the Polatis OCS, compatible NIC/firmware, testbed hosts, and site-approved packages |
