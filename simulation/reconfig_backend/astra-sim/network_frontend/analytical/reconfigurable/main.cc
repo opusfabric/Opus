@@ -12,6 +12,7 @@ LICENSE file in the root directory of this source tree.
 #include <remote_memory_backend/analytical/AnalyticalRemoteMemory.hh>
 #include "astra-sim/system/CommunicatorGroup.hh"
 
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -73,12 +74,6 @@ void parse_bw_matrix(const std::string& filename) {
             }
             bw_matrix_map[topo_id] = bw_matrix;
             std::cout << "Parsed BW matrix for topology: " << topo_id << std::endl;
-            for(auto row:bw_matrix){
-                for(auto bw: row){
-                    std::cout << bw << " ";
-                }
-                std::cout << std::endl;
-            }
         }
     }
 }
@@ -115,28 +110,16 @@ void initialize_comm_groups(std::string comm_group_filename) {
 void map_comm_to_topo(std::string comm_group_file){
     initialize_comm_groups(comm_group_file);
     for (auto& [comm_group_id, involved_NPUs] : comm_groups) {
-        // For simplicity, we assign each communicator group to a topology
-        // based on its ID modulo the number of topologies available.
-        for (int topo_id = 0; topo_id < bw_matrix_map.size(); ++topo_id) {
+        for (const auto& [topo_id, bw_matrix] : bw_matrix_map) {
             bool compatible = true;
-            for(int i = 0; i < involved_NPUs.size() - 1; i++){
+            for(int i = 0; i < (int)involved_NPUs.size() - 1; i++){
                 int npu_a = involved_NPUs[i];
                 int npu_b = involved_NPUs[i+1];
-                if (bw_matrix_map[topo_id][npu_a][npu_b] == 0){
+                if (bw_matrix[npu_a][npu_b] == 0){
                     compatible = false;
                     break;
                 }
             }
-            // for(const auto& src : involved_NPUs){
-            //     for (const auto& dst : involved_NPUs){
-            //         if(src != dst) {
-            //             if (bw_matrix_map[topo_id][src][dst] == 0) {
-            //                 compatible = false;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
             if (compatible){
                 comm_to_topo[comm_group_id].push_back(topo_id);
                 std::cout << "Mapped Comm Group " << comm_group_id << " to Topology " << topo_id << std::endl;
@@ -175,6 +158,8 @@ int main(int argc, char* argv[]) {
 
     const auto provision_config =
         cmd_line_parser.get<std::string>("provision-config");
+    const auto routing_algorithm_str =
+        cmd_line_parser.get<std::string>("routing-algorithm");
 
     AstraSim::LoggerFactory::init(logging_configuration);
 
@@ -206,8 +191,61 @@ int main(int argc, char* argv[]) {
 
     tm = std::make_shared<TopologyManager>(npus_count, npus_count, event_queue.get(), bw_matrix_map);
 
-    // Initialize the topology to the first topology in the map
-    tm->reconfigure(bw_matrix_map[0], lt_matrix, 0, 0);
+    {
+        RoutingAlgorithm algo = RoutingAlgorithm::BFS;
+        if (routing_algorithm_str == "opus") {
+            algo = RoutingAlgorithm::OPUS;
+        } else if (routing_algorithm_str != "bfs") {
+            std::cerr << "[Warning] Unknown --routing-algorithm='"
+                      << routing_algorithm_str
+                      << "'; defaulting to 'bfs'." << std::endl;
+        }
+        tm->set_routing_algorithm(algo);
+        std::cout << "Routing algorithm: " << routing_algorithm_str << std::endl;
+    }
+
+    // Legacy DP/PP studies encode stage state as a bitmask. The EP study
+    // selects opus routing and uses decimal digits (0=PP, 1=DP, 3=EP).
+    // This avoids mistaking bitmask IDs such as 3 and 13 for EP digits.
+    AstraSim::Scheduler::decimal_topology_ids =
+        routing_algorithm_str == "opus";
+    AstraSim::Scheduler::stage_dp_or_pp.clear();
+    if (AstraSim::Scheduler::decimal_topology_ids) {
+        int max_key = bw_matrix_map.empty() ? 1 : bw_matrix_map.rbegin()->first;
+        int n = 1;
+        { int tmp = max_key; while (tmp >= 10) { tmp /= 10; n++; } }
+        AstraSim::Scheduler::pp_stages = n;
+    } else {
+        AstraSim::Scheduler::pp_stages =
+            static_cast<int>(std::log2(bw_matrix_map.size()));
+    }
+    std::cout << "Topology ID encoding: "
+              << (AstraSim::Scheduler::decimal_topology_ids
+                      ? "decimal stage digits" : "PP-stage bitmask")
+              << std::endl;
+    std::cout << "PP Stages: " << AstraSim::Scheduler::pp_stages << std::endl;
+    AstraSim::Scheduler::num_npu_per_pp = npus_count / AstraSim::Scheduler::pp_stages;
+    std::cout << "Num NPU per PP: " << AstraSim::Scheduler::num_npu_per_pp << std::endl;
+    for (int i = 0; i < AstraSim::Scheduler::pp_stages; i++) {
+        AstraSim::Scheduler::stage_dp_or_pp.push_back(
+            AstraSim::Scheduler::decimal_topology_ids ? 1 : 0);
+    }
+
+    AstraSim::Scheduler::ep_topo_id = 0;
+    if (AstraSim::Scheduler::decimal_topology_ids && bw_matrix_map.count(3)) {
+        AstraSim::Scheduler::ep_topo_id = 3;
+        std::cout << "EP topology digit detected: 3" << std::endl;
+    }
+
+    int initial_dp_topo_id = 0;
+    if (AstraSim::Scheduler::decimal_topology_ids) {
+        for (int i = 0; i < AstraSim::Scheduler::pp_stages; i++) {
+            initial_dp_topo_id = initial_dp_topo_id * 10 + 1;
+        }
+    }
+    tm->reconfigure(bw_matrix_map.at(initial_dp_topo_id), lt_matrix,
+                    AstraSim::Scheduler::decimal_topology_ids ? 1 : 0,
+                    initial_dp_topo_id, 0);
 
     tm->set_reconfig_latency(reconfig_latency);
 
@@ -226,14 +264,6 @@ int main(int argc, char* argv[]) {
     auto queues_per_dim = std::vector<int>();
     for (auto i = 0; i < 1; i++) {
         queues_per_dim.push_back(num_queues_per_dim);
-    }
-
-    AstraSim::Scheduler::pp_stages = int(log2(bw_matrix_map.size()));
-    std::cout << "PP Stages set to: " << AstraSim::Scheduler::pp_stages << std::endl;
-    AstraSim::Scheduler::num_npu_per_pp = npus_count / AstraSim::Scheduler::pp_stages;
-    std::cout << "Num NPU per PP set to: " << AstraSim::Scheduler::num_npu_per_pp << std::endl;
-    for(int i = 0; i < AstraSim::Scheduler::pp_stages; i++){
-        AstraSim::Scheduler::stage_dp_or_pp.push_back(0);
     }
 
 
@@ -274,6 +304,19 @@ int main(int argc, char* argv[]) {
             break;
     }
 
+    int unfinished_workloads = 0;
+    for (int i = 0; i < npus_count; i++) {
+        if (!systems[i]->workload->is_finished) {
+            unfinished_workloads++;
+        }
+    }
+    if (unfinished_workloads != 0) {
+        std::cerr << "Error: simulation event queue ended with "
+                  << unfinished_workloads << " of " << npus_count
+                  << " workloads unfinished." << std::endl;
+    }
+
+    bool has_pending_chunks = false;
     for (int i = 0; i < npus_count; i++) {
         auto d = tm->get_device(i);
         for (int j = 0; j < npus_count; j++) {
@@ -282,10 +325,15 @@ int main(int argc, char* argv[]) {
                     std::cerr << "Error: Device " << d->get_id()
                               << " has pending chunks to Device " << j
                               << " after simulation ends!" << std::endl;
-                    assert(false);
+                    has_pending_chunks = true;
                 }
             }
         }
+    }
+
+    if (has_pending_chunks || unfinished_workloads != 0) {
+        AstraSim::LoggerFactory::shutdown();
+        return 2;
     }
 
     std::ofstream link_stats_file("link_stats_report.txt");

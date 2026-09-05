@@ -11,6 +11,7 @@ LICENSE file in the root directory of this source tree.
 #include <unordered_map>
 
 #include "astra-sim/workload/Scheduler.hh"
+#include "astra-sim/system/AllToAllVLoad.hh"
 #include "astra-sim/system/Callable.hh"
 #include "astra-sim/system/CommunicatorGroup.hh"
 #include "astra-sim/workload/HardwareResource.hh"
@@ -44,6 +45,7 @@ class Workload : public Callable {
     // event-based simulation
     void issue_dep_free_nodes();
     bool issue(std::shared_ptr<Chakra::FeederV3::ETFeederNode> node);
+    bool issue_reconfig(std::shared_ptr<Chakra::FeederV3::ETFeederNode> node);
     void issue_metadata(std::shared_ptr<Chakra::FeederV3::ETFeederNode> node);
     void issue_replay(std::shared_ptr<Chakra::FeederV3::ETFeederNode> node);
     void issue_remote_mem(std::shared_ptr<Chakra::FeederV3::ETFeederNode> node);
@@ -69,6 +71,7 @@ class Workload : public Callable {
     std::unordered_map<int, DataSet*> collective_comm_wrapper_map;
     bool is_finished;
     Scheduler* scheduler;
+    std::string all2allv_load_filename;
 
     static std::map<int, int> group_vote_count;
     static std::map<int, std::map<int, int>> group_node_vote_count;
@@ -100,6 +103,7 @@ class Workload : public Callable {
 
     CommunicatorGroup* extract_comm_group(
         std::shared_ptr<Chakra::ETFeederNode> node);
+    AllToAllVLoadMapPtr load_all2allv_loads(const std::string& key);
     int previous_group_id = 0;
 };
 

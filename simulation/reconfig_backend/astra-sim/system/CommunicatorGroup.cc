@@ -9,6 +9,7 @@ LICENSE file in the root directory of this source tree.
 
 #include "astra-sim/system/CollectivePlan.hh"
 #include "astra-sim/system/Sys.hh"
+#include "astra-sim/workload/Scheduler.hh"
 
 using namespace AstraSim;
 
@@ -53,8 +54,17 @@ CollectivePlan* CommunicatorGroup::get_collective_plan(ComType comm_type) {
     } else {
         LogicalTopology* logical_topology = new RingTopology(
             RingTopology::Dimension::Local, generator->id, involved_NPUs);
-        std::vector<CollectiveImpl*> collective_implementation{
-            new CollectiveImpl(CollectiveImplType::Ring)};
+        std::vector<CollectiveImpl*> collective_implementation;
+        if (Scheduler::decimal_topology_ids) {
+            for (auto impl : generator->get_collective_implementation(comm_type)) {
+                collective_implementation.push_back(
+                    static_cast<CollectiveImpl*>(impl->clone()));
+            }
+        }
+        if (collective_implementation.empty()) {
+            collective_implementation.push_back(
+                new CollectiveImpl(CollectiveImplType::Ring));
+        }
         std::vector<bool> dimensions_involved(1, true);
         bool should_be_removed = true;
         comm_plans[comm_type] =

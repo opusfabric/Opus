@@ -44,7 +44,12 @@ void CmdLineParser::define_options() noexcept {
         "circuit-schedules", "Circuit schedules file",
         cxxopts::value<std::string>())(
         "provision-config", "Provisioning configuration file",
-        cxxopts::value<std::string>()->default_value(""));
+        cxxopts::value<std::string>()->default_value(""))(
+        "routing-algorithm",
+        "Routing algorithm: bfs (default, shortest-hop BFS) or opus "
+        "(hierarchical Dijkstra with ECMP: minimises scale-out hops, "
+        "load-balances across rails)",
+        cxxopts::value<std::string>()->default_value("bfs"));
 }
 
 void CmdLineParser::parse(int argc, char* argv[]) noexcept {

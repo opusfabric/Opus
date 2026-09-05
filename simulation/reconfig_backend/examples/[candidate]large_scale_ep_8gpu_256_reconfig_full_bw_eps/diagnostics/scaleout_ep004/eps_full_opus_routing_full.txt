@@ -1,0 +1,2 @@
+terminate called after throwing an instance of 'spdlog::spdlog_ex'
+  what():  Failed opening file log/log.log for writing: Permission denied

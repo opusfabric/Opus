@@ -1,0 +1,41 @@
+{
+    "name": "large_scale_ep_scaleout_32gpu_512_all2allv_topk_context",
+    "description": "GB200-style 512-GPU scale-out EP sweep using all2allv MoE dispatch/combine with top-k context routing.",
+    "total_gpus": 512,
+    "gpus_per_node": 32,
+    "tp": 32,
+    "pp": 2,
+    "dp": 8,
+    "scale_up_GBps": 900.0,
+    "scale_out_Gbps": 800.0,
+    "scale_out_GBps": 100.0,
+    "latency_ns": 1000,
+    "microbatches": 4,
+    "global_batch_size": 256,
+    "layers_per_stage": 2,
+    "ep_sizes": [
+        1,
+        2,
+        4,
+        8
+    ],
+    "reconfig_latencies_ns": [
+        500000,
+        1000000,
+        10000000,
+        50000000,
+        100000000
+    ],
+    "plot_latencies_ns": [
+        500000,
+        1000000,
+        10000000,
+        50000000,
+        100000000
+    ],
+    "ep_comm_pattern": "all_to_allv",
+    "moe_routing": "topk_context",
+    "all2allv_payload_scale": "comm_size",
+    "all2allv_collective_envelope": "max_rank_load",
+    "sweep_variants": ["opus_diverge"]
+}

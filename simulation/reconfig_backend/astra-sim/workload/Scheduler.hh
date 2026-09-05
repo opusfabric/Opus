@@ -32,6 +32,12 @@ public:
     static std::vector<int> stage_dp_or_pp;
     static int pp_stages;
     static int num_npu_per_pp;
+    // Figure 12/13/15 schedules use one bit per PP stage. The expert-
+    // parallel Figure 14 schedules use one decimal digit per stage.
+    static bool decimal_topology_ids;
+    // When non-zero, the decimal digit used for EP-stage topology state.
+    // The full topology ID is assembled from per-PP-stage digits.
+    static int ep_topo_id;
 };
 }
 

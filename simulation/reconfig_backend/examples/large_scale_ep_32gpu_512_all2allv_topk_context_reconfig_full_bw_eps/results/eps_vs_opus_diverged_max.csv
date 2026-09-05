@@ -1,0 +1,66 @@
+source,source_label,ep_size,latency_label,stat,eps_ms,opus_diverge_ms,eps_speedup_vs_opus_diverge,eps_slowdown_vs_opus_diverge
+original,EP + TP + DP,1,500us,max,21517.576,21532.576,1.0007,0.9993
+original,EP + TP + DP,2,500us,max,10826.672,10841.672,1.0014,0.9986
+original,EP + TP + DP,4,500us,max,5480.452,5495.452,1.0027,0.9973
+original,EP + TP + DP,8,500us,max,2807.395,2822.395,1.0053,0.9947
+original,EP + TP + DP,16,500us,max,1470.854,1485.854,1.0102,0.9899
+original,EP + TP + DP,32,500us,max,802.581,817.581,1.0187,0.9817
+original,EP + TP + DP,64,500us,max,531.169,546.169,1.0282,0.9725
+original,EP + TP + DP,128,500us,max,550.567,632.983,1.1497,0.8698
+original,EP + TP + DP,256,500us,max,466.957,695.886,1.4903,0.6710
+original,EP + TP + DP,1,1ms,max,21517.576,21547.576,1.0014,0.9986
+original,EP + TP + DP,2,1ms,max,10826.672,10856.672,1.0028,0.9972
+original,EP + TP + DP,4,1ms,max,5480.452,5510.452,1.0055,0.9946
+original,EP + TP + DP,8,1ms,max,2807.395,2837.395,1.0107,0.9894
+original,EP + TP + DP,16,1ms,max,1470.854,1500.854,1.0204,0.9800
+original,EP + TP + DP,32,1ms,max,802.581,832.581,1.0374,0.9640
+original,EP + TP + DP,64,1ms,max,531.169,561.169,1.0565,0.9465
+original,EP + TP + DP,128,1ms,max,550.567,647.983,1.1769,0.8497
+original,EP + TP + DP,256,1ms,max,466.957,710.886,1.5224,0.6569
+original,EP + TP + DP,1,10ms,max,21517.576,21817.576,1.0139,0.9862
+original,EP + TP + DP,2,10ms,max,10826.672,11126.672,1.0277,0.9730
+original,EP + TP + DP,4,10ms,max,5480.452,5780.452,1.0547,0.9481
+original,EP + TP + DP,8,10ms,max,2807.395,3107.395,1.1069,0.9035
+original,EP + TP + DP,16,10ms,max,1470.854,1770.854,1.2040,0.8306
+original,EP + TP + DP,32,10ms,max,802.581,1102.581,1.3738,0.7279
+original,EP + TP + DP,64,10ms,max,531.169,831.169,1.5648,0.6391
+original,EP + TP + DP,128,10ms,max,550.567,917.983,1.6673,0.5998
+original,EP + TP + DP,256,10ms,max,466.957,980.886,2.1006,0.4761
+original,EP + TP + DP,1,50ms,max,21517.576,23017.576,1.0697,0.9348
+original,EP + TP + DP,2,50ms,max,10826.672,12326.672,1.1385,0.8783
+original,EP + TP + DP,4,50ms,max,5480.452,6980.452,1.2737,0.7851
+original,EP + TP + DP,8,50ms,max,2807.395,4307.395,1.5343,0.6518
+original,EP + TP + DP,16,50ms,max,1470.854,2970.854,2.0198,0.4951
+original,EP + TP + DP,32,50ms,max,802.581,2302.581,2.8690,0.3486
+original,EP + TP + DP,64,50ms,max,531.169,2031.169,3.8240,0.2615
+original,EP + TP + DP,128,50ms,max,550.567,2117.983,3.8469,0.2599
+original,EP + TP + DP,256,50ms,max,466.957,2180.886,4.6704,0.2141
+original,EP + TP + DP,1,100ms,max,21517.576,24517.576,1.1394,0.8776
+original,EP + TP + DP,2,100ms,max,10826.672,13826.672,1.2771,0.7830
+original,EP + TP + DP,4,100ms,max,5480.452,8480.452,1.5474,0.6462
+original,EP + TP + DP,8,100ms,max,2807.395,5807.395,2.0686,0.4834
+original,EP + TP + DP,16,100ms,max,1470.854,4470.854,3.0396,0.3290
+original,EP + TP + DP,32,100ms,max,802.581,3802.581,4.7379,0.2111
+original,EP + TP + DP,64,100ms,max,531.169,3531.169,6.6479,0.1504
+original,EP + TP + DP,128,100ms,max,550.567,3617.983,6.5714,0.1522
+original,EP + TP + DP,256,100ms,max,466.957,3680.886,7.8827,0.1269
+scaleout,EP + DP,1,500us,max,21517.576,21532.576,1.0007,0.9993
+scaleout,EP + DP,2,500us,max,11076.033,11091.033,1.0014,0.9986
+scaleout,EP + DP,4,500us,max,5731.997,9961.580,1.7379,0.5754
+scaleout,EP + DP,8,500us,max,3057.846,5207.745,1.7031,0.5872
+scaleout,EP + DP,1,1ms,max,21517.576,21547.576,1.0014,0.9986
+scaleout,EP + DP,2,1ms,max,11076.033,11106.033,1.0027,0.9973
+scaleout,EP + DP,4,1ms,max,5731.997,9976.580,1.7405,0.5745
+scaleout,EP + DP,8,1ms,max,3057.846,5222.745,1.7080,0.5855
+scaleout,EP + DP,1,10ms,max,21517.576,21817.576,1.0139,0.9862
+scaleout,EP + DP,2,10ms,max,11076.033,11376.033,1.0271,0.9736
+scaleout,EP + DP,4,10ms,max,5731.997,10246.580,1.7876,0.5594
+scaleout,EP + DP,8,10ms,max,3057.846,5492.745,1.7963,0.5567
+scaleout,EP + DP,1,50ms,max,21517.576,23017.576,1.0697,0.9348
+scaleout,EP + DP,2,50ms,max,11076.033,12576.033,1.1354,0.8807
+scaleout,EP + DP,4,50ms,max,5731.997,11446.580,1.9970,0.5008
+scaleout,EP + DP,8,50ms,max,3057.846,6692.745,2.1887,0.4569
+scaleout,EP + DP,1,100ms,max,21517.576,24517.576,1.1394,0.8776
+scaleout,EP + DP,2,100ms,max,11076.033,14076.033,1.2709,0.7869
+scaleout,EP + DP,4,100ms,max,5731.997,12946.580,2.2587,0.4427
+scaleout,EP + DP,8,100ms,max,3057.846,8192.745,2.6793,0.3732

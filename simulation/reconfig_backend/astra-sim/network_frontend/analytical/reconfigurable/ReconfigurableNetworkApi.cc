@@ -57,13 +57,17 @@ void ReconfigurableNetworkApi::decrement_inflight_coll(int rank, int node_id) {
             }
         }
     }
-    else { 
+    else {
+        // Point-to-point entries use the exact name "SEND#<node_id>"; a bare
+        // substring match could confuse node 12 with node 123.
+        const std::string send_name = "SEND#" + std::to_string(node_id);
         for (const auto& name : on_going_comms[rank]) {
-            if (name.find(std::to_string(node_id)) != std::string::npos) {
+            if (name == send_name ||
+                (name.rfind("SEND#", 0) != 0 &&
+                 name.find(std::to_string(node_id)) != std::string::npos)) {
                 on_going_comms[rank].erase(name);
-            break;
+                break;
             }
-
         }
     }
     if(tm->inflight_coll == 0) {

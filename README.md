@@ -483,9 +483,11 @@ Expected result:
 ### Paper Figure 12
 Figure 12 is the Llama/H200-style scale-out study: DP=4, PP=4, TP=8, with reconfiguration-latency and scale-out-bandwidth sweeps.
 
-From the previous simulation docker environment:
+From the previous simulation Docker environment:
 
 ```bash
+cd /Opus
+./simulation/scripts/build_backends.sh
 cd simulation/scripts/fig12
 
 # Latency sweep. Default values are 0, 10, 50, 100, 250, 500, 750, and 1000 ms.
@@ -516,15 +518,23 @@ The result is `simulation/scripts/fig13/fig13.pdf`. The generated center directo
 
 ### Paper Figure 14
 
-Figure 14 is the expert-parallel (EP) scaling experiment: step latency versus EP degree for Opus and EPS. The left panel co-locates EP with TP/DP; the right spreads EP over DP only, so all EP AllToAll traffic crosses scale-out. The paper uses DeepSeek-V3-style MoE traces with 256 routed experts, top-8 gating, sequence length 4096, and global batch 256 on 256- and 512-GPU H200 configurations.
+Requirement: CPU only; 64 GB RAM is recommended for the complete 256/512-GPU sweeps.
 
-Run the fixed-GPU software reconstruction from the repository root after building the reconfigurable backend and installing the Python plotting dependencies:
+From the repository root, build the simulator and regenerate all Figure 14 results:
 
 ```bash
-./simulation/expert_parallel/run_ep.sh
+./simulation/scripts/build_backends.sh
+./simulation/expert_parallel/run_ep.sh all
 ```
 
-By default this generates the 256/512-GPU, EP+TP+DP/EP+DP, and 0/0.5/1/10/50/100-ms cases, writes `fig14_ep_results.csv`, and renders `fig14_ep.pdf`. The 0-ms row is EPS (no OCS delay). Positive rows use the reconfigurable backend with the requested delay. The launcher reconstructs the published topology and sweep from generated Chakra traces. Readers can narrow the run by doing `CLUSTER_SIZES=256 PLACEMENTS=tpdp EP_SIZES_256_TPDP="1 2" EP_LAYERS=1 LATENCIES_MS="0 0.5" ./simulation/expert_parallel/run_ep.sh`.
+Run only one system size if desired:
+
+```bash
+./simulation/expert_parallel/run_ep.sh 256
+./simulation/expert_parallel/run_ep.sh 512
+```
+
+Results are written to the [256-GPU directory](simulation/reconfig_backend/examples/large_scale_ep_8gpu_256_all2allv_topk_context_reconfig_full_bw_eps/) and [512-GPU directory](simulation/reconfig_backend/examples/large_scale_ep_32gpu_512_all2allv_topk_context_reconfig_full_bw_eps/). Set `ASTRA_SIM_BIN_DIR` if the simulator executable was built elsewhere.
 
 ### Paper Figure 15
 
