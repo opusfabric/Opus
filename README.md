@@ -395,6 +395,7 @@ From the Opus repository root:
 ```bash
 docker build --network=host -f environment/emulation-env/Dockerfile -t opus-emulation:artifact .
 docker run --rm -it --network host \
+  --ulimit nofile=65536:65536 \
   -v "$PWD:/Opus" -w /Opus opus-emulation:artifact bash
 ```
 
@@ -405,7 +406,7 @@ Inside the container:
 ./simulation/scripts/run_example.sh
 ```
 
-The simulator run is CPU-only; `--gpus` is not needed. The bind mount preserves generated experiment directories and logs in the checkout.
+The simulator run is CPU-only; `--gpus` is not needed. Keep the `nofile` setting because ASTRA-Sim opens one workload trace per simulated GPU. The bind mount preserves generated experiment directories and logs in the checkout.
 
 ### Host fallback dependencies
 

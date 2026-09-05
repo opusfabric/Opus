@@ -2,10 +2,64 @@
 
 
 import argparse
+import glob
+import json
 import os
+import resource
 import subprocess
 
 import yaml
+
+
+def prepare_simulation(base_dir):
+    """Validate inputs and reserve one trace descriptor per simulated rank."""
+    required_files = (
+        "network.yml", "system.json", "remote_memory.json", "workload.json",
+        "schedules.txt", "run_network_reconfig.sh",
+    )
+    for filename in required_files:
+        path = os.path.join(base_dir, filename)
+        if not os.path.isfile(path) or os.path.getsize(path) == 0:
+            raise RuntimeError(f"missing or empty simulator input: {path}")
+
+    for filename in ("system.json", "remote_memory.json", "workload.json"):
+        path = os.path.join(base_dir, filename)
+        try:
+            with open(path, "r") as stream:
+                json.load(stream)
+        except (OSError, json.JSONDecodeError) as error:
+            raise RuntimeError(f"invalid simulator JSON input {path}: {error}") from error
+
+    network_path = os.path.join(base_dir, "network.yml")
+    with open(network_path, "r") as stream:
+        network = yaml.safe_load(stream)
+    try:
+        npus_count = int(network["npus_count"][0])
+    except (KeyError, IndexError, TypeError, ValueError) as error:
+        raise RuntimeError(f"invalid npus_count in {network_path}") from error
+
+    traces = glob.glob(os.path.join(base_dir, "workload.*.et"))
+    nonempty_traces = sum(os.path.getsize(path) > 0 for path in traces)
+    if nonempty_traces < npus_count:
+        raise RuntimeError(
+            f"incomplete workload generation in {base_dir}: expected "
+            f"{npus_count} nonempty rank traces, found {nonempty_traces}"
+        )
+
+    # ETFeeder keeps every rank trace open. A 1024-descriptor Docker limit
+    # otherwise causes a misleading nlohmann empty-JSON parse error.
+    required_nofile = npus_count + 256
+    soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
+    if soft_limit < required_nofile:
+        if hard_limit < required_nofile:
+            raise RuntimeError(
+                f"open-file limit is too low for {npus_count} simulated GPUs "
+                f"(soft={soft_limit}, hard={hard_limit}, need at least "
+                f"{required_nofile}). Start Docker with "
+                f"--ulimit nofile=65536:65536"
+            )
+        resource.setrlimit(resource.RLIMIT_NOFILE, (required_nofile, hard_limit))
+        print(f"Raised open-file soft limit to {required_nofile}")
 
 
 def extract_last_cycles(file_path):
@@ -36,6 +90,10 @@ def extract_last_cycles(file_path):
 
 def _result(log_path):
     cycles, exposed, sys0_cycles, sys0_exposed = extract_last_cycles(log_path)
+    if cycles is None or sys0_cycles is None:
+        raise RuntimeError(
+            f"simulator did not emit complete finish records in {log_path}"
+        )
     return {
         "cycles": cycles,
         "exposed_cycles": exposed,
@@ -56,6 +114,7 @@ def run_with_reconfig_times(reconfig_times, base_dir):
     The zero-delay result is the EPS reference; provisioning is skipped at zero
     delay. All runs use the reconfigurable simulator and run_network_reconfig.sh.
     """
+    prepare_simulation(base_dir)
     results = {}
     network_file = os.path.join(base_dir, "network.yml")
 
