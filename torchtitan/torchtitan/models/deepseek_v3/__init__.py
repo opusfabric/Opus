@@ -124,6 +124,35 @@ deepseekv3_configs = {
         use_flex_attn=True,
         attn_mask_type="block_causal",
     ),
+    # Same 16B architecture with standard causal SDPA. The FlexAttention
+    # kernel selected for the PP=4/TP=4 Figure 10/11 shape exceeds the A100
+    # shared-memory limit, while the paper experiment does not depend on a
+    # particular attention-kernel implementation.
+    "16B_A100": DeepSeekV3ModelArgs(
+        vocab_size=102400,
+        dim=2048,
+        inter_dim=10944,
+        moe_inter_dim=1408,
+        n_layers=27,
+        n_dense_layers=1,
+        n_heads=16,
+        moe_args=MoEArgs(
+            num_experts=64,
+            num_shared_experts=2,
+            top_k=6,
+            score_func="softmax",
+            route_norm=False,
+            score_before_experts=False,
+        ),
+        q_lora_rank=0,
+        kv_lora_rank=512,
+        qk_nope_head_dim=128,
+        qk_rope_head_dim=64,
+        v_head_dim=128,
+        mscale=0.70,
+        use_flex_attn=False,
+        attn_mask_type="causal",
+    ),
     "236B": DeepSeekV3ModelArgs(
         vocab_size=102400,
         dim=5120,

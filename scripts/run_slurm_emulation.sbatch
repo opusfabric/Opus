@@ -7,9 +7,20 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-SCRIPT_PATH=${SCRIPT_DIR}/$(basename -- "${BASH_SOURCE[0]}")
-OPUS_ROOT=${OPUS_ROOT:-$(cd -- "${SCRIPT_DIR}/.." && pwd)}
+SOURCE_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+if [[ -z ${OPUS_ROOT:-} ]]; then
+    if [[ -f ${SOURCE_DIR}/../README.md ]]; then
+        OPUS_ROOT=$(cd -- "${SOURCE_DIR}/.." && pwd)
+    elif [[ -n ${SLURM_SUBMIT_DIR:-} && -f ${SLURM_SUBMIT_DIR}/README.md ]]; then
+        OPUS_ROOT=$(cd -- "${SLURM_SUBMIT_DIR}" && pwd)
+    else
+        echo "Set OPUS_ROOT to the shared Opus checkout" >&2
+        exit 2
+    fi
+fi
+# sbatch executes a node-local spool copy; workers must recurse through the
+# shared checkout instead of BASH_SOURCE's directory.
+SCRIPT_PATH=${OPUS_ROOT}/scripts/run_slurm_emulation.sbatch
 
 if [[ ${1:-} == "--worker" ]]; then
     cd "${OPUS_ROOT}/torchtitan"
@@ -85,4 +96,4 @@ srun --nodes="${NUM_NODES}" \
     --gpus-per-task="${NUM_RANKS_PER_NODE}" \
     --export=ALL \
     --output="${OPUS_OUTPUT_DIR}/torchrun_%N.log" \
-    "${SCRIPT_PATH}" --worker
+    bash "${SCRIPT_PATH}" --worker

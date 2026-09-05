@@ -27,7 +27,7 @@ if [[ ${1:-} == "--worker" ]]; then
         --profiling.profile_freq="${PROFILE_FREQ}" \
         --profiling.save_traces_folder=profile_trace \
         --training.steps="${PROFILE_STEPS}" \
-        --training.no_enable_opus_backend
+        --training.no-enable-opus-backend
 fi
 
 : "${SLURM_JOB_NODELIST:?Run this script through sbatch or an existing Slurm allocation}"
@@ -55,4 +55,4 @@ srun --nodes="${NUM_NODES}" \
     --gpus-per-task="${NUM_RANKS_PER_NODE}" \
     --export=ALL \
     --output="${TRACE_ROOT}/torchrun_%N.log" \
-    "${SCRIPT_PATH}" --worker
+    bash "${SCRIPT_PATH}" --worker

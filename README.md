@@ -541,21 +541,63 @@ The output is `simulation/scripts/fig15/fig15.pdf`. This output corresponds to p
 
 ### Paper Figure 4
 
-Figure 4 shows how communication reconfiguration affects computation windows. Panels (a-c) use trace analysis, and panel (d) uses ASTRA-Sim for strong scaling. The original paper traces are not included, so panels (a-c) require those traces to be available locally.
+Figure 4 shows how communication reconfiguration affects computation windows.
 
-Scripts: [plot_transition_cdf.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/plot_transition_cdf.py), [trace_timing_gap.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/trace_timing_gap.py), [timing_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/timing_gap_deepseek_236b_256gpu.py), [comm_gap_deepseek_236b_256gpu.py](https://github.com/opusfabric/Opus/blob/main/evaluation/deepseek-236b-256/comm_gap_deepseek_236b_256gpu.py), and [ASTRA-Sim workload generator](https://github.com/opusfabric/Opus/blob/main/simulation/reconfig_backend/run_stg_exp_fg_pp.sh).
+#### Panels (a-c): trace analysis
 
-Run the trace analysis after placing the original `rank*_trace.json` files in `evaluation/deepseek-236b-256/`:
+Requirement: a 256-GPU Slurm allocation with CUDA-enabled PyTorch/TorchTitan
+(the default launcher requests 32 nodes x 8 GPUs). The profiling run uses one experiment's configuration: DeepSeek-V2 236B, DP=8, PP=8, TP=4, EP=32, sequence
+length 4096, and global batch 256. It initializes the model locally and records
+real CUDA/NCCL activity.
+
+Scripts and configuration:
+
+- [GPU trace launcher](evaluation/deepseek-236b-256/run_gpu_trace_profile.sbatch)
+- [DeepSeek-236B profiling configuration](evaluation/deepseek-236b-256/deepseek_236b_trace.toml)
+- [Measured transition-window extractor](evaluation/deepseek-236b-256/trace_timing_gap.py)
+- [Analytical transition-window model](evaluation/deepseek-236b-256/timing_gap_deepseek_236b_256gpu.py)
+- [Communication-volume and time model](evaluation/deepseek-236b-256/comm_gap_deepseek_236b_256gpu.py)
+- [Transition CDF plotter](evaluation/deepseek-236b-256/plot_transition_cdf.py)
+
+Prepare the tokenizer once from the repository root. Only tokenizer metadata is
+downloaded; the profiling job trains from random initialization:
 
 ```bash
-cd evaluation/deepseek-236b-256
-python3 trace_timing_gap.py > trace_timing_gap.txt
-python3 timing_gap_deepseek_236b_256gpu.py > timing_gap_model.txt
-python3 comm_gap_deepseek_236b_256gpu.py > comm_gap_model.txt
-python3 plot_transition_cdf.py
+cd torchtitan
+python3 scripts/download_hf_assets.py \
+  --repo_id deepseek-ai/DeepSeek-V2 --assets tokenizer
+cd ..
 ```
 
-The plotting script writes `transition_cdf_combined.png` and `transition_cdf_per_pair.png`.
+Submit the end-to-end GPU profiling and analysis job:
+
+```bash
+sbatch evaluation/deepseek-236b-256/run_gpu_trace_profile.sbatch
+```
+
+Use normal site flags such as `--account`, `--partition`, or `--constraint` on
+the `sbatch` command when required. For a cluster with four GPUs per node,
+request 64 nodes and tell the launcher the GPU density:
+
+```bash
+sbatch --nodes=64 --gpus-per-node=4 \
+  --export=ALL,NUM_RANKS_PER_NODE=4 \
+  evaluation/deepseek-236b-256/run_gpu_trace_profile.sbatch
+```
+
+The launcher verifies that exactly 256 GPU ranks are present, runs five
+training steps, and profiles the fifth step after the PyTorch profiler warmup.
+All 256 Chrome traces remain under `runs/<job-id>/figure4/profile_trace/`. It
+also copies `rank0_trace.json` through `rank3_trace.json` into
+`evaluation/deepseek-236b-256/` and runs every panel (a-c) analysis script.
+The rerun is complete when these outputs exist there:
+
+- `trace_timing_gap.txt`: measured cross-parallelism windows from the traces
+- `timing_gap_model.txt`: modeled computation windows between communication types
+- `comm_gap_model.txt`: modeled DP, EP, and PP communication costs
+- `transition_cdf_combined.png`: combined transition-window CDF
+- `transition_cdf_per_pair.png`: one CDF panel per transition pair
+- `transition_cdf_summary.txt`: CDF sample counts and percentiles
 
 For the ASTRA-Sim strong-scaling inputs, run the following inside the Section 3 Docker container after building the simulator:
 
@@ -579,11 +621,13 @@ Figure 5 derives GPU utilization from the Figure 4(d) frontier windows using `Ut
 
 Requirement: Slurm with CUDA-enabled PyTorch, NCCL/RDMA, and 16 NVIDIA GPUs
 (4 nodes × 4 GPUs) for the 16-GPU cases or 64 GPUs (16 nodes × 4 GPUs) for
-Llama-64. No physical OCS is required. Reruns require a compatible
-Slingshot/NCCL cluster.
+Llama-64. No physical OCS is required: the controller runs in emulation mode
+and applies the requested reconfiguration delay. Complete the Section 2 build
+and tokenizer setup before submitting these jobs.
 
 Scripts:
 
+- [Figure 10/11 submission helper](scripts/submit_figure10_11.sh)
 - [Generic emulation](scripts/run_slurm_emulation.sbatch)
 - [Generic provisioning](scripts/run_slurm_provision.sbatch)
 - [Perlmutter emulation](scripts/perlmutter/run_opus_emulation.sbatch)
@@ -595,32 +639,66 @@ Scripts:
 - [DeepSeek 2D plot notebook](evaluation/deepseek_v3_16b-2d-16-latency/plot.ipynb)
 - [DeepSeek 3D plot notebook](evaluation/deepseek_v3_16b-3d-16-latency/plot.ipynb)
 
-The following archived directories contain the communication-pattern files
-used by the corresponding Figure 10/11 runs (`COMM_PATTERN_PATH`):
+The submission helper selects the matching TorchTitan configuration,
+communication-pattern prefix, GPU count, and provisioning callback mode:
 
-- [Llama 3D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/llama-3-3d-16-latency/comm_pattern)
-- [Llama 3D, 64 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/llama-3-3d-64-latency/comm_pattern_no_ctl_issue)
-- [DeepSeek 2D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/deepseek_v3_16b-2d-16-latency/comm_pattern)
-- [DeepSeek 3D, 16 GPUs — communication pattern](https://github.com/opusfabric/Opus/tree/main/evaluation/deepseek_v3_16b-3d-16-latency/comm_pattern)
+| Case argument | Workload and parallelism | Allocation | Archived pattern |
+| --- | --- | --- | --- |
+| `llama16` | Llama 3 8B; DP=2, PP=2, TP=4 | 4 nodes × 4 GPUs | [pattern](evaluation/llama-3-3d-16-latency/comm_pattern) |
+| `llama64` | Llama 3 8B; DP=8, PP=2, TP=4 | 16 nodes × 4 GPUs | [pattern](evaluation/llama-3-3d-64-latency/comm_pattern_no_ctl_issue) |
+| `deepseek2d` | DeepSeek 16B; PP=4, TP=4 | 4 nodes × 4 GPUs | [pattern](evaluation/deepseek_v3_16b-2d-16-latency/comm_pattern) |
+| `deepseek3d` | DeepSeek 16B; DP=2, PP=2, TP=4 | 4 nodes × 4 GPUs | [pattern](evaluation/deepseek_v3_16b-3d-16-latency/comm_pattern) |
 
-
-After the Section 2 setup, set the case-specific config, communication-pattern
-prefix, GPU allocation, delay, and output directory, then submit:
+From the repository root, run one EPS, on-demand, and provisioning comparison.
+This example uses the 16-GPU Llama case and a 50 ms OCS delay:
 
 ```bash
-# Generic Slurm
-sbatch --nodes=4 --gpus-per-node=4 scripts/run_slurm_emulation.sbatch
-sbatch --nodes=4 --gpus-per-node=4 scripts/run_slurm_provision.sbatch
+EPS_JOB=$(scripts/submit_figure10_11.sh \
+  llama16 baseline 0 --account=YOUR_ACCOUNT)
+ONDEMAND_JOB=$(scripts/submit_figure10_11.sh \
+  llama16 baseline 50 --account=YOUR_ACCOUNT)
+PROVISION_JOB=$(scripts/submit_figure10_11.sh \
+  llama16 provision 50 --account=YOUR_ACCOUNT)
 
-# Perlmutter/Shifter
-sbatch -N 4 -G 16 -C gpu -A <account> scripts/perlmutter/run_opus_emulation.sbatch
-sbatch -N 4 -G 16 -C gpu -A <account> scripts/perlmutter/run_opus_provision.sbatch
-
-# EPS uses RECONFIG_DELAY_MS=0; repeat for the archived delay values.
-scripts/check_run_output.sh <run-id>
-scripts/summarize_iteration_latency.py <run-id> --last 5
+echo "EPS=${EPS_JOB} on-demand=${ONDEMAND_JOB} provision=${PROVISION_JOB}"
 ```
 
+Replace `llama16` with any case argument from the table. For Perlmutter/Shifter,
+select the container launcher and pass the normal site options:
+
+```bash
+OPUS_SLURM_LAUNCHER=perlmutter \
+OPUS_SHIFTER_IMAGE=ericd16/opus:2.0 \
+scripts/submit_figure10_11.sh \
+  llama16 provision 50 --account=YOUR_ACCOUNT --constraint=gpu --qos=regular
+```
+
+To recreate the archived latency sweep for one case, submit both modes at each
+delay. The zero-delay baseline is the EPS point:
+
+```bash
+for delay in 0 10 50 100 250 500 750 1000; do
+  scripts/submit_figure10_11.sh \
+    llama16 baseline "${delay}" --account=YOUR_ACCOUNT
+  scripts/submit_figure10_11.sh \
+    llama16 provision "${delay}" --account=YOUR_ACCOUNT
+done
+```
+
+Each submission prints its job ID and writes controller and per-node worker logs
+to `runs/<job-id>/`. After the three comparison jobs finish, verify completion,
+ACK health, topology changes, and final-five-step latency:
+
+```bash
+EXPECTED_RANKS=16 scripts/check_run_output.sh \
+  "${EPS_JOB}" "${ONDEMAND_JOB}" "${PROVISION_JOB}"
+
+scripts/summarize_iteration_latency.py \
+  "${EPS_JOB}" "${ONDEMAND_JOB}" "${PROVISION_JOB}" --last 5
+```
+
+Use `EXPECTED_RANKS=64` when checking `llama64`. The plot notebooks listed
+above consume the corresponding latency summaries/CSV data.
 
 ### Other paper figures and archived artifacts
 
